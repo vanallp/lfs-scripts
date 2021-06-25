@@ -209,21 +209,13 @@ finish
 
 # 6.7. File-5.39
 begin file-5.39 tar.gz
-mkdir build
-pushd build
-  ../configure --disable-bzlib      \
-               --disable-libseccomp \
-               --disable-xzlib      \
-               --disable-zlib
-  make
-popd
-./configure --prefix=/usr --host=$LFS_TGT --build=$(./config.guess)
-make FILE_COMPILE=$(pwd)/build/src/file
+./configure --prefix=/usr --host=$LFS_TGT
+make
 make DESTDIR=$LFS install
 finish
 
-# 6.8. Findutils-4.8.0
-begin findutils-4.8.0 tar.xz
+# 6.8. Findutils-4.7.0
+begin findutils-4.7.0 tar.xz
 ./configure --prefix=/usr   \
             --host=$LFS_TGT \
             --build=$(build-aux/config.guess)
@@ -243,8 +235,8 @@ make
 make DESTDIR=$LFS install
 finish
 
-# 6.10. Grep-3.6
-begin grep-3.6 tar.xz
+# 6.10. Grep-3.4
+begin grep-3.4 tar.xz
 ./configure --prefix=/usr   \
             --host=$LFS_TGT \
             --bindir=/bin
@@ -288,8 +280,8 @@ make
 make DESTDIR=$LFS install
 finish
 
-# 6.15. Tar-1.34
-begin tar-1.34 tar.xz
+# 6.15. Tar-1.32
+begin tar-1.32 tar.xz
 ./configure --prefix=/usr                     \
             --host=$LFS_TGT                   \
             --build=$(build-aux/config.guess) \
@@ -312,8 +304,8 @@ mv -v $LFS/usr/lib/liblzma.so.*                       $LFS/lib
 ln -svf ../../lib/$(readlink $LFS/usr/lib/liblzma.so) $LFS/usr/lib/liblzma.so
 finish
 
-# 6.17. Binutils-2.36.1 - Pass 2
-begin binutils-2.36.1 tar.xz
+# 6.17. Binutils-2.35 - Pass 2
+begin binutils-2.35 tar.xz
 mkdir -v build
 cd       build
 ../configure                   \
@@ -326,17 +318,16 @@ cd       build
     --enable-64-bit-bfd
 make
 make DESTDIR=$LFS install
-install -vm755 libctf/.libs/libctf.so.0.0.0 $LFS/usr/lib
 finish
 
 # 6.18. GCC-10.2.0 - Pass 2
 begin gcc-10.2.0 tar.xz
 tar -xf ../mpfr-4.1.0.tar.xz
 mv -v mpfr-4.1.0 mpfr
-tar -xf ../gmp-6.2.1.tar.xz
-mv -v gmp-6.2.1 gmp
-tar -xf ../mpc-1.2.1.tar.gz
-mv -v mpc-1.2.1 mpc
+tar -xf ../gmp-6.2.0.tar.xz
+mv -v gmp-6.2.0 gmp
+tar -xf ../mpc-1.1.0.tar.gz
+mv -v mpc-1.1.0 mpc
 case $(uname -m) in
   x86_64)
     sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64
@@ -367,5 +358,3 @@ make
 make DESTDIR=$LFS install
 ln -sv gcc $LFS/usr/bin/cc
 finish
-
-

@@ -3,81 +3,72 @@ Instructions and scripts to build LFS (Linux From Scratch), version 10.1. I'm pe
 
 # Foreword
 
-First, this guide does not replace reading the whole LFS book. Read it!
+First, this guide does not replace reading the whole LFS book. [Read it!](https://www.linuxfromscratch.org/lfs/view/stable/)
 
 This build will be accomplished inside a Fedora release 34 machine.
-
-The packages needed to build LFS were downloaded from [here](http://ftp.lfs-matrix.net/pub/lfs/lfs-packages/lfs-packages-10.0.tar) (423 MB), other mirrors are available [here](http://linuxfromscratch.org/lfs/download.html) (look for the "LFS HTTP/FTP Sites" section at the bottom, the file you need is lfs-packages-10.0.tar).
 
 # Build instructions
 
 :point_right: Run commands below as root.
 
-Create a partition and a filesystem in the virtual hard disk (/dev/sdb):
+dnf install -y vim-default-editor --allowerasing
 
-```
-fdisk /dev/sdb
-```
+visudo
+paul    ALL=(ALL:ALL)   NOPASSWD:ALL
+ansible ALL=(ALL:ALL)   NOPASSWD:ALL
 
-Use the following basic options: n- new partition, accept the default values, w- write changes
+dnf group list -v
+yum grouplist hidden
 
-Create a filesystem, a mount point, and mount it:
+Installing Package Groups with dnf
 
-```
-mkfs.ext4 /dev/sdb1
-mkdir /mnt/lfs
-mount /dev/sdb1 /mnt/lfs
-```
+dnf -y group install "C Development Tools and Libraries"
+dnf -y group install "Development Tools"
+dnf -y install texinfo
+dnf -y erase byacc
+dnf -y reinstall bison
+ln -s `which bison` /usr/bin/yacc
 
-Add the following line to root's .bashrc:
-
-```
-export LFS=/mnt/lfs
-```
-
-Source the file:
-
-```
-source .bashrc
-```
-
-Download all the packages and extract them to $LFS/sources. The tcl package must be renamed in order to work with the scripts that will follow.
-
-```
-cd $LFS
-cp /<location_of_the_package>/lfs-packages-10.0.tar .
-tar xf lfs-packages-10.0.tar
-mv 10.0 sources
+mkdir /lfs
+export LFS=/lfs
+echo "export LFS=/lfs" >>  .bash_profile 
+mkdir -v $LFS/sources
 chmod -v a+wt $LFS/sources
-mv $LFS/sources/tcl8.6.10-src.tar.gz $LFS/sources/tcl8.6.10.tar.gz
-```
+wget https://www.linuxfromscratch.org/lfs/view/10.1/wget-list
+wget --input-file=wget-list --continue --directory-prefix=$LFS/sources
+wget https://www.linuxfromscratch.org/lfs/view/10.1/md5sums
+mv md5sums $LFS/sources
+pushd $LFS/sources
+  md5sum -c md5sums
+popd
+#The tcl package must be renamed
+mv $LFS/sources/tcl8.6.11-src.tar.gz $LFS/sources/tcl8.6.11.tar.gz
 
-Copy all the shell scripts from this repository to your $LFS directory:
+# vim https://github.com/vim/vim/releases
+# https://www.kernel.org/ & vim
+cd /lfs/sources
+wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.12.13.tar.xz
+wget https://github.com/vim/vim/archive/refs/tags/v8.2.3043.tar.gz
+git clone https://github.com/vanallp/lfs-scripts.git
 
-```
-cp /<location_of_the_scripts>/*.sh $LFS
-```
+mkdir -pv $LFS/{bin,etc,lib,sbin,usr,var}
+case $(uname -m) in
+  x86_64) mkdir -pv $LFS/lib64 ;;
+esac
+mkdir -pv $LFS/tools
 
-Create the basic filesystem for LFS:
-
-```
-mkdir -pv $LFS/{bin,etc,lib,sbin,usr,var,lib64,tools}
-```
-
-Create the lfs user, used during the initial build process (you will have to type a password):
-
-```
 groupadd lfs
 useradd -s /bin/bash -g lfs -m -k /dev/null lfs
-passwd lfs
-```
+# passwd lfs
+chown -v lfs $LFS/{usr,lib,var,etc,bin,sbin,tools}
+case $(uname -m) in
+  x86_64) chown -v lfs $LFS/lib64 ;;
+esac
+chown -v lfs $LFS/sources
 
-Make lfs own the entire filesystem:
 
-```
-chown -R lfs:lfs $LFS/*
-chown lfs:lfs $LFS
-```
+
+
 
 Login as the lfs user:
 
@@ -87,21 +78,13 @@ su - lfs
 
 :point_right: Run commands below as lfs.
 
-Create a .bash_profile file:
-
-```
 cat > ~/.bash_profile << "EOF"
 exec env -i HOME=$HOME TERM=$TERM PS1='\u:\w\$ ' /bin/bash
 EOF
-```
-
-Create a .bashrc file:
-
-```
 cat > ~/.bashrc << "EOF"
 set +h
 umask 022
-LFS=/mnt/lfs
+LFS=/lfs
 LC_ALL=POSIX
 LFS_TGT=$(uname -m)-lfs-linux-gnu
 PATH=/usr/bin
@@ -111,9 +94,10 @@ export LFS LC_ALL LFS_TGT PATH
 EOF
 
 source ~/.bashrc
-```
 
 Run the lfs-cross.sh script, which will build the cross-toolchain and cross compiling temporary tools from chapters 5 and 6:
+
+
 
 ``` 
 sh $LFS/lfs-cross.sh | tee $LFS/lfs-cross.log
