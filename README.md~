@@ -100,7 +100,7 @@ Run the lfs-cross.sh script, which will build the cross-toolchain and cross comp
 
 
 ``` 
-sh $LFS/lfs-cross.sh | tee $LFS/lfs-cross.log
+sh $LFS/sources/lfs-cross.sh | tee $LFS/sources/lfs-cross.log
 ```
 
 Return to being root:

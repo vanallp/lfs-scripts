@@ -11,8 +11,9 @@ This build will be accomplished inside a Fedora release 34 machine.
 
 :point_right: Run commands below as root.
 
+```
 dnf install -y vim-default-editor --allowerasing
-
+```
 visudo
 paul    ALL=(ALL:ALL)   NOPASSWD:ALL
 ansible ALL=(ALL:ALL)   NOPASSWD:ALL
@@ -22,6 +23,7 @@ yum grouplist hidden
 
 Installing Package Groups with dnf
 
+```
 dnf -y group install "C Development Tools and Libraries"
 dnf -y group install "Development Tools"
 dnf -y install texinfo
@@ -65,7 +67,7 @@ case $(uname -m) in
   x86_64) chown -v lfs $LFS/lib64 ;;
 esac
 chown -v lfs $LFS/sources
-
+```
 
 
 
@@ -78,6 +80,7 @@ su - lfs
 
 :point_right: Run commands below as lfs.
 
+```
 cat > ~/.bash_profile << "EOF"
 exec env -i HOME=$HOME TERM=$TERM PS1='\u:\w\$ ' /bin/bash
 EOF
@@ -94,13 +97,15 @@ export LFS LC_ALL LFS_TGT PATH
 EOF
 
 source ~/.bashrc
+```
+
 
 Run the lfs-cross.sh script, which will build the cross-toolchain and cross compiling temporary tools from chapters 5 and 6:
 
 
 
 ``` 
-sh $LFS/lfs-cross.sh | tee $LFS/lfs-cross.log
+sh $LFS/sources/lfs-cross.sh | tee $LFS/sources/lfs-cross.log
 ```
 
 Return to being root:
