@@ -101,3 +101,7 @@ mkdir -pv /var/lib/hwclock
 make
 make install
 finish
+
+find /usr/{lib,libexec} -name \*.la -delete
+rm -rf /usr/share/{info,man,doc}/*
+

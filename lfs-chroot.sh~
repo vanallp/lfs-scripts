@@ -45,16 +45,16 @@ make
 cp -v gettext-tools/src/{msgfmt,msgmerge,xgettext} /usr/bin
 finish
 
-# 7.9. Bison-3.7.1
-begin bison-3.7.1 tar.xz
+# 7.9. Bison-3.7.5
+begin bison-3.7.5 tar.xz
 ./configure --prefix=/usr \
-            --docdir=/usr/share/doc/bison-3.7.1
+            --docdir=/usr/share/doc/bison-3.7.5
 make
 make install
 finish
 
 # 7.10. Perl-5.32.0
-begin perl-5.32.0 tar.xz
+begin perl-5.32.1 tar.xz
 sh Configure -des                                        \
              -Dprefix=/usr                               \
              -Dvendorprefix=/usr                         \
@@ -68,8 +68,8 @@ make
 make install
 finish
 
-# 7.11. Python-3.8.5
-begin Python-3.8.5 tar.xz
+# 7.11. Python-3.9.2
+begin Python-3.9.2 tar.xz
 ./configure --prefix=/usr   \
             --enable-shared \
             --without-ensurepip
@@ -84,11 +84,11 @@ make
 make install
 finish
 
-# 7.13. Util-linux-2.36
-begin util-linux-2.36 tar.xz
+# 7.13. Util-linux-2.36.2
+begin util-linux-2.36.2 tar.xz
 mkdir -pv /var/lib/hwclock
 ./configure ADJTIME_PATH=/var/lib/hwclock/adjtime    \
-            --docdir=/usr/share/doc/util-linux-2.36 \
+            --docdir=/usr/share/doc/util-linux-2.36.2 \
             --disable-chfn-chsh  \
             --disable-login      \
             --disable-nologin    \

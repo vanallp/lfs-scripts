@@ -218,13 +218,20 @@ Run the lfs-chroot.sh script, which will build additional temporary tools:
 sh /lfs-chroot.sh | tee /lfs-chroot.log
 ```
 
-
-Cleanup before the final build phase:
+Leave the chroot environment and unmount the kernel virtual file systems
 
 ```
-find /usr/{lib,libexec} -name \*.la -delete
-rm -rf /usr/share/{info,man,doc}/*
+exit
+umount $LFS/dev{/pts,}
+umount $LFS/{sys,proc,run}
+strip --strip-debug $LFS/usr/lib/*
+strip --strip-unneeded $LFS/usr/{,s}bin/*
+strip --strip-unneeded $LFS/tools/bin/*
+
+cd $LFS &&
+tar -cJpf $HOME/lfs-temp-tools-10.1.tar.xz .
 ```
+
 
 For the final build phase, run the lfs-system.sh script:
 
