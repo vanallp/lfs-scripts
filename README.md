@@ -215,7 +215,7 @@ exec /bin/bash --login +h
 Run the lfs-chroot.sh script, which will build additional temporary tools:
 
 ``` 
-sh /lfs-chroot.sh | tee /lfs-chroot.log
+sh sources/lfs-scripts/lfs-chroot.sh | tee /lfs-chroot.log
 ```
 
 Leave the chroot environment and unmount the kernel virtual file systems
@@ -236,7 +236,7 @@ tar -cJpf $HOME/lfs-temp-tools-10.1.tar.xz .
 For the final build phase, run the lfs-system.sh script:
 
 ``` 
-sh /lfs-system.sh | tee /lfs-system.log
+sh sources/lfs-scripts/lfs-system.sh | tee /lfs-system.log
 ```
 
 You must now set a password for the root user (you will have to type a password):
