@@ -51,6 +51,7 @@ mv $LFS/sources/tcl8.6.11-src.tar.gz $LFS/sources/tcl8.6.11.tar.gz
 cd /lfs/sources
 wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.12.13.tar.xz
 wget https://github.com/vim/vim/archive/refs/tags/v8.2.3043.tar.gz
+wget https://ftp.gnu.org/gnu/grub/grub-2.06.tar.gz
 git clone https://github.com/vanallp/lfs-scripts.git
 
 mkdir -pv $LFS/{bin,etc,lib,sbin,usr,var}
@@ -215,7 +216,7 @@ exec /bin/bash --login +h
 Run the lfs-chroot.sh script, which will build additional temporary tools:
 
 ``` 
-sh /lfs-chroot.sh | tee /lfs-chroot.log
+sh sources/lfs-scripts/lfs-chroot.sh | tee /lfs-chroot.log
 ```
 
 Leave the chroot environment and unmount the kernel virtual file systems
@@ -236,7 +237,7 @@ tar -cJpf $HOME/lfs-temp-tools-10.1.tar.xz .
 For the final build phase, run the lfs-system.sh script:
 
 ``` 
-sh /lfs-system.sh | tee /lfs-system.log
+sh sources/lfs-scripts/lfs-system.sh | tee /lfs-system.log
 ```
 
 You must now set a password for the root user (you will have to type a password):

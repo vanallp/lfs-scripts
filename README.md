@@ -37,6 +37,9 @@ echo "export LFS=/lfs" >>  .bash_profile
 mkdir -v $LFS/sources
 chmod -v a+wt $LFS/sources
 wget https://www.linuxfromscratch.org/lfs/view/10.1/wget-list
+
+wget https://prdownloads.sourceforge.net/expat/expat-2.4.1.tar.xz
+
 wget --input-file=wget-list --continue --directory-prefix=$LFS/sources
 wget https://www.linuxfromscratch.org/lfs/view/10.1/md5sums
 mv md5sums $LFS/sources
@@ -51,6 +54,7 @@ mv $LFS/sources/tcl8.6.11-src.tar.gz $LFS/sources/tcl8.6.11.tar.gz
 cd /lfs/sources
 wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.12.13.tar.xz
 wget https://github.com/vim/vim/archive/refs/tags/v8.2.3043.tar.gz
+wget https://ftp.gnu.org/gnu/grub/grub-2.06.tar.gz
 git clone https://github.com/vanallp/lfs-scripts.git
 
 mkdir -pv $LFS/{bin,etc,lib,sbin,usr,var}

@@ -554,11 +554,11 @@ make
 make install
 finish
 
-# 8.38. Expat-2.2.9
-begin expat-2.2.9 tar.xz
+# 8.38. Expat-2.4.1
+begin expat-2.4.1 tar.xz
 ./configure --prefix=/usr    \
             --disable-static \
-            --docdir=/usr/share/doc/expat-2.2.9
+            --docdir=/usr/share/doc/expat-2.4.1
 make
 make install
 finish

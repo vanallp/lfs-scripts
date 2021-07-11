@@ -392,8 +392,8 @@ pushd /usr/share/info
 popd
 finish
 
-# 8.69. Vim-8.2.1361
-begin vim-8.2.1361 tar.gz
+# 8.69. Vim-8.2.2433
+begin vim-8.2.2433 tar.gz
 echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 ./configure --prefix=/usr
 make
@@ -402,7 +402,7 @@ ln -sv vim /usr/bin/vi
 for L in  /usr/share/man/{,*/}man1/vim.1; do
     ln -sv vim.1 $(dirname $L)/vi.1
 done
-ln -sv ../vim/vim82/doc /usr/share/doc/vim-8.2.1361
+ln -sv ../vim/vim82/doc /usr/share/doc/vim-8.2.2433
 cat > /etc/vimrc << "EOF"
 " Begin /etc/vimrc
 
@@ -422,8 +422,8 @@ endif
 EOF
 finish
 
-# 8.70. Eudev-3.2.9
-begin eudev-3.2.9 tar.gz
+# 8.70. Eudev-3.2.10
+begin eudev-3.2.10 tar.gz
 ./configure --prefix=/usr           \
             --bindir=/sbin          \
             --sbindir=/sbin         \
@@ -435,18 +435,20 @@ begin eudev-3.2.9 tar.gz
             --enable-manpages       \
             --disable-static
 make
+mkdir -pv /lib/udev/rules.d
+mkdir -pv /etc/udev/rules.d
 make install
 tar -xvf ../udev-lfs-20171102.tar.xz
 make -f udev-lfs-20171102/Makefile.lfs install
 udevadm hwdb --update
 finish
 
-# 8.71. Procps-ng-3.3.16
-begin procps-ng-3.3.16 tar.xz
+# 8.71. Procps-ng-3.3.17
+begin procps-ng-3.3.17 tar.xz
 ./configure --prefix=/usr                            \
             --exec-prefix=                           \
             --libdir=/usr/lib                        \
-            --docdir=/usr/share/doc/procps-ng-3.3.16 \
+            --docdir=/usr/share/doc/procps-ng-3.3.17 \
             --disable-static                         \
             --disable-kill
 make
@@ -455,11 +457,11 @@ mv -v /usr/lib/libprocps.so.* /lib
 ln -sfv ../../lib/$(readlink /usr/lib/libprocps.so) /usr/lib/libprocps.so
 finish
 
-# 8.72. Util-linux-2.36
-begin util-linux-2.36 tar.xz
-mkdir -pv /var/lib/hwclock
+# 8.72. Util-linux-2.36.2
+begin util-linux-2.36.2 tar.xz
+#mkdir -pv /var/lib/hwclock
 ./configure ADJTIME_PATH=/var/lib/hwclock/adjtime   \
-            --docdir=/usr/share/doc/util-linux-2.36 \
+            --docdir=/usr/share/doc/util-linux-2.36.2 \
             --disable-chfn-chsh  \
             --disable-login      \
             --disable-nologin    \
@@ -470,13 +472,14 @@ mkdir -pv /var/lib/hwclock
             --disable-static     \
             --without-python     \
             --without-systemd    \
-            --without-systemdsystemunitdir
+            --without-systemdsystemunitdir \
+	    runstatedir=/run
 make
 make install
 finish
 
-# 8.73. E2fsprogs-1.45.6
-begin e2fsprogs-1.45.6 tar.gz
+# 8.73. E2fsprogs-1.46.1
+begin e2fsprogs-1.46.1 tar.gz
 mkdir -v build
 cd       build
 ../configure --prefix=/usr           \
@@ -489,7 +492,7 @@ cd       build
              --disable-fsck
 make
 make install
-chmod -v u+w /usr/lib/{libcom_err,libe2p,libext2fs,libss}.a
+rm -fv /usr/lib/{libcom_err,libe2p,libext2fs,libss}.a
 gunzip -v /usr/share/info/libext2fs.info.gz
 install-info --dir-file=/usr/share/info/dir /usr/share/info/libext2fs.info
 makeinfo -o      doc/com_err.info ../lib/et/com_err.texinfo
@@ -503,17 +506,30 @@ sed -i '/Error loading kernel symbols/{n;n;d}' ksym_mod.c
 sed -i 's/union wait/int/' syslogd.c
 make
 make BINDIR=/sbin install
+cat > /etc/syslog.conf << "EOF"
+# Begin /etc/syslog.conf
+
+auth,authpriv.* -/var/log/auth.log
+*.*;auth,authpriv.none -/var/log/sys.log
+daemon.* -/var/log/daemon.log
+kern.* -/var/log/kern.log
+mail.* -/var/log/mail.log
+user.* -/var/log/user.log
+*.emerg *
+
+# End /etc/syslog.conf
+EOF
 finish
 
-# 8.75. Sysvinit-2.97
-begin sysvinit-2.97 tar.xz
-patch -Np1 -i ../sysvinit-2.97-consolidated-1.patch
+# 8.75. Sysvinit-2.98
+begin sysvinit-2.98 tar.xz
+patch -Np1 -i ../sysvinit-2.98-consolidated-1.patch
 make
 make install
 finish
 
 # 8.77. Stripping Again
-save_lib="ld-2.32.so libc-2.32.so libpthread-2.32.so libthread_db-1.0.so"
+save_lib="ld-2.33.so libc-2.33.so libpthread-2.33.so libthread_db-1.0.so"
 cd /lib
 for LIB in $save_lib; do
     objcopy --only-keep-debug $LIB $LIB.dbg 

@@ -115,7 +115,7 @@ done
 cp -v zone.tab zone1970.tab iso3166.tab $ZONEINFO
 zic -d $ZONEINFO -p America/New_York
 unset ZONEINFO
-ln -sfv /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
+ln -sfv /usr/share/zoneinfo/America/New_York /etc/localtime
 cat > /etc/ld.so.conf << "EOF"
 # Begin /etc/ld.so.conf
 /usr/local/lib
@@ -130,16 +130,17 @@ EOF
 mkdir -pv /etc/ld.so.conf.d
 finish
 
-# 8.9. Zlib-1.2.11
+# 8.6. Zlib-1.2.11
 begin zlib-1.2.11 tar.xz
 ./configure --prefix=/usr
 make
 make install
 mv -v /usr/lib/libz.so.* /lib
 ln -sfv ../../lib/$(readlink /usr/lib/libz.so) /usr/lib/libz.so
+rm -fv /usr/lib/libz.a
 finish
 
-# 8.10. Bzip2-1.0.8
+# 8.7. Bzip2-1.0.8
 begin bzip2-1.0.8 tar.gz
 patch -Np1 -i ../bzip2-1.0.8-install_docs-1.patch
 sed -i 's@\(ln -s -f \)$(PREFIX)/bin/@\1@' Makefile
@@ -154,9 +155,10 @@ ln -sv ../../lib/libbz2.so.1.0 /usr/lib/libbz2.so
 rm -v /usr/bin/{bunzip2,bzcat,bzip2}
 ln -sv bzip2 /bin/bunzip2
 ln -sv bzip2 /bin/bzcat
+rm -fv /usr/lib/libbz2.a
 finish
 
-# 8.11. Xz-5.2.5
+# 8.8. Xz-5.2.5
 begin xz-5.2.5 tar.xz
 ./configure --prefix=/usr    \
             --disable-static \
@@ -168,8 +170,8 @@ mv -v /usr/lib/liblzma.so.* /lib
 ln -svf ../../lib/$(readlink /usr/lib/liblzma.so) /usr/lib/liblzma.so
 finish
 
-# 8.12. Zstd-1.4.5
-begin zstd-1.4.5 tar.gz
+# 8.9. Zstd-1.4.8
+begin zstd-1.4.8 tar.gz
 make
 make prefix=/usr install
 rm -v /usr/lib/libzstd.a
@@ -177,31 +179,31 @@ mv -v /usr/lib/libzstd.so.* /lib
 ln -sfv ../../lib/$(readlink /usr/lib/libzstd.so) /usr/lib/libzstd.so
 finish
 
-# 8.13. File-5.39
+# 8.10. File-5.39
 begin file-5.39 tar.gz
 ./configure --prefix=/usr
 make
 make install
 finish
 
-# 8.14. Readline-8.0
-begin readline-8.0 tar.gz
+# 8.11. Readline-8.1
+begin readline-8.1 tar.gz
 sed -i '/MV.*old/d' Makefile.in
 sed -i '/{OLDSUFF}/c:' support/shlib-install
 ./configure --prefix=/usr    \
             --disable-static \
             --with-curses    \
-            --docdir=/usr/share/doc/readline-8.0
+            --docdir=/usr/share/doc/readline-8.1
 make SHLIB_LIBS="-lncursesw"
 make SHLIB_LIBS="-lncursesw" install
 mv -v /usr/lib/lib{readline,history}.so.* /lib
-chmod -v u+w /lib/lib{readline,history}.so.*
+## chmod -v u+w /lib/lib{readline,history}.so.*
 ln -sfv ../../lib/$(readlink /usr/lib/libreadline.so) /usr/lib/libreadline.so
 ln -sfv ../../lib/$(readlink /usr/lib/libhistory.so ) /usr/lib/libhistory.so
-install -v -m644 doc/*.{ps,pdf,html,dvi} /usr/share/doc/readline-8.0
+install -v -m644 doc/*.{ps,pdf,html,dvi} /usr/share/doc/readline-8.1
 finish
 
-# 8.15. M4-1.4.18
+# 8.12. M4-1.4.18
 begin m4-1.4.18 tar.xz
 sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
 echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
@@ -210,25 +212,28 @@ make
 make install
 finish
 
-# 8.16. Bc-3.1.5
-begin bc-3.1.5 tar.xz
-PREFIX=/usr CC=gcc CFLAGS="-std=c99" ./configure.sh -G -O3
+# 8.13. Bc-3.3.0
+begin bc-3.3.0 tar.xz
+#PREFIX=/usr CC=gcc CFLAGS="-std=c99" ./configure.sh -G -O3
+PREFIX=/usr CC=gcc  ./configure.sh -G -O3
 make
 make install
 finish
-#
-## 8.17. Flex-2.6.4
+ 
+## 8.14. Flex-2.6.4
 begin flex-2.6.4 tar.gz
-./configure --prefix=/usr --docdir=/usr/share/doc/flex-2.6.4
+./configure --prefix=/usr \
+            --docdir=/usr/share/doc/flex-2.6.4 \
+            --disable-static
 make
 make install
 ln -sv flex /usr/bin/lex
 finish
 
 
-# 8.4. Tcl-8.6.10
+# 8.15. Tcl-8.6.11
 begin tcl8.6.10 tar.gz
-tar -xf ../tcl8.6.10-html.tar.gz --strip-components=1
+tar -xf ../tcl8.6.11-html.tar.gz --strip-components=1
 SRCDIR=$(pwd)
 cd unix
 ./configure --prefix=/usr           \
@@ -238,23 +243,24 @@ make
 sed -e "s|$SRCDIR/unix|/usr/lib|" \
     -e "s|$SRCDIR|/usr/include|"  \
     -i tclConfig.sh
-sed -e "s|$SRCDIR/unix/pkgs/tdbc1.1.1|/usr/lib/tdbc1.1.1|" \
-    -e "s|$SRCDIR/pkgs/tdbc1.1.1/generic|/usr/include|"    \
-    -e "s|$SRCDIR/pkgs/tdbc1.1.1/library|/usr/lib/tcl8.6|" \
-    -e "s|$SRCDIR/pkgs/tdbc1.1.1|/usr/include|"            \
+sed -e "s|$SRCDIR/unix/pkgs/tdbc1.1.2|/usr/lib/tdbc1.1.2|" \
+    -e "s|$SRCDIR/pkgs/tdbc1.1.2/generic|/usr/include|"    \
+    -e "s|$SRCDIR/pkgs/tdbc1.1.2/library|/usr/lib/tcl8.6|" \
+    -e "s|$SRCDIR/pkgs/tdbc1.1.2|/usr/include|"            \
     -i pkgs/tdbc1.1.1/tdbcConfig.sh
-sed -e "s|$SRCDIR/unix/pkgs/itcl4.2.0|/usr/lib/itcl4.2.0|" \
-    -e "s|$SRCDIR/pkgs/itcl4.2.0/generic|/usr/include|"    \
-    -e "s|$SRCDIR/pkgs/itcl4.2.0|/usr/include|"            \
-    -i pkgs/itcl4.2.0/itclConfig.sh
+sed -e "s|$SRCDIR/unix/pkgs/itcl4.2.1|/usr/lib/itcl4.2.1|" \
+    -e "s|$SRCDIR/pkgs/itcl4.2.1/generic|/usr/include|"    \
+    -e "s|$SRCDIR/pkgs/itcl4.2.1|/usr/include|"            \
+    -i pkgs/itcl4.2.1/itclConfig.sh
 unset SRCDIR
 make install
 chmod -v u+w /usr/lib/libtcl8.6.so
 make install-private-headers
 ln -sfv tclsh8.6 /usr/bin/tclsh
+mv /usr/share/man/man3/{Thread,Tcl_Thread}.3
 finish
 
-# 8.5. Expect-5.45.4
+# 8.16. Expect-5.45.4
 begin expect5.45.4 tar.gz
 ./configure --prefix=/usr           \
             --with-tcl=/usr/lib     \
@@ -266,7 +272,7 @@ make install
 ln -svf expect5.45.4/libexpect5.45.4.so /usr/lib
 finish
 
-# 8.6. DejaGNU-1.6.2
+# 8.17. DejaGNU-1.6.2
 begin dejagnu-1.6.2 tar.gz
 ./configure --prefix=/usr
 makeinfo --html --no-split -o doc/dejagnu.html doc/dejagnu.texi
@@ -276,8 +282,8 @@ install -v -dm755  /usr/share/doc/dejagnu-1.6.2
 install -v -m644   doc/dejagnu.{html,txt} /usr/share/doc/dejagnu-1.6.2
 finish
 
-# 8.18. Binutils-2.35
-begin binutils-2.35 tar.xz
+# 8.18. Binutils-2.36.1
+begin binutils-2.36.1 tar.xz
 sed -i '/@\tincremental_copy/d' gold/testsuite/Makefile.in
 mkdir -v build
 cd       build
@@ -291,14 +297,15 @@ cd       build
              --with-system-zlib
 make tooldir=/usr
 make tooldir=/usr install
+rm -fv /usr/lib/lib{bfd,ctf,ctf-nobfd,opcodes}.a
 finish
 
-# 8.19. GMP-6.2.0
-begin gmp-6.2.0 tar.xz
+# 8.19. GMP-6.2.1
+begin gmp-6.2.1 tar.xz
 ./configure --prefix=/usr    \
             --enable-cxx     \
             --disable-static \
-            --docdir=/usr/share/doc/gmp-6.2.0
+            --docdir=/usr/share/doc/gmp-6.2.1
 make
 make html
 make install
@@ -317,11 +324,11 @@ make install
 make install-html
 finish
 
-# 8.21. MPC-1.1.0
-begin mpc-1.1.0 tar.gz
+# 8.21. MPC-1.2.1
+begin mpc-1.2.1 tar.gz
 ./configure --prefix=/usr    \
             --disable-static \
-            --docdir=/usr/share/doc/mpc-1.1.0
+            --docdir=/usr/share/doc/mpc-1.2.1
 make
 make html
 make install
@@ -354,15 +361,17 @@ mv -v /usr/lib/libacl.so.* /lib
 ln -sfv ../../lib/$(readlink /usr/lib/libacl.so) /usr/lib/libacl.so
 finish
 
-# 8.24. Libcap-2.42
-begin libcap-2.42 tar.xz
+# 8.24. Libcap-2.48
+begin libcap-2.48 tar.xz
 sed -i '/install -m.*STACAPLIBNAME/d' libcap/Makefile
-make lib=lib
-make lib=lib PKGCONFIGDIR=/usr/lib/pkgconfig install
-chmod -v 755 /lib/libcap.so.2.42
-mv -v /lib/libpsx.a /usr/lib
-rm -v /lib/libcap.so
-ln -sfv ../../lib/libcap.so.2 /usr/lib/libcap.so
+make prefix=/usr lib=lib
+make test
+make prefix=/usr lib=lib install
+for libname in cap psx; do
+    mv -v /usr/lib/lib${libname}.so.* /lib
+    ln -sfv ../../lib/lib${libname}.so.2 /usr/lib/lib${libname}.so
+    chmod -v 755 /lib/lib${libname}.so.2.48
+done
 finish
 
 # 8.25. Shadow-4.8.1
@@ -407,7 +416,7 @@ rm -rf /usr/lib/gcc/$(gcc -dumpmachine)/10.2.0/include-fixed/bits/
 chown -v -R root:root \
     /usr/lib/gcc/*linux-gnu/10.2.0/include{,-fixed}
 ln -sv ../usr/bin/cpp /lib
-install -v -dm755 /usr/lib/bfd-plugins
+#install -v -dm755 /usr/lib/bfd-plugins
 ln -sfv ../../libexec/gcc/$(gcc -dumpmachine)/10.2.0/liblto_plugin.so \
         /usr/lib/bfd-plugins/
 echo 'int main(){}' > dummy.c
@@ -470,8 +479,8 @@ install -d -m755           /usr/share/doc/sed-4.8
 install -m644 doc/sed.html /usr/share/doc/sed-4.8
 finish
 
-# 8.30. Psmisc-23.3
-begin psmisc-23.3 tar.xz
+# 8.30. Psmisc-23.4
+begin psmisc-23.4 tar.xz
 ./configure --prefix=/usr
 make
 make install
@@ -489,31 +498,37 @@ make install
 chmod -v 0755 /usr/lib/preloadable_libintl.so
 finish
 
-# 8.32. Bison-3.7.1
-begin bison-3.7.1 tar.xz
-./configure --prefix=/usr --docdir=/usr/share/doc/bison-3.7.1
+# 8.32. Bison-3.7.5
+begin bison-3.7.5 tar.xz
+./configure --prefix=/usr --docdir=/usr/share/doc/bison-3.7.5
 make
 make install
 finish
 
-# 8.33. Grep-3.4
-begin grep-3.4 tar.xz
+# 8.33. Grep-3.6
+begin grep-3.6 tar.xz
 ./configure --prefix=/usr --bindir=/bin
 make
 make install
 finish
 
-# 8.34. Bash-5.0
-begin bash-5.0 tar.gz
-patch -Np1 -i ../bash-5.0-upstream_fixes-1.patch
+# 8.34. Bash-5.1
+begin bash-5.1 tar.gz
+sed -i  '/^bashline.o:.*shmbchar.h/a bashline.o: ${DEFDIR}/builtext.h' Makefile.in
 ./configure --prefix=/usr                    \
-            --docdir=/usr/share/doc/bash-5.0 \
+            --docdir=/usr/share/doc/bash-5.1 \
             --without-bash-malloc            \
             --with-installed-readline
 make
 make install
 mv -vf /usr/bin/bash /bin
 finish
+
+
+
+exit
+
+
 
 # 8.35. Libtool-2.4.6
 begin libtool-2.4.6 tar.xz
