@@ -13,14 +13,13 @@ This build will be accomplished inside a Fedora release 34 machine.
 
 ```
 dnf install -y vim-default-editor --allowerasing
-```
-visudo
+cat >> /etc/sudoers << "EOF"
 paul    ALL=(ALL:ALL)   NOPASSWD:ALL
 ansible ALL=(ALL:ALL)   NOPASSWD:ALL
+EOF
 
-dnf group list -v
-yum grouplist hidden
-
+reboot
+```
 Installing Package Groups with dnf
 
 ```
@@ -30,16 +29,13 @@ dnf -y install texinfo
 dnf -y erase byacc
 dnf -y reinstall bison
 ln -s `which bison` /usr/bin/yacc
-
 mkdir /lfs
 export LFS=/lfs
 echo "export LFS=/lfs" >>  .bash_profile 
 mkdir -v $LFS/sources
 chmod -v a+wt $LFS/sources
 wget https://www.linuxfromscratch.org/lfs/view/10.1/wget-list
-
 wget https://prdownloads.sourceforge.net/expat/expat-2.4.1.tar.xz
-
 wget --input-file=wget-list --continue --directory-prefix=$LFS/sources
 wget https://www.linuxfromscratch.org/lfs/view/10.1/md5sums
 mv md5sums $LFS/sources
@@ -54,6 +50,7 @@ mv $LFS/sources/tcl8.6.11-src.tar.gz $LFS/sources/tcl8.6.11.tar.gz
 cd /lfs/sources
 wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.12.13.tar.xz
 wget https://github.com/vim/vim/archive/refs/tags/v8.2.3043.tar.gz
+mv v8.2.3043.tar.gz vim-8.2.3043.tar.gz
 wget https://ftp.gnu.org/gnu/grub/grub-2.06.tar.gz
 git clone https://github.com/vanallp/lfs-scripts.git
 
@@ -109,7 +106,7 @@ Run the lfs-cross.sh script, which will build the cross-toolchain and cross comp
 
 
 ``` 
-sh $LFS/sources/lfs-cross.sh | tee $LFS/sources/lfs-cross.log
+sh $LFS/sources/lfs-scripts/lfs-cross.sh | tee $LFS/sources/lfs-cross.log
 ```
 
 Return to being root:
@@ -154,6 +151,7 @@ chroot "$LFS" /usr/bin/env -i   \
 Create essential directories, files and symlinks:
 
 ```
+source 
 mkdir -pv /{boot,home,mnt,opt,srv}
 mkdir -pv /etc/{opt,sysconfig}
 mkdir -pv /lib/firmware
@@ -241,13 +239,12 @@ For the final build phase, run the lfs-system.sh script:
 
 ``` 
 sh sources/lfs-scripts/lfs-system.sh | tee /lfs-system.log
+
+exec /bin/bash --login +h
+
+sh sources/lfs-scripts/lfs-system2.sh | tee /lfs-system2.log
 ```
 
-You must now set a password for the root user (you will have to type a password):
-
-```
-passwd root
-```
 
 Logout from the chroot environment and re-enter it with updated configuration:
 
