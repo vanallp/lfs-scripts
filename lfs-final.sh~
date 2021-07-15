@@ -28,7 +28,7 @@ cd /sources
 
 # 9.2. LFS-Bootscripts-20210201
 begin lfs-bootscripts-20210201 tar.xz
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/finalrc.log
 finish
 
 # 9.4.1.2. Creating Custom Udev Rules
@@ -194,7 +194,7 @@ sysfs          /sys         sysfs    nosuid,noexec,nodev         0 0
 devpts         /dev/pts     devpts   gid=5,mode=620              0 0
 tmpfs          /run         tmpfs    defaults                    0 0
 devtmpfs       /dev         devtmpfs mode=0755,nosuid            0 0
-
+efivarfs       /sys/firmware/efi/efivars  efivarfs  defaults     0 1
 # End /etc/fstab
 EOF
 

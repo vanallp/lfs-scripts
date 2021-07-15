@@ -28,12 +28,12 @@ cd /sources
 
 # 8.3. Man-pages-5.10
 begin man-pages-5.10 tar.xz
-make install
+make install ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.4. Iana-Etc-20210202
 begin iana-etc-20210202 tar.gz
-cp services protocols /etc
+cp services protocols /etc ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.5. Glibc-2.33
@@ -56,7 +56,7 @@ make
 #esac
 touch /etc/ld.so.conf
 sed '/test-installation/s@$(PERL)@echo not running@' -i ../Makefile
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 cp -v ../nscd/nscd.conf /etc/nscd.conf
 mkdir -pv /var/cache/nscd
 mkdir -pv /usr/lib/locale
@@ -134,7 +134,7 @@ finish
 begin zlib-1.2.11 tar.xz
 ./configure --prefix=/usr
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /usr/lib/libz.so.* /lib
 ln -sfv ../../lib/$(readlink /usr/lib/libz.so) /usr/lib/libz.so
 rm -fv /usr/lib/libz.a
@@ -148,7 +148,7 @@ sed -i "s@(PREFIX)/man@(PREFIX)/share/man@g" Makefile
 make -f Makefile-libbz2_so
 make clean
 make
-make PREFIX=/usr install
+make PREFIX=/usr install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 cp -v bzip2-shared /bin/bzip2
 cp -av libbz2.so* /lib
 ln -sv ../../lib/libbz2.so.1.0 /usr/lib/libbz2.so
@@ -164,7 +164,7 @@ begin xz-5.2.5 tar.xz
             --disable-static \
             --docdir=/usr/share/doc/xz-5.2.5
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v   /usr/bin/{lzma,unlzma,lzcat,xz,unxz,xzcat} /bin
 mv -v /usr/lib/liblzma.so.* /lib
 ln -svf ../../lib/$(readlink /usr/lib/liblzma.so) /usr/lib/liblzma.so
@@ -173,7 +173,7 @@ finish
 # 8.9. Zstd-1.4.8
 begin zstd-1.4.8 tar.gz
 make
-make prefix=/usr install
+make prefix=/usr install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 rm -v /usr/lib/libzstd.a
 mv -v /usr/lib/libzstd.so.* /lib
 ln -sfv ../../lib/$(readlink /usr/lib/libzstd.so) /usr/lib/libzstd.so
@@ -183,7 +183,7 @@ finish
 begin file-5.39 tar.gz
 ./configure --prefix=/usr
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.11. Readline-8.1
@@ -195,7 +195,7 @@ sed -i '/{OLDSUFF}/c:' support/shlib-install
             --with-curses    \
             --docdir=/usr/share/doc/readline-8.1
 make SHLIB_LIBS="-lncursesw"
-make SHLIB_LIBS="-lncursesw" install
+make SHLIB_LIBS="-lncursesw" install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /usr/lib/lib{readline,history}.so.* /lib
 ## chmod -v u+w /lib/lib{readline,history}.so.*
 ln -sfv ../../lib/$(readlink /usr/lib/libreadline.so) /usr/lib/libreadline.so
@@ -209,7 +209,7 @@ sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
 echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
 ./configure --prefix=/usr
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.13. Bc-3.3.0
@@ -217,7 +217,7 @@ begin bc-3.3.0 tar.xz
 #PREFIX=/usr CC=gcc CFLAGS="-std=c99" ./configure.sh -G -O3
 PREFIX=/usr CC=gcc  ./configure.sh -G -O3
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
  
 ## 8.14. Flex-2.6.4
@@ -226,7 +226,7 @@ begin flex-2.6.4 tar.gz
             --docdir=/usr/share/doc/flex-2.6.4 \
             --disable-static
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 ln -sv flex /usr/bin/lex
 finish
 
@@ -253,7 +253,7 @@ sed -e "s|$SRCDIR/unix/pkgs/itcl4.2.1|/usr/lib/itcl4.2.1|" \
     -e "s|$SRCDIR/pkgs/itcl4.2.1|/usr/include|"            \
     -i pkgs/itcl4.2.1/itclConfig.sh
 unset SRCDIR
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 chmod -v u+w /usr/lib/libtcl8.6.so
 make install-private-headers
 ln -sfv tclsh8.6 /usr/bin/tclsh
@@ -268,7 +268,7 @@ begin expect5.45.4 tar.gz
             --mandir=/usr/share/man \
             --with-tclinclude=/usr/include
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 ln -svf expect5.45.4/libexpect5.45.4.so /usr/lib
 finish
 
@@ -277,7 +277,7 @@ begin dejagnu-1.6.2 tar.gz
 ./configure --prefix=/usr
 makeinfo --html --no-split -o doc/dejagnu.html doc/dejagnu.texi
 makeinfo --plaintext       -o doc/dejagnu.txt  doc/dejagnu.texi
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 install -v -dm755  /usr/share/doc/dejagnu-1.6.2
 install -v -m644   doc/dejagnu.{html,txt} /usr/share/doc/dejagnu-1.6.2
 finish
@@ -296,7 +296,7 @@ cd       build
              --enable-64-bit-bfd \
              --with-system-zlib
 make tooldir=/usr
-make tooldir=/usr install
+make tooldir=/usr install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 rm -fv /usr/lib/lib{bfd,ctf,ctf-nobfd,opcodes}.a
 finish
 
@@ -308,7 +308,7 @@ begin gmp-6.2.1 tar.xz
             --docdir=/usr/share/doc/gmp-6.2.1
 make
 make html
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 make install-html
 finish
 
@@ -320,7 +320,7 @@ begin mpfr-4.1.0 tar.xz
             --docdir=/usr/share/doc/mpfr-4.1.0
 make
 make html
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 make install-html
 finish
 
@@ -331,7 +331,7 @@ begin mpc-1.2.1 tar.gz
             --docdir=/usr/share/doc/mpc-1.2.1
 make
 make html
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 make install-html
 finish
 
@@ -343,7 +343,7 @@ begin attr-2.4.48 tar.gz
             --sysconfdir=/etc \
             --docdir=/usr/share/doc/attr-2.4.48
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /usr/lib/libattr.so.* /lib
 ln -sfv ../../lib/$(readlink /usr/lib/libattr.so) /usr/lib/libattr.so
 finish
@@ -356,7 +356,7 @@ begin acl-2.2.53 tar.gz
             --libexecdir=/usr/lib \
             --docdir=/usr/share/doc/acl-2.2.53
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /usr/lib/libacl.so.* /lib
 ln -sfv ../../lib/$(readlink /usr/lib/libacl.so) /usr/lib/libacl.so
 finish
@@ -366,7 +366,7 @@ begin libcap-2.48 tar.xz
 sed -i '/install -m.*STACAPLIBNAME/d' libcap/Makefile
 make prefix=/usr lib=lib
 make test
-make prefix=/usr lib=lib install
+make prefix=/usr lib=lib install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 for libname in cap psx; do
     mv -v /usr/lib/lib${libname}.so.* /lib
     ln -sfv ../../lib/lib${libname}.so.2 /usr/lib/lib${libname}.so
@@ -388,7 +388,7 @@ touch /usr/bin/passwd
 ./configure --sysconfdir=/etc \
             --with-group-name-max-length=32
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 pwconv
 grpconv
 echo "root" | passwd --stdin root
@@ -411,7 +411,7 @@ cd       build
              --disable-bootstrap      \
              --with-system-zlib
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 rm -rf /usr/lib/gcc/$(gcc -dumpmachine)/10.2.0/include-fixed/bits/
 chown -v -R root:root \
     /usr/lib/gcc/*linux-gnu/10.2.0/include{,-fixed}
@@ -439,7 +439,7 @@ begin pkg-config-0.29.2 tar.gz
             --disable-host-tool        \
             --docdir=/usr/share/doc/pkg-config-0.29.2
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.28. Ncurses-6.2
@@ -453,7 +453,7 @@ sed -i '/LIBTOOL_INSTALL/d' c++/Makefile.in
             --enable-pc-files       \
             --enable-widec
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /usr/lib/libncursesw.so.6* /lib
 ln -sfv ../../lib/$(readlink /usr/lib/libncursesw.so) /usr/lib/libncursesw.so
 for lib in ncurses form panel menu ; do
@@ -474,7 +474,7 @@ begin sed-4.8 tar.xz
 ./configure --prefix=/usr --bindir=/bin
 make
 make html
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 install -d -m755           /usr/share/doc/sed-4.8
 install -m644 doc/sed.html /usr/share/doc/sed-4.8
 finish
@@ -483,7 +483,7 @@ finish
 begin psmisc-23.4 tar.xz
 ./configure --prefix=/usr
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /usr/bin/fuser   /bin
 mv -v /usr/bin/killall /bin
 finish
@@ -494,7 +494,7 @@ begin gettext-0.21 tar.xz
             --disable-static \
             --docdir=/usr/share/doc/gettext-0.21
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 chmod -v 0755 /usr/lib/preloadable_libintl.so
 finish
 
@@ -502,14 +502,14 @@ finish
 begin bison-3.7.5 tar.xz
 ./configure --prefix=/usr --docdir=/usr/share/doc/bison-3.7.5
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.33. Grep-3.6
 begin grep-3.6 tar.xz
 ./configure --prefix=/usr --bindir=/bin
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.34. Bash-5.1
@@ -520,11 +520,11 @@ sed -i  '/^bashline.o:.*shmbchar.h/a bashline.o: ${DEFDIR}/builtext.h' Makefile.
             --without-bash-malloc            \
             --with-installed-readline
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -vf /usr/bin/bash /bin
 finish
 
-
+cat /sources/systemrc.log
 
 exit
 

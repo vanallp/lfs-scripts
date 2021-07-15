@@ -31,9 +31,9 @@ cd build
              --with-sysroot=$LFS        \
              --target=$LFS_TGT          \
              --disable-nls              \
-             --disable-werror
+	     --disable-werror
 make
-make install
+make install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
 # 5.3. GCC-10.2.0 - Pass 1
@@ -73,16 +73,16 @@ cd       build
     --disable-libstdcxx                            \
     --enable-languages=c,c++
 make
-make install
+make install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 cd ..
 cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
   `dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/install-tools/include/limits.h
 finish
 
-# 5.4. Linux-5.12.13 API Headers 
-begin linux-5.12.13 tar.xz
+# 5.4. Linux-5.13.1 API Headers 
+begin linux-5.13.1 tar.xz
 make mrproper
-make headers
+make headers ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 find usr/include -name '.*' -delete
 rm usr/include/Makefile
 cp -rv usr/include $LFS/usr
@@ -108,7 +108,7 @@ cd       build
       --with-headers=$LFS/usr/include    \
       libc_cv_slibdir=/lib
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 echo 'int main(){}' > dummy.c
 $LFS_TGT-gcc dummy.c
 readelf -l a.out | grep '/ld-linux'
@@ -129,7 +129,7 @@ cd       build
     --disable-libstdcxx-pch         \
     --with-gxx-include-dir=/tools/$LFS_TGT/include/c++/10.2.0
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
 # 6.2. M4-1.4.18
@@ -140,7 +140,7 @@ echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
             --host=$LFS_TGT \
             --build=$(build-aux/config.guess)
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
 # 6.3. Ncurses-6.2
@@ -163,7 +163,7 @@ popd
             --without-normal             \
             --enable-widec
 make
-make DESTDIR=$LFS TIC_PATH=$(pwd)/build/progs/tic install
+make DESTDIR=$LFS TIC_PATH=$(pwd)/build/progs/tic install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 echo "INPUT(-lncursesw)" > $LFS/usr/lib/libncurses.so
 mv -v $LFS/usr/lib/libncursesw.so.6* $LFS/lib
 ln -sfv ../../lib/$(readlink $LFS/usr/lib/libncursesw.so) $LFS/usr/lib/libncursesw.so
@@ -176,7 +176,7 @@ begin bash-5.1 tar.gz
             --host=$LFS_TGT                 \
             --without-bash-malloc
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 mv $LFS/usr/bin/bash $LFS/bin/bash
 ln -sv bash $LFS/bin/sh
 finish
@@ -189,7 +189,7 @@ begin coreutils-8.32 tar.xz
             --enable-install-program=hostname \
             --enable-no-install-program=kill,uptime
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 mv -v $LFS/usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} $LFS/bin
 mv -v $LFS/usr/bin/{false,ln,ls,mkdir,mknod,mv,pwd,rm}        $LFS/bin
 mv -v $LFS/usr/bin/{rmdir,stty,sync,true,uname}               $LFS/bin
@@ -204,7 +204,7 @@ finish
 begin diffutils-3.7 tar.xz
 ./configure --prefix=/usr --host=$LFS_TGT
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
 # 6.7. File-5.39
@@ -219,7 +219,7 @@ pushd build
 popd
 ./configure --prefix=/usr --host=$LFS_TGT --build=$(./config.guess)
 make FILE_COMPILE=$(pwd)/build/src/file
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
 # 6.8. Findutils-4.8.0
@@ -228,7 +228,7 @@ begin findutils-4.8.0 tar.xz
             --host=$LFS_TGT \
             --build=$(build-aux/config.guess)
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 mv -v $LFS/usr/bin/find $LFS/bin
 sed -i 's|find:=${BINDIR}|find:=/bin|' $LFS/usr/bin/updatedb
 finish
@@ -240,7 +240,7 @@ sed -i 's/extras//' Makefile.in
             --host=$LFS_TGT \
             --build=$(./config.guess)
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
 # 6.10. Grep-3.6
@@ -249,14 +249,14 @@ begin grep-3.6 tar.xz
             --host=$LFS_TGT \
             --bindir=/bin
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
 # 6.11. Gzip-1.10
 begin gzip-1.10 tar.xz
 ./configure --prefix=/usr --host=$LFS_TGT
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 mv -v $LFS/usr/bin/gzip $LFS/bin
 finish
 
@@ -267,7 +267,7 @@ begin make-4.3 tar.gz
             --host=$LFS_TGT \
             --build=$(build-aux/config.guess)
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
 # 6.13. Patch-2.7.6
@@ -276,7 +276,7 @@ begin patch-2.7.6 tar.xz
             --host=$LFS_TGT \
             --build=$(build-aux/config.guess)
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
 # 6.14. Sed-4.8
@@ -285,7 +285,7 @@ begin sed-4.8 tar.xz
             --host=$LFS_TGT \
             --bindir=/bin
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
 # 6.15. Tar-1.34
@@ -295,7 +295,7 @@ begin tar-1.34 tar.xz
             --build=$(build-aux/config.guess) \
             --bindir=/bin
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
 # 6.16. Xz-5.2.5
@@ -306,7 +306,7 @@ begin xz-5.2.5 tar.xz
             --disable-static                  \
             --docdir=/usr/share/doc/xz-5.2.5
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 mv -v $LFS/usr/bin/{lzma,unlzma,lzcat,xz,unxz,xzcat}  $LFS/bin
 mv -v $LFS/usr/lib/liblzma.so.*                       $LFS/lib
 ln -svf ../../lib/$(readlink $LFS/usr/lib/liblzma.so) $LFS/usr/lib/liblzma.so
@@ -325,7 +325,7 @@ cd       build
     --disable-werror           \
     --enable-64-bit-bfd
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 install -vm755 libctf/.libs/libctf.so.0.0.0 $LFS/usr/lib
 finish
 
@@ -364,8 +364,9 @@ ln -s ../../../libgcc/gthr-posix.h $LFS_TGT/libgcc/gthr-default.h
     --disable-libstdcxx                            \
     --enable-languages=c,c++
 make
-make DESTDIR=$LFS install
+make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 ln -sv gcc $LFS/usr/bin/cc
 finish
 
+cat $LFS/sources/rc.log
 

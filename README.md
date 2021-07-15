@@ -17,12 +17,7 @@ cat >> /etc/sudoers << "EOF"
 paul    ALL=(ALL:ALL)   NOPASSWD:ALL
 ansible ALL=(ALL:ALL)   NOPASSWD:ALL
 EOF
-
-reboot
-```
-Installing Package Groups with dnf
-
-```
+kernel="5.13.2"
 dnf -y group install "C Development Tools and Libraries"
 dnf -y group install "Development Tools"
 dnf -y install texinfo
@@ -48,7 +43,7 @@ mv $LFS/sources/tcl8.6.11-src.tar.gz $LFS/sources/tcl8.6.11.tar.gz
 # vim https://github.com/vim/vim/releases
 # https://www.kernel.org/ & vim
 cd /lfs/sources
-wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.12.13.tar.xz
+wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-"$kernel".tar.xz
 wget https://github.com/vim/vim/archive/refs/tags/v8.2.3043.tar.gz
 mv v8.2.3043.tar.gz vim-8.2.3043.tar.gz
 wget https://ftp.gnu.org/gnu/grub/grub-2.06.tar.gz
@@ -71,9 +66,8 @@ chown -v lfs $LFS/sources
 ```
 
 
-
-
 Login as the lfs user:
+
 
 ```
 su - lfs

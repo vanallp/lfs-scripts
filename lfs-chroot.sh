@@ -35,13 +35,13 @@ cd       build
     --host=$(uname -m)-lfs-linux-gnu \
     --disable-libstdcxx-pch
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/rc.log
 finish
 
 # 7.8. Gettext-0.21
 begin gettext-0.21 tar.xz
 ./configure --disable-shared
-make
+make ;rc=$?;echo $package_name $rc >> /sources/rc.log
 cp -v gettext-tools/src/{msgfmt,msgmerge,xgettext} /usr/bin
 finish
 
@@ -50,7 +50,7 @@ begin bison-3.7.5 tar.xz
 ./configure --prefix=/usr \
             --docdir=/usr/share/doc/bison-3.7.5
 make
-make install
+make install ;rc=$?;echo $package_name $rc >> /sources/rc.log
 finish
 
 # 7.10. Perl-5.32.0
@@ -65,7 +65,7 @@ sh Configure -des                                        \
              -Dvendorlib=/usr/lib/perl5/5.32/vendor_perl \
              -Dvendorarch=/usr/lib/perl5/5.32/vendor_perl
 make
-make install
+make install ;rc=$?;echo $package_name $rc >> /sources/rc.log
 finish
 
 # 7.11. Python-3.9.2
@@ -74,14 +74,14 @@ begin Python-3.9.2 tar.xz
             --enable-shared \
             --without-ensurepip
 make
-make install
+make install ;rc=$?;echo $package_name $rc >> /sources/rc.log
 finish
 
 # 7.12. Texinfo-6.7
 begin texinfo-6.7 tar.xz
 ./configure --prefix=/usr
 make
-make install
+make install ;rc=$?;echo $package_name $rc >> /sources/rc.log
 finish
 
 # 7.13. Util-linux-2.36.2
@@ -99,9 +99,11 @@ mkdir -pv /var/lib/hwclock
             --disable-static     \
             --without-python
 make
-make install
+make install ;rc=$?;echo $package_name $rc >> /sources/rc.log
 finish
 
 find /usr/{lib,libexec} -name \*.la -delete
 rm -rf /usr/share/{info,man,doc}/*
+
+cat /sources/rc.log
 

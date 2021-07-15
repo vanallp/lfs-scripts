@@ -52,14 +52,14 @@ make
 make install
 finish
 
-# 8.38. Expat-2.2.10
-begin expat-2.2.10 tar.xz
+# 8.38. Expat-2.4.1
+begin expat-2.4.1 tar.xz
 ./configure --prefix=/usr    \
             --disable-static \
-            --docdir=/usr/share/doc/expat-2.2.10
+            --docdir=/usr/share/doc/expat-2.4.1
 make
 make install
-install -v -m644 doc/*.{html,png,css} /usr/share/doc/expat-2.2.10
+install -v -m644 doc/*.{html,png,css} /usr/share/doc/expat-2.4.1
 finish
 
 # 8.39. Inetutils-2.0

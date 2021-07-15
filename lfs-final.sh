@@ -28,7 +28,7 @@ cd /sources
 
 # 9.2. LFS-Bootscripts-20210201
 begin lfs-bootscripts-20210201 tar.xz
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/finalrc.log
 finish
 
 # 9.4.1.2. Creating Custom Udev Rules
@@ -200,17 +200,17 @@ EOF
 
 cd /sources
 
-# 10.3. Linux-5.13.1
-begin linux-5.13.1 tar.xz
+# 10.3. Linux-"$kernel"
+begin linux-"$kernel" tar.xz
 make mrproper
 make defconfig
 make
 make modules_install
-cp -iv arch/x86/boot/bzImage /boot/vmlinuz-5.13.1-lfs-10.1
-cp -iv System.map /boot/System.map-5.13.1
-cp -iv .config /boot/config-5.13.1
-install -d /usr/share/doc/linux-5.13.1
-cp -r Documentation/* /usr/share/doc/linux-5.13.1
+cp -iv arch/x86/boot/bzImage /boot/vmlinuz-"$kernel"-lfs-10.1
+cp -iv System.map /boot/System.map-"$kernel"
+cp -iv .config /boot/config-"$kernel"
+install -d /usr/share/doc/linux-"$kernel"
+cp -r Documentation/* /usr/share/doc/linux-"$kernel"
 finish
 
 # 10.3.2. Configuring Linux Module Load Order
@@ -236,8 +236,8 @@ set timeout=5
 insmod ext2
 set root=(hd0,1)
 
-menuentry "GNU/Linux, Linux 5.12.13-lfs-10.1" {
-        linux   /boot/vmlinuz-5.12.13-lfs-10.1 root=/dev/sda1 ro
+menuentry "GNU/Linux, Linux "$kernel"-lfs-10.1" {
+        linux   /boot/vmlinuz-"$kernel"-lfs-10.1 root=/dev/sda1 ro
 }
 EOF
 
