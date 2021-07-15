@@ -232,7 +232,7 @@ finish
 
 
 # 8.15. Tcl-8.6.11
-begin tcl8.6.10 tar.gz
+begin tcl8.6.11 tar.gz
 tar -xf ../tcl8.6.11-html.tar.gz --strip-components=1
 SRCDIR=$(pwd)
 cd unix

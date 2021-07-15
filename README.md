@@ -1,5 +1,6 @@
 # lfs-scripts :penguin:
 Instructions and scripts to build LFS (Linux From Scratch), version 10.1. I'm performing the build on a Fedora 34 Workstation.
+This script is still under construction...  !!!!
 
 # Foreword
 
@@ -37,6 +38,12 @@ mv md5sums $LFS/sources
 pushd $LFS/sources
   md5sum -c md5sums
 popd
+```
+
+Check and confirm everything downloaded and passed OK
+
+
+```
 #The tcl package must be renamed
 mv $LFS/sources/tcl8.6.11-src.tar.gz $LFS/sources/tcl8.6.11.tar.gz
 
@@ -100,7 +107,8 @@ Run the lfs-cross.sh script, which will build the cross-toolchain and cross comp
 
 
 ``` 
-sh $LFS/sources/lfs-scripts/lfs-cross.sh | tee $LFS/sources/lfs-cross.log
+kernel="5.13.2"
+.  $LFS/sources/lfs-scripts/lfs-cross.sh | tee $LFS/sources/lfs-cross.log
 ```
 
 Return to being root:
@@ -232,11 +240,25 @@ tar -cJpf $HOME/lfs-temp-tools-10.1.tar.xz .
 For the final build phase, run the lfs-system.sh script:
 
 ``` 
-sh sources/lfs-scripts/lfs-system.sh | tee /lfs-system.log
+kernel="5.13.2"
+mount -v --bind /dev $LFS/dev
+mount -v --bind /dev/pts $LFS/dev/pts
+mount -vt proc proc $LFS/proc
+mount -vt sysfs sysfs $LFS/sys
+mount -vt tmpfs tmpfs $LFS/run
+chroot "$LFS" /usr/bin/env -i   \
+    HOME=/root                  \
+    TERM="$TERM"                \
+    PS1='(lfs chroot) \u:\w\$ ' \
+    PATH=/bin:/usr/bin:/sbin:/usr/sbin \
+    /bin/bash --login +h
+
+. sources/lfs-scripts/lfs-system.sh | tee /lfs-system.log
 
 exec /bin/bash --login +h
 
-sh sources/lfs-scripts/lfs-system2.sh | tee /lfs-system2.log
+kernel="5.13.2"
+. sources/lfs-scripts/lfs-system2.sh | tee /lfs-system2.log
 ```
 
 
@@ -254,7 +276,8 @@ chroot "$LFS" /usr/bin/env -i          \
 Run the final script to configure the rest of the system:
 
 ```
-sh /lfs-final.sh | tee /lfs-final.log
+kernel="5.13.2"
+. sources/lfs-scripts/lfs-final.sh | tee /lfs-final.log
 ```
 
 # The end
