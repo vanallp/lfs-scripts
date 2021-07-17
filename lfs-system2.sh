@@ -555,5 +555,6 @@ find /{bin,sbin} /usr/{bin,sbin,libexec} -type f \
 # 8.78. Cleaning Up
 rm -rf /tmp/*a
 
+echo "lfs-system2.sh"
 cat  /sources/systemrc.log
 

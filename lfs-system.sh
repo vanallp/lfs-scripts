@@ -524,6 +524,7 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -vf /usr/bin/bash /bin
 finish
 
+echo "lfs-system.sh"
 cat /sources/systemrc.log
 
 exit

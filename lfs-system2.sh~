@@ -31,7 +31,7 @@ cd /sources
 begin libtool-2.4.6 tar.xz
 ./configure --prefix=/usr
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 rm -fv /usr/lib/libltdl.a
 finish
 
@@ -42,14 +42,14 @@ sed -r -i '/^char.*parseopt_program_(doc|args)/d' src/parseopt.c
             --disable-static \
             --enable-libgdbm-compat
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.37. Gperf-3.1
 begin gperf-3.1 tar.gz
 ./configure --prefix=/usr --docdir=/usr/share/doc/gperf-3.1
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.38. Expat-2.4.1
@@ -58,7 +58,7 @@ begin expat-2.4.1 tar.xz
             --disable-static \
             --docdir=/usr/share/doc/expat-2.4.1
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 install -v -m644 doc/*.{html,png,css} /usr/share/doc/expat-2.4.1
 finish
 
@@ -74,7 +74,7 @@ begin inetutils-2.0 tar.xz
             --disable-rsh        \
             --disable-servers
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /usr/bin/{hostname,ping,ping6,traceroute} /bin
 mv -v /usr/bin/ifconfig /sbin
 finish
@@ -98,7 +98,7 @@ sh Configure -des                                         \
              -Duseshrplib                                 \
              -Dusethreads
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 unset BUILD_ZLIB BUILD_BZIP2
 finish
 
@@ -106,7 +106,7 @@ finish
 begin XML-Parser-2.46 tar.gz
 perl Makefile.PL
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.42. Intltool-0.51.0
@@ -114,7 +114,7 @@ begin intltool-0.51.0 tar.gz
 sed -i 's:\\\${:\\\$\\{:' intltool-update.in
 ./configure --prefix=/usr
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 install -v -Dm644 doc/I18N-HOWTO /usr/share/doc/intltool-0.51.0/I18N-HOWTO
 finish
 
@@ -122,7 +122,7 @@ finish
 begin autoconf-2.71 tar.xz
 ./configure --prefix=/usr
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.44. Automake-1.16.3
@@ -130,7 +130,7 @@ begin automake-1.16.3 tar.xz
 sed -i "s/''/etags/" t/tags-lisp-space.sh
 ./configure --prefix=/usr --docdir=/usr/share/doc/automake-1.16.3
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.45. Kmod-28
@@ -142,7 +142,7 @@ begin kmod-28 tar.xz
             --with-xz              \
             --with-zlib
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 for target in depmod insmod lsmod modinfo modprobe rmmod; do
   ln -sfv ../bin/kmod /sbin/$target
 done
@@ -156,7 +156,7 @@ begin elfutils-0.183 tar.bz2
             --enable-libdebuginfod=dummy \
             --libdir=/lib
 make
-make -C libelf install
+make -C libelf install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 install -vm644 config/libelf.pc /usr/lib/pkgconfig
 rm /lib/libelf.a
 finish
@@ -165,7 +165,7 @@ finish
 begin libffi-3.3 tar.gz
 ./configure --prefix=/usr --disable-static --with-gcc-arch=native
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.48. OpenSSL-1.1.1j
@@ -177,7 +177,7 @@ begin openssl-1.1.1j tar.gz
          zlib-dynamic
 make
 sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
-make MANSUFFIX=ssl install
+make MANSUFFIX=ssl install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /usr/share/doc/openssl /usr/share/doc/openssl-1.1.1j
 cp -vfr doc/* /usr/share/doc/openssl-1.1.1j
 finish
@@ -190,7 +190,7 @@ begin Python-3.9.2 tar.xz
             --with-system-ffi   \
             --with-ensurepip=yes
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 install -v -dm755 /usr/share/doc/python-3.9.2/html 
 tar --strip-components=1  \
     --no-same-owner       \
@@ -208,7 +208,7 @@ sed -i '/int Guess/a \
   if ( j > 0 ) return j;\
 ' src/ninja.cc
 python3 configure.py --bootstrap
-install -vm755 ninja /usr/bin/
+install -vm755 ninja /usr/bin/;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 install -vDm644 misc/bash-completion /usr/share/bash-completion/completions/ninja
 install -vDm644 misc/zsh-completion  /usr/share/zsh/site-functions/_ninja
 finish
@@ -216,7 +216,7 @@ finish
 # 8.51. Meson-0.57.1
 begin meson-0.57.1 tar.gz
 python3 setup.py build
-python3 setup.py install --root=dest
+python3 setup.py install --root=dest;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 cp -rv dest/* /
 finish
 
@@ -230,7 +230,7 @@ FORCE_UNSAFE_CONFIGURE=1
             --prefix=/usr            \
             --enable-no-install-program=kill,uptime
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} /bin
 mv -v /usr/bin/{false,ln,ls,mkdir,mknod,mv,pwd,rm} /bin
 mv -v /usr/bin/{rmdir,stty,sync,true,uname} /bin
@@ -244,14 +244,14 @@ finish
 begin check-0.15.2 tar.gz
 ./configure --prefix=/usr --disable-static
 make
-make docdir=/usr/share/doc/check-0.15.2 install
+make docdir=/usr/share/doc/check-0.15.2 install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.54. Diffutils-3.7
 begin diffutils-3.7 tar.xz
 ./configure --prefix=/usr
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.55. Gawk-5.1.0
@@ -259,7 +259,7 @@ begin gawk-5.1.0 tar.xz
 sed -i 's/extras//' Makefile.in
 ./configure --prefix=/usr
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mkdir -v /usr/share/doc/gawk-5.1.0
 cp    -v doc/{awkforai.txt,*.{eps,pdf,jpg}} /usr/share/doc/gawk-5.1.0
 finish
@@ -268,7 +268,7 @@ finish
 begin findutils-4.8.0 tar.xz
 ./configure --prefix=/usr --localstatedir=/var/lib/locate
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /usr/bin/find /bin
 sed -i 's|find:=${BINDIR}|find:=/bin|' /usr/bin/updatedb
 finish
@@ -277,7 +277,7 @@ finish
 begin groff-1.22.4 tar.gz
 PAGE=letter ./configure --prefix=/usr
 make -j1
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.58. GRUB-2.04
@@ -290,7 +290,7 @@ sed "s/gold-version/& -R .note.gnu.property/" \
             --disable-efiemu       \
             --disable-werror
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /etc/bash_completion.d/grub /usr/share/bash-completion/completions
 finish
 
@@ -298,14 +298,14 @@ finish
 begin less-563 tar.gz
 ./configure --prefix=/usr --sysconfdir=/etc
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.60. Gzip-1.10
 begin gzip-1.10 tar.xz
 ./configure --prefix=/usr
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /usr/bin/gzip /bin
 finish
 
@@ -315,7 +315,7 @@ sed -i /ARPD/d Makefile
 rm -fv man/man8/arpd.8
 sed -i 's/.m_ipt.o//' tc/Makefile
 make
-make DOCDIR=/usr/share/doc/iproute2-5.10.0 install
+make DOCDIR=/usr/share/doc/iproute2-5.10.0 install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.62. Kbd-2.4.0
@@ -325,7 +325,7 @@ sed -i '/RESIZECONS_PROGS=/s/yes/no/' configure
 sed -i 's/resizecons.8 //' docs/man/man8/Makefile.in
 ./configure --prefix=/usr --disable-vlock
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 rm -v /usr/lib/libtswrap.{a,la,so*}
 mkdir -v            /usr/share/doc/kbd-2.4.0
 cp -R -v docs/doc/* /usr/share/doc/kbd-2.4.0
@@ -335,21 +335,21 @@ finish
 begin libpipeline-1.5.3 tar.gz
 ./configure --prefix=/usr
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.64. Make-4.3
 begin make-4.3 tar.gz
 ./configure --prefix=/usr
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.65. Patch-2.7.6
 begin patch-2.7.6 tar.x
 ./configure --prefix=/usr
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.66. Man-DB-2.9.4
@@ -365,7 +365,7 @@ begin man-db-2.9.4 tar.xz
             --with-systemdtmpfilesdir=           \
             --with-systemdsystemunitdir=
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.67. Tar-1.34
@@ -374,7 +374,7 @@ FORCE_UNSAFE_CONFIGURE=1  \
 ./configure --prefix=/usr \
             --bindir=/bin
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 make -C doc install-html docdir=/usr/share/doc/tar-1.34
 finish
 
@@ -382,7 +382,7 @@ finish
 begin texinfo-6.7 tar.xz
 ./configure --prefix=/usr --disable-static
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 make TEXMF=/usr/share/texmf install-tex
 pushd /usr/share/info
   rm -v dir
@@ -397,7 +397,7 @@ begin vim-8.2.2433 tar.gz
 echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 ./configure --prefix=/usr
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 ln -sv vim /usr/bin/vi
 for L in  /usr/share/man/{,*/}man1/vim.1; do
     ln -sv vim.1 $(dirname $L)/vi.1
@@ -437,7 +437,7 @@ begin eudev-3.2.10 tar.gz
 make
 mkdir -pv /lib/udev/rules.d
 mkdir -pv /etc/udev/rules.d
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 tar -xvf ../udev-lfs-20171102.tar.xz
 make -f udev-lfs-20171102/Makefile.lfs install
 udevadm hwdb --update
@@ -452,7 +452,7 @@ begin procps-ng-3.3.17 tar.xz
             --disable-static                         \
             --disable-kill
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /usr/lib/libprocps.so.* /lib
 ln -sfv ../../lib/$(readlink /usr/lib/libprocps.so) /usr/lib/libprocps.so
 finish
@@ -475,7 +475,7 @@ begin util-linux-2.36.2 tar.xz
             --without-systemdsystemunitdir \
 	    runstatedir=/run
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.73. E2fsprogs-1.46.1
@@ -491,7 +491,7 @@ cd       build
              --disable-uuidd         \
              --disable-fsck
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 rm -fv /usr/lib/{libcom_err,libe2p,libext2fs,libss}.a
 gunzip -v /usr/share/info/libext2fs.info.gz
 install-info --dir-file=/usr/share/info/dir /usr/share/info/libext2fs.info
@@ -505,7 +505,7 @@ begin sysklogd-1.5.1 tar.gz
 sed -i '/Error loading kernel symbols/{n;n;d}' ksym_mod.c
 sed -i 's/union wait/int/' syslogd.c
 make
-make BINDIR=/sbin install
+make BINDIR=/sbin install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 cat > /etc/syslog.conf << "EOF"
 # Begin /etc/syslog.conf
 
@@ -525,7 +525,7 @@ finish
 begin sysvinit-2.98 tar.xz
 patch -Np1 -i ../sysvinit-2.98-consolidated-1.patch
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.77. Stripping Again
@@ -553,4 +553,7 @@ find /{bin,sbin} /usr/{bin,sbin,libexec} -type f \
     -exec strip --strip-all {} ';'
 
 # 8.78. Cleaning Up
-rm -rf /tmp/*
+rm -rf /tmp/*a
+
+cat  /sources/systemrc.log
+

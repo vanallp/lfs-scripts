@@ -368,4 +368,6 @@ make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 ln -sv gcc $LFS/usr/bin/cc
 finish
 
+echo "lfs-cross"
+cat $LFS/sources/rc.log
 

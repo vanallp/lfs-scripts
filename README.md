@@ -4,9 +4,9 @@ This script is still under construction...  !!!!
 
 # Foreword
 
-First, this guide does not replace reading the whole LFS book. [Read it!](https://www.linuxfromscratch.org/lfs/view/stable/)
-
+First, this guide does not replace reading the whole LFS book(v10.1 is current). [Read it!](https://www.linuxfromscratch.org/lfs/view/stable/)
 This build will be accomplished inside a Fedora release 34 machine.
+Pick a kernel. [here](https://www.kernel.org/)
 
 # Build instructions
 
@@ -18,7 +18,10 @@ cat >> /etc/sudoers << "EOF"
 paul    ALL=(ALL:ALL)   NOPASSWD:ALL
 ansible ALL=(ALL:ALL)   NOPASSWD:ALL
 EOF
+
+# several times below I have to set the kernel version with:
 kernel="5.13.2"
+
 dnf -y group install "C Development Tools and Libraries"
 dnf -y group install "Development Tools"
 dnf -y install texinfo
@@ -38,6 +41,7 @@ mv md5sums $LFS/sources
 pushd $LFS/sources
   md5sum -c md5sums
 popd
+
 ```
 
 Check and confirm everything downloaded and passed OK
