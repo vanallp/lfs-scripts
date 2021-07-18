@@ -20,7 +20,7 @@ ansible ALL=(ALL:ALL)   NOPASSWD:ALL
 EOF
 
 # several times below I have to set the kernel version with:
-kernel="5.13.2"
+kernel="5.12.17"
 
 dnf -y group install "C Development Tools and Libraries"
 dnf -y group install "Development Tools"
@@ -34,10 +34,10 @@ echo "export LFS=/lfs" >>  .bash_profile
 mkdir -v $LFS/sources
 chmod -v a+wt $LFS/sources
 wget https://www.linuxfromscratch.org/lfs/view/10.1/wget-list
-wget https://prdownloads.sourceforge.net/expat/expat-2.4.1.tar.xz
+wget https://prdownloads.sourceforge.net/expat/expat-2.4.1.tar.xz --directory-prefix=$LFS/sources
 wget --input-file=wget-list --continue --directory-prefix=$LFS/sources
-wget https://www.linuxfromscratch.org/lfs/view/10.1/md5sums
-mv md5sums $LFS/sources
+wget https://www.linuxfromscratch.org/lfs/view/10.1/md5sums --directory-prefix=$LFS/sources
+
 pushd $LFS/sources
   md5sum -c md5sums
 popd
@@ -48,8 +48,9 @@ Check and confirm everything downloaded and passed OK
 
 
 ```
-#The tcl package must be renamed
+#The tcl & procps-ng package must be renamed
 mv $LFS/sources/tcl8.6.11-src.tar.gz $LFS/sources/tcl8.6.11.tar.gz
+mv $LFS/sources/procps-ng-3.3.17.tar.gz $LFS/sources/procps-3.3.17.tar.gz
 
 # vim https://github.com/vim/vim/releases
 # https://www.kernel.org/ & vim
@@ -111,7 +112,7 @@ Run the lfs-cross.sh script, which will build the cross-toolchain and cross comp
 
 
 ``` 
-kernel="5.13.2"
+kernel="5.12.17"
 .  $LFS/sources/lfs-scripts/lfs-cross.sh | tee $LFS/sources/lfs-cross.log
 ```
 
@@ -223,7 +224,8 @@ exec /bin/bash --login +h
 Run the lfs-chroot.sh script, which will build additional temporary tools:
 
 ``` 
-sh sources/lfs-scripts/lfs-chroot.sh | tee /lfs-chroot.log
+kernel="5.12.17"
+. sources/lfs-scripts/lfs-chroot.sh | tee /lfs-chroot.log
 ```
 
 Leave the chroot environment and unmount the kernel virtual file systems
@@ -244,7 +246,6 @@ tar -cJpf $HOME/lfs-temp-tools-10.1.tar.xz .
 For the final build phase, run the lfs-system.sh script:
 
 ``` 
-kernel="5.13.2"
 mount -v --bind /dev $LFS/dev
 mount -v --bind /dev/pts $LFS/dev/pts
 mount -vt proc proc $LFS/proc
@@ -257,11 +258,12 @@ chroot "$LFS" /usr/bin/env -i   \
     PATH=/bin:/usr/bin:/sbin:/usr/sbin \
     /bin/bash --login +h
 
+kernel="5.12.17"
 . sources/lfs-scripts/lfs-system.sh | tee /lfs-system.log
 
 exec /bin/bash --login +h
 
-kernel="5.13.2"
+kernel="5.12.17"
 . sources/lfs-scripts/lfs-system2.sh | tee /lfs-system2.log
 ```
 
@@ -280,7 +282,7 @@ chroot "$LFS" /usr/bin/env -i          \
 Run the final script to configure the rest of the system:
 
 ```
-kernel="5.13.2"
+kernel="5.12.17"
 . sources/lfs-scripts/lfs-final.sh | tee /lfs-final.log
 ```
 
