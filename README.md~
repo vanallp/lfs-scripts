@@ -48,8 +48,9 @@ Check and confirm everything downloaded and passed OK
 
 
 ```
-#The tcl package must be renamed
+#The tcl & procps-ng package must be renamed
 mv $LFS/sources/tcl8.6.11-src.tar.gz $LFS/sources/tcl8.6.11.tar.gz
+mv $LFS/sources/procps-ng-3.3.17.tar.xz $LFS/sources/procps-3.3.17.tar.xz
 
 # vim https://github.com/vim/vim/releases
 # https://www.kernel.org/ & vim

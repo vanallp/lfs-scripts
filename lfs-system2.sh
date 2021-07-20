@@ -345,7 +345,7 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.65. Patch-2.7.6
-begin patch-2.7.6 tar.x
+begin patch-2.7.6 tar.xz
 ./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log

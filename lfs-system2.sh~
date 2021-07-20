@@ -224,9 +224,8 @@ finish
 begin coreutils-8.32 tar.xz
 patch -Np1 -i ../coreutils-8.32-i18n-1.patch
 sed -i '/test.lock/s/^/#/' gnulib-tests/gnulib.mk
-autoreconf -fiv
-FORCE_UNSAFE_CONFIGURE=1 
-./configure \
+autoreconf -fiv 
+FORCE_UNSAFE_CONFIGURE=1 ./configure \
             --prefix=/usr            \
             --enable-no-install-program=kill,uptime
 make
@@ -444,7 +443,9 @@ udevadm hwdb --update
 finish
 
 # 8.71. Procps-ng-3.3.17
-begin procps-ng-3.3.17 tar.xz
+# This package extracts to the directory procps-3.3.17, not the expected procps-ng-3.3.17
+# the tar file was renamed after d/l 
+begin procps-3.3.17 tar.xz
 ./configure --prefix=/usr                            \
             --exec-prefix=                           \
             --libdir=/usr/lib                        \
