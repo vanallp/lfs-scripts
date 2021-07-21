@@ -5,7 +5,14 @@ This script is still under construction...  !!!!
 # Foreword
 
 First, this guide does not replace reading the whole LFS book(v10.1 is current). [Read it!](https://www.linuxfromscratch.org/lfs/view/stable/)
-This build will be accomplished inside a Fedora release 34 machine.
+This build will be accomplished inside a Fedora release 34 machine formatted with:
+
+```
+sda1 /boot/efi 600M
+sda2 /         64G ext4
+```
+
+
 Pick a kernel. [here](https://www.kernel.org/)
 
 # Build instructions
@@ -18,6 +25,13 @@ cat >> /etc/sudoers << "EOF"
 paul    ALL=(ALL:ALL)   NOPASSWD:ALL
 ansible ALL=(ALL:ALL)   NOPASSWD:ALL
 EOF
+parted /dev/sda3 mkpart primary ext4 65.1GB -1
+mkfs.ext4 /dev/sda3
+mkdir /mnt/lfs
+cat >> /etc/fstab << "EOF"
+/dev/sda3 /mnt/lfs ext4 defaults 1 1
+EOF
+mount -a
 
 # several times below I have to set the kernel version with:
 kernel="5.12.17"
@@ -28,9 +42,9 @@ dnf -y install texinfo
 dnf -y erase byacc
 dnf -y reinstall bison
 ln -s `which bison` /usr/bin/yacc
-mkdir /lfs
-export LFS=/lfs
-echo "export LFS=/lfs" >>  .bash_profile 
+
+export LFS=/mnt/lfs
+echo "export LFS=/mnt/lfs" >>  .bash_profile 
 mkdir -v $LFS/sources
 chmod -v a+wt $LFS/sources
 wget https://www.linuxfromscratch.org/lfs/view/10.1/wget-list
@@ -54,7 +68,7 @@ mv $LFS/sources/procps-ng-3.3.17.tar.xz $LFS/sources/procps-3.3.17.tar.xz
 
 # vim https://github.com/vim/vim/releases
 # https://www.kernel.org/ & vim
-cd /lfs/sources
+cd $LFS/sources
 wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-"$kernel".tar.xz
 wget https://github.com/vim/vim/archive/refs/tags/v8.2.3043.tar.gz
 mv v8.2.3043.tar.gz vim-8.2.3043.tar.gz
@@ -94,7 +108,7 @@ EOF
 cat > ~/.bashrc << "EOF"
 set +h
 umask 022
-LFS=/lfs
+LFS=/mnt/lfs
 LC_ALL=POSIX
 LFS_TGT=$(uname -m)-lfs-linux-gnu
 PATH=/usr/bin
