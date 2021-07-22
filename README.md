@@ -72,7 +72,15 @@ cd $LFS/sources
 wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-"$kernel".tar.xz
 wget https://github.com/vim/vim/archive/refs/tags/v8.2.3043.tar.gz
 mv v8.2.3043.tar.gz vim-8.2.3043.tar.gz
-wget https://ftp.gnu.org/gnu/grub/grub-2.06.tar.gz
+wget https://github.com/rhboot/efivar/releases/download/37/efivar-37.tar.bz2
+wget https://www.linuxfromscratch.org/patches/blfs/svn/efivar-37-gcc_9-1.patch
+wget https://github.com/rhboot/efibootmgr/archive/17/efibootmgr-17.tar.gz
+wget http://ftp.rpm.org/popt/releases/popt-1.x/popt-1.18.tar.gz
+https://downloads.sourceforge.net/freetype/freetype-2.10.4.tar.xz
+wget https://ftp.gnu.org/gnu/grub/grub-2.06.tar.xz
+wget https://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
+wget https://downloads.sourceforge.net/freetype/freetype-2.10.4.tar.xz
+
 git clone https://github.com/vanallp/lfs-scripts.git
 
 mkdir -pv $LFS/{bin,etc,lib,sbin,usr,var}

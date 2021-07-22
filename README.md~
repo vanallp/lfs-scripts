@@ -34,7 +34,7 @@ EOF
 mount -a
 
 # several times below I have to set the kernel version with:
-kernel="5.12.17"
+kernel="5.13.4"
 
 dnf -y group install "C Development Tools and Libraries"
 dnf -y group install "Development Tools"
@@ -72,7 +72,14 @@ cd $LFS/sources
 wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-"$kernel".tar.xz
 wget https://github.com/vim/vim/archive/refs/tags/v8.2.3043.tar.gz
 mv v8.2.3043.tar.gz vim-8.2.3043.tar.gz
-wget https://ftp.gnu.org/gnu/grub/grub-2.06.tar.gz
+wget https://github.com/rhboot/efivar/releases/download/37/efivar-37.tar.bz2
+wget https://www.linuxfromscratch.org/patches/blfs/svn/efivar-37-gcc_9-1.patch
+wget https://github.com/rhboot/efibootmgr/archive/17/efibootmgr-17.tar.gz
+wget http://ftp.rpm.org/popt/releases/popt-1.x/popt-1.18.tar.gz
+wget https://ftp.gnu.org/gnu/grub/grub-2.06.tar.xz
+wget https://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
+wget https://downloads.sourceforge.net/freetype/freetype-2.10.4.tar.xz
+
 git clone https://github.com/vanallp/lfs-scripts.git
 
 mkdir -pv $LFS/{bin,etc,lib,sbin,usr,var}
@@ -126,7 +133,7 @@ Run the lfs-cross.sh script, which will build the cross-toolchain and cross comp
 
 
 ``` 
-kernel="5.12.17"
+kernel="5.13.4"
 .  $LFS/sources/lfs-scripts/lfs-cross.sh | tee $LFS/sources/lfs-cross.log
 ```
 
@@ -238,7 +245,7 @@ exec /bin/bash --login +h
 Run the lfs-chroot.sh script, which will build additional temporary tools:
 
 ``` 
-kernel="5.12.17"
+kernel="5.13.4"
 . sources/lfs-scripts/lfs-chroot.sh | tee /lfs-chroot.log
 ```
 
@@ -272,12 +279,12 @@ chroot "$LFS" /usr/bin/env -i   \
     PATH=/bin:/usr/bin:/sbin:/usr/sbin \
     /bin/bash --login +h
 
-kernel="5.12.17"
+kernel="5.13.4"
 . sources/lfs-scripts/lfs-system.sh | tee /lfs-system.log
 
 exec /bin/bash --login +h
 
-kernel="5.12.17"
+kernel="5.13.4"
 . sources/lfs-scripts/lfs-system2.sh | tee /lfs-system2.log
 ```
 
@@ -296,7 +303,7 @@ chroot "$LFS" /usr/bin/env -i          \
 Run the final script to configure the rest of the system:
 
 ```
-kernel="5.12.17"
+kernel="5.13.4"
 . sources/lfs-scripts/lfs-final.sh | tee /lfs-final.log
 ```
 
