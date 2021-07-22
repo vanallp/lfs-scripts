@@ -279,15 +279,39 @@ make -j1
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
+#efivar efivar-37.tar.bz2
+begin efivar-37 tar.bz2
+patch -Np1 -i ../efivar-37-gcc_9-1.patch
+make CFLAGS="-O2 -Wno-stringop-truncation"
+make install LIBDIR=/usr/lib ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
+finish
+
+#popt-1.18.tar.gz
+begin popt-1.18 tar.gz
+./configure --prefix=/usr --disable-static &&
+make
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
+finish
+
+#efibootmgr-17.tar.gz
+begin efibootmgr-17 tar.gz
+sed -e '/extern int efi_set_verbose/d' -i src/efibootmgr.c
+make EFIDIR=LFS EFI_LOADER=grubx64.efi
+make install EFIDIR=LFS ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
+finish
+
 # 8.58. GRUB-2.04
-begin grub-2.04 tar.xz
-sed "s/gold-version/& -R .note.gnu.property/" \
-    -i Makefile.in grub-core/Makefile.in
+begin grub-2.06 tar.xz
+#sed "s/gold-version/& -R .note.gnu.property/" \
+#    -i Makefile.in grub-core/Makefile.in
+mkdir -pv /usr/share/fonts/unifont &&
+gunzip -c ../unifont-13.0.06.pcf.gz > /usr/share/fonts/unifont/unifont.pcf
 ./configure --prefix=/usr          \
-            --sbindir=/sbin        \
             --sysconfdir=/etc      \
             --disable-efiemu       \
-            --disable-werror
+	    --enable-grub-mkfont \
+            --with-platform=efi  \
+            --disable-werror     &&
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /etc/bash_completion.d/grub /usr/share/bash-completion/completions
