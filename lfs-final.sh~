@@ -185,10 +185,8 @@ cat > /etc/fstab << "EOF"
 # file system  mount-point  type     options             dump  fsck
 #                                                              order
 
-/dev/sda3      /            btrfs    subvol=root,compress=zstd:1 0 0
-/dev/sda3      /home        btrfs    subvol=home,compress=zstd:1 0 0
 /dev/sda1      /boot/efi    vfat     umask=0077,shortname=winnt  0 2
-/dev/sda2      /boot        ext4     defaults                    1 2
+/dev/sda3      /            ext4     defaults                    1 2
 proc           /proc        proc     nosuid,noexec,nodev         0 0
 sysfs          /sys         sysfs    nosuid,noexec,nodev         0 0
 devpts         /dev/pts     devpts   gid=5,mode=620              0 0

@@ -186,7 +186,7 @@ cat > /etc/fstab << "EOF"
 #                                                              order
 
 /dev/sda1      /boot/efi    vfat     umask=0077,shortname=winnt  0 2
-/dev/sda2      /            ext4     defaults                    1 2
+/dev/sda3      /            ext4     defaults                    1 2
 proc           /proc        proc     nosuid,noexec,nodev         0 0
 sysfs          /sys         sysfs    nosuid,noexec,nodev         0 0
 devpts         /dev/pts     devpts   gid=5,mode=620              0 0
@@ -225,20 +225,31 @@ EOF
 exit
 
 # 10.4. Using GRUB to Set Up the Boot Process
-grub-install /dev/sda
-cat > /boot/grub/grub.cfg << "EOF"
+grub-install --bootloader-id=LFS --recheck
+
+cat > /boot/grub/grub.cfg << EOF
 # Begin /boot/grub/grub.cfg
 set default=0
 set timeout=5
 
+insmod part_gpt
 insmod ext2
-set root=(hd0,1)
+set root=(hd0,3)
 
-menuentry "GNU/Linux, Linux "$kernel"-lfs-10.1" {
-        linux   /boot/vmlinuz-"$kernel"-lfs-10.1 root=/dev/sda1 ro
+if loadfont /boot/grub/fonts/unicode.pf2; then
+  set gfxmode=auto
+  insmod all_video
+  terminal_output gfxterm
+fi
+
+menuentry "GNU/Linux, Linux $kernel-lfs-10.1"  {
+  linux   /boot/vmlinuz-$kernel-lfs-10.1 root=/dev/sda3 ro
+}
+
+menuentry "Firmware Setup" {
+  fwsetup
 }
 EOF
-
 # 11.1. The End
 echo 10.1 > /etc/lfs-release
 cat > /etc/lsb-release << "EOF"
