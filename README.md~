@@ -8,8 +8,8 @@ First, this guide does not replace reading the whole LFS book(v10.1 is current).
 This build will be accomplished inside a Fedora release 34 machine formatted with:
 
 ```
-sda1 /boot/efi 600M
-sda2 /         64G ext4
+sda1 /boot/efi 600MiB
+sda2 /          26GiB ext4
 ```
 
 
@@ -25,7 +25,7 @@ cat >> /etc/sudoers << "EOF"
 paul    ALL=(ALL:ALL)   NOPASSWD:ALL
 ansible ALL=(ALL:ALL)   NOPASSWD:ALL
 EOF
-parted /dev/sda3 mkpart primary ext4 65.1GB -1
+parted /dev/sda mkpart primary ext4 28.5GB 128GB 
 mkfs.ext4 /dev/sda3
 mkdir /mnt/lfs
 cat >> /etc/fstab << "EOF"
@@ -76,6 +76,7 @@ wget https://github.com/rhboot/efivar/releases/download/37/efivar-37.tar.bz2
 wget https://www.linuxfromscratch.org/patches/blfs/svn/efivar-37-gcc_9-1.patch
 wget https://github.com/rhboot/efibootmgr/archive/17/efibootmgr-17.tar.gz
 wget http://ftp.rpm.org/popt/releases/popt-1.x/popt-1.18.tar.gz
+https://downloads.sourceforge.net/freetype/freetype-2.10.4.tar.xz
 wget https://ftp.gnu.org/gnu/grub/grub-2.06.tar.xz
 wget https://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
 wget https://downloads.sourceforge.net/freetype/freetype-2.10.4.tar.xz
@@ -305,6 +306,34 @@ Run the final script to configure the rest of the system:
 ```
 kernel="5.13.4"
 . sources/lfs-scripts/lfs-final.sh | tee /lfs-final.log
+```
+
+```
+Processor type and features --->  ( all defaults )
+  [*] EFI runtime service support                              [CONFIG_EFI]
+  [*]   EFI stub support                                       [CONFIG_EFI_STUB]
+  [*]     EFI mixed-mode support
+Firmware Drivers --->             ( all defaults ) 
+  EFI (Extensible Firmware Interface) Support --->
+    < > EFI Variable Support via sysfs                         [CONFIG_EFI_VARS]
+    [*] Export efi runtime maps to sysfs                       [CONFIG_EFI_RUNTIME_MAP]
+Enable the block layer --->       ( all defaults )
+  Partition Types --->
+    [*] Advanced partition selection                           [CONFIG_PARTITION_ADVANCED]
+    [*] EFI GUID Partition support                             [CONFIG_EFI_PARTITION]
+Device Drivers --->               
+  Generic Driver Options  --->
+    [ ] Support for uevent helper                               [CONFIG_UEVENT_HELPER]
+    [*] Maintain a devtmpfs filesystem to mount at /dev         [CONFIG_DEVTMPFS]
+  Graphics support --->
+    Frame buffer Devices --->
+      Support for frame buffer devices --->                    [CONFIG_FB]
+        [*] EFI-based Framebuffer support                      [CONFIG_FB_EFI]
+    Console display driver support --->
+      [*] Framebuffer Console support                          [CONFIG_FRAMEBUFFER_CONSOLE]
+File systems --->
+  Pseudo filesystems --->
+    <*/M> EFI Variable filesystem                              [CONFIG_EFIVAR_FS]
 ```
 
 # The end

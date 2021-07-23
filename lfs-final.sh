@@ -225,8 +225,12 @@ EOF
 exit
 
 # 10.4. Using GRUB to Set Up the Boot Process
-grub-install --bootloader-id=LFS --recheck
+mountpoint /sys/firmware/efi/efivars || mount -v -t efivarfs efivarfs /sys/firmware/efi/efivars
+mkdir /boot/efi
+mount /boot/efi
 
+grub-install --bootloader-id=LFS --recheck
+efibootmgr
 cat > /boot/grub/grub.cfg << EOF
 # Begin /boot/grub/grub.cfg
 set default=0

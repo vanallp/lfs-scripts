@@ -391,7 +391,8 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 pwconv
 grpconv
-echo "root" | passwd --stdin root
+#echo "root" | passwd --stdin root
+sh -c 'echo root:root | chpasswd'
 finish
 
 # 8.26. GCC-10.2.0
