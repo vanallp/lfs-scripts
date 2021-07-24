@@ -391,7 +391,8 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 pwconv
 grpconv
-echo "root" | passwd --stdin root
+#echo "root" | passwd --stdin root
+sh -c 'echo root:root | chpasswd'
 finish
 
 # 8.26. GCC-10.2.0
@@ -783,19 +784,19 @@ make install
 finish
 
 # 8.58. GRUB-2.04
-begin grub-2.04 tar.xz
-unset {C,CXX,LD}FLAGS
-./configure --prefix=/usr          \
-            --sbindir=/sbin        \
-            --sysconfdir=/etc      \
-            --disable-efiemu       \
-            --enable-grub-mkfont   \
-            --with-platform=efi    \
-            --disable-werror
-make
-make install
-mv -v /etc/bash_completion.d/grub /usr/share/bash-completion/completions
-finish
+#begin grub-2.04 tar.xz
+#unset {C,CXX,LD}FLAGS
+#./configure --prefix=/usr          \
+#            --sbindir=/sbin        \
+#            --sysconfdir=/etc      \
+#            --disable-efiemu       \
+#            --enable-grub-mkfont   \
+#            --with-platform=efi    \
+#            --disable-werror
+#make
+#make install
+#mv -v /etc/bash_completion.d/grub /usr/share/bash-completion/completions
+#finish
 
 # 8.59. Less-551
 begin less-551 tar.gz

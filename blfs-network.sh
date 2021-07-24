@@ -1,0 +1,80 @@
+#!/bin/bash
+# BLFS 10.1 Build Script
+
+package_name=""
+package_ext=""
+
+begin() {
+	package_name=$1
+	package_ext=$2
+	
+	echo "[lfs-scripts] Starting build of $package_name at $(date)"
+	
+	tar xf $package_name.$package_ext
+	cd $package_name
+}
+
+finish() {
+	echo "[lfs-scripts] Finishing build of $package_name at $(date)"
+
+	cd /sources
+	rm -rf $package_name
+}
+
+cd /sources
+
+
+# https://www.samba.org/ftp/rsync/src/rsync-3.2.3.tar.gz
+wget https://www.samba.org/ftp/rsync/src/rsync-3.2.3.tar.gz
+begin rsync-3.2.3 tar.gz
+groupadd -g 48 rsyncd &&
+useradd -c "rsyncd Daemon" -m -d /home/rsync -g rsyncd \
+    -s /bin/false -u 48 rsyncd
+./configure --prefix=/usr    \
+            --disable-lz4    \
+            --disable-xxhash \
+            --without-included-zlib 
+make
+make install ;rc=$?;echo $package_name $rc >> /sources/blfsnetworkrc.log
+install -v -m755 -d          /usr/share/doc/rsync-3.2.3/api &&
+install -v -m644 dox/html/*  /usr/share/doc/rsync-3.2.3/api
+cat > /etc/rsyncd.conf << "EOF"
+# This is a basic rsync configuration file
+# It exports a single module without user authentication.
+
+motd file = /home/rsync/welcome.msg
+use chroot = yes
+
+[localhost]
+    path = /home/rsync
+    comment = Default rsync module
+    read only = yes
+    list = yes
+    uid = rsyncd
+    gid = rsyncd
+
+EOF
+finish
+
+make install-rsyncd
+
+# https://ftp.gnu.org/gnu/wget/wget-1.21.1.tar.gz
+wget https://ftp.gnu.org/gnu/wget/wget-1.21.1.tar.gz
+begin wget-1.21.1 tar.gz
+./configure --prefix=/usr      \
+            --sysconfdir=/etc  \
+            --with-ssl=openssl 
+make
+make install ;rc=$?;echo $package_name $rc >> /sources/blfsnetworkrc.log
+finish
+
+
+
+
+
+#  Cleaning Up
+rm -rf /tmp/*a
+
+echo "blfs-security.sh"
+cat  /sources/blfsnetworkrc.log
+

@@ -300,6 +300,18 @@ make EFIDIR=LFS EFI_LOADER=grubx64.efi
 make install EFIDIR=LFS ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
+#freetype-2.10.4.tar.xz
+begin freetype-2.10.4 tar.xz
+sed -ri "s:.*(AUX_MODULES.*valid):\1:" modules.cfg &&
+
+sed -r "s:.*(#.*SUBPIXEL_RENDERING) .*:\1:" \
+    -i include/freetype/config/ftoption.h  &&
+
+./configure --prefix=/usr --enable-freetype-config --disable-static &&
+make
+make install ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
+finish
+
 # 8.58. GRUB-2.04
 begin grub-2.06 tar.xz
 #sed "s/gold-version/& -R .note.gnu.property/" \

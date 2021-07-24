@@ -86,6 +86,16 @@ wget https://downloads.sourceforge.net/freetype/freetype-2.10.4.tar.xz
 
 git clone https://github.com/vanallp/lfs-scripts.git
 
+## blfs 
+wget https://curl.se/download/curl-7.78.0.tar.xz
+wget https://www.kernel.org/pub/software/scm/git/git-2.32.0.tar.xz
+wget https://anduin.linuxfromscratch.org/BLFS/blfs-bootscripts/blfs-bootscripts-20210711.tar.xz
+wget https://www.samba.org/ftp/rsync/src/rsync-3.2.3.tar.gz
+wget https://ftp.gnu.org/gnu/wget/wget-1.21.1.tar.gz
+wget https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.6p1.tar.gz
+wget https://www.sudo.ws/dist/sudo-1.9.7p1.tar.gz
+wget https://ftp.gnu.org/gnu/parted/parted-3.4.tar.xz
+
 mkdir -pv $LFS/{bin,etc,lib,sbin,usr,var}
 case $(uname -m) in
   x86_64) mkdir -pv $LFS/lib64 ;;

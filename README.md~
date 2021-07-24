@@ -8,6 +8,8 @@ First, this guide does not replace reading the whole LFS book(v10.1 is current).
 This build will be accomplished inside a Fedora release 34 machine formatted with:
 
 ```
+ single 128G disk - manually formatted as:
+
 sda1 /boot/efi 600MiB
 sda2 /          26GiB ext4
 ```
@@ -25,6 +27,7 @@ cat >> /etc/sudoers << "EOF"
 paul    ALL=(ALL:ALL)   NOPASSWD:ALL
 ansible ALL=(ALL:ALL)   NOPASSWD:ALL
 EOF
+# create third partition
 parted /dev/sda mkpart primary ext4 28.5GB 128GB 
 mkfs.ext4 /dev/sda3
 mkdir /mnt/lfs
@@ -76,7 +79,7 @@ wget https://github.com/rhboot/efivar/releases/download/37/efivar-37.tar.bz2
 wget https://www.linuxfromscratch.org/patches/blfs/svn/efivar-37-gcc_9-1.patch
 wget https://github.com/rhboot/efibootmgr/archive/17/efibootmgr-17.tar.gz
 wget http://ftp.rpm.org/popt/releases/popt-1.x/popt-1.18.tar.gz
-https://downloads.sourceforge.net/freetype/freetype-2.10.4.tar.xz
+wget https://downloads.sourceforge.net/freetype/freetype-2.10.4.tar.xz
 wget https://ftp.gnu.org/gnu/grub/grub-2.06.tar.xz
 wget https://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
 wget https://downloads.sourceforge.net/freetype/freetype-2.10.4.tar.xz
