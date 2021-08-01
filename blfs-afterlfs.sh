@@ -53,7 +53,7 @@ begin git-2.32.0 tar.xz
             --with-python=python3 
 make
 make perllibdir=/usr/lib/perl5/5.34/site_perl install ;rc=$?;echo $package_name $rc >> /sources/blfssystemrc.log
-make install-man                                     # asciidoc commad not found
+make install-man                                  
 make htmldir=/usr/share/doc/git-2.32.0 install-html
 
 finish

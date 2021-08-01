@@ -37,7 +37,7 @@ EOF
 mount -a
 
 # several times below I have to set the kernel version with:
-kernel="5.13.4"
+kernel="5.13.6"
 
 dnf -y group install "C Development Tools and Libraries"
 dnf -y group install "Development Tools"
@@ -147,7 +147,7 @@ Run the lfs-cross.sh script, which will build the cross-toolchain and cross comp
 
 
 ``` 
-kernel="5.13.4"
+kernel="5.13.6"
 .  $LFS/sources/lfs-scripts/lfs-cross.sh | tee $LFS/sources/lfs-cross.log
 ```
 
@@ -259,7 +259,7 @@ exec /bin/bash --login +h
 Run the lfs-chroot.sh script, which will build additional temporary tools:
 
 ``` 
-kernel="5.13.4"
+kernel="5.13.6"
 . sources/lfs-scripts/lfs-chroot.sh | tee /lfs-chroot.log
 ```
 
@@ -293,12 +293,12 @@ chroot "$LFS" /usr/bin/env -i   \
     PATH=/bin:/usr/bin:/sbin:/usr/sbin \
     /bin/bash --login +h
 
-kernel="5.13.4"
+kernel="5.13.6"
 . sources/lfs-scripts/lfs-system.sh | tee /lfs-system.log
 
 exec /bin/bash --login +h
 passwd root
-kernel="5.13.4"
+kernel="5.13.6"
 . sources/lfs-scripts/lfs-system2.sh | tee /lfs-system2.log
 ```
 
@@ -317,7 +317,7 @@ chroot "$LFS" /usr/bin/env -i          \
 Run the final script to configure the rest of the system:
 
 ```
-kernel="5.13.4"
+kernel="5.13.6"
 . sources/lfs-scripts/lfs-final.sh | tee /lfs-final.log
 ```
 

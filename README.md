@@ -12,6 +12,7 @@ This build will be accomplished inside a Fedora release 34 machine formatted wit
 
 sda1 /boot/efi 600MiB
 sda2 /          26GiB ext4
+sda3 /mnt/lfs  [everything else] ext4
 ```
 
 
@@ -27,17 +28,9 @@ cat >> /etc/sudoers << "EOF"
 paul    ALL=(ALL:ALL)   NOPASSWD:ALL
 ansible ALL=(ALL:ALL)   NOPASSWD:ALL
 EOF
-# create third partition
-parted /dev/sda mkpart primary ext4 28.5GB 128GB 
-mkfs.ext4 /dev/sda3
-mkdir /mnt/lfs
-cat >> /etc/fstab << "EOF"
-/dev/sda3 /mnt/lfs ext4 defaults 1 1
-EOF
-mount -a
 
 # several times below I have to set the kernel version with:
-kernel="5.13.6"
+kernel="5.13.5"
 
 dnf -y group install "C Development Tools and Libraries"
 dnf -y group install "Development Tools"
@@ -147,7 +140,7 @@ Run the lfs-cross.sh script, which will build the cross-toolchain and cross comp
 
 
 ``` 
-kernel="5.13.6"
+kernel="5.13.5"
 .  $LFS/sources/lfs-scripts/lfs-cross.sh | tee $LFS/sources/lfs-cross.log
 ```
 
@@ -259,7 +252,7 @@ exec /bin/bash --login +h
 Run the lfs-chroot.sh script, which will build additional temporary tools:
 
 ``` 
-kernel="5.13.6"
+kernel="5.13.5"
 . sources/lfs-scripts/lfs-chroot.sh | tee /lfs-chroot.log
 ```
 
@@ -293,12 +286,12 @@ chroot "$LFS" /usr/bin/env -i   \
     PATH=/bin:/usr/bin:/sbin:/usr/sbin \
     /bin/bash --login +h
 
-kernel="5.13.6"
+kernel="5.13.5"
 . sources/lfs-scripts/lfs-system.sh | tee /lfs-system.log
 
 exec /bin/bash --login +h
 passwd root
-kernel="5.13.6"
+kernel="5.13.5"
 . sources/lfs-scripts/lfs-system2.sh | tee /lfs-system2.log
 ```
 
@@ -317,7 +310,7 @@ chroot "$LFS" /usr/bin/env -i          \
 Run the final script to configure the rest of the system:
 
 ```
-kernel="5.13.6"
+kernel="5.13.5"
 . sources/lfs-scripts/lfs-final.sh | tee /lfs-final.log
 ```
 
