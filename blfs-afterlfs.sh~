@@ -27,11 +27,35 @@ cd /sources
 wget https://anduin.linuxfromscratch.org/BLFS/blfs-bootscripts/blfs-bootscripts-20210711.tar.xz
 
 
-# 
-begin xxx.0.1 tar.xz
-./configure --prefix=/usr
+# https://curl.se/download/curl-7.78.0.tar.xz
+begin curl-7.78.0 tar.xz
+grep -rl '#!.*python$' | xargs sed -i '1s/python/&3/'
+./configure --prefix=/usr                           \
+            --disable-static                        \
+            --with-openssl                          \
+            --enable-threaded-resolver              \
+            --with-ca-path=/etc/ssl/certs 
 make
 make install;rc=$?;echo $package_name $rc >> /sources/blfssystemrc.log
+
+rm -rf docs/examples/.deps 
+
+find docs \( -name Makefile\* -o -name \*.1 -o -name \*.3 \) -exec rm {} \;
+
+install -v -d -m755 /usr/share/doc/curl-7.78.0 
+cp -v -R docs/*     /usr/share/doc/curl-7.78.0
+finish
+
+# https://www.kernel.org/pub/software/scm/git/git-2.32.0.tar.xz
+begin git-2.32.0 tar.xz
+./configure --prefix=/usr \
+            --with-gitconfig=/etc/gitconfig \
+            --with-python=python3 
+make
+make perllibdir=/usr/lib/perl5/5.34/site_perl install ;rc=$?;echo $package_name $rc >> /sources/blfssystemrc.log
+make install-man
+make htmldir=/usr/share/doc/git-2.32.0 install-html
+
 finish
 
 

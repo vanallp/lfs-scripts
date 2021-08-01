@@ -297,7 +297,7 @@ kernel="5.13.4"
 . sources/lfs-scripts/lfs-system.sh | tee /lfs-system.log
 
 exec /bin/bash --login +h
-
+passwd root
 kernel="5.13.4"
 . sources/lfs-scripts/lfs-system2.sh | tee /lfs-system2.log
 ```
