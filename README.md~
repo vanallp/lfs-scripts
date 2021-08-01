@@ -177,6 +177,7 @@ chroot "$LFS" /usr/bin/env -i   \
 ```
 
 Create essential directories, files and symlinks:
+. $LFS/sources/lfs-scripts/step4.sh
 
 ```
 mkdir -pv /{boot,home,mnt,opt,srv}
