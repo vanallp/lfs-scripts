@@ -23,26 +23,21 @@ Pick a kernel. [here](https://www.kernel.org/)
 :point_right: Run commands below as root.
 
 ```
-dnf install -y vim-default-editor --allowerasing
-cat >> /etc/sudoers << "EOF"
-paul    ALL=(ALL:ALL)   NOPASSWD:ALL
-ansible ALL=(ALL:ALL)   NOPASSWD:ALL
-EOF
-
 # several times below I have to set the kernel version with:
 kernel="5.13.5"
 
+dnf install -y vim-default-editor --allowerasing
 dnf -y group install "C Development Tools and Libraries"
 dnf -y group install "Development Tools"
 dnf -y install texinfo
 dnf -y erase byacc
 dnf -y reinstall bison
 ln -s `which bison` /usr/bin/yacc
-
 export LFS=/mnt/lfs
 echo "export LFS=/mnt/lfs" >>  .bash_profile 
 mkdir -v $LFS/sources
 chmod -v a+wt $LFS/sources
+git clone https://github.com/vanallp/lfs-scripts.git $LFS/sources
 wget https://www.linuxfromscratch.org/lfs/view/10.1/wget-list
 wget https://prdownloads.sourceforge.net/expat/expat-2.4.1.tar.xz --directory-prefix=$LFS/sources
 wget --input-file=wget-list --continue --directory-prefix=$LFS/sources
@@ -55,7 +50,7 @@ popd
 ```
 
 Check and confirm everything downloaded and passed OK
-
+. $LFS/sources/lfs-scripts/step1.sh
 
 ```
 #The tcl & procps-ng package must be renamed
@@ -77,7 +72,6 @@ wget https://ftp.gnu.org/gnu/grub/grub-2.06.tar.xz
 wget https://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
 wget https://downloads.sourceforge.net/freetype/freetype-2.10.4.tar.xz
 
-git clone https://github.com/vanallp/lfs-scripts.git
 
 ## blfs 
 wget https://curl.se/download/curl-7.78.0.tar.xz
@@ -114,6 +108,7 @@ su - lfs
 ```
 
 :point_right: Run commands below as lfs.
+. $LFS/sources/lfs-scripts/step2.sh
 
 ```
 cat > ~/.bash_profile << "EOF"
@@ -130,8 +125,6 @@ if [ ! -L /bin ]; then PATH=/bin:$PATH; fi
 PATH=$LFS/tools/bin:$PATH
 export LFS LC_ALL LFS_TGT PATH
 EOF
-
-source ~/.bashrc
 ```
 
 
@@ -139,7 +132,8 @@ Run the lfs-cross.sh script, which will build the cross-toolchain and cross comp
 
 
 
-``` 
+```
+source ~/.bashrc
 kernel="5.13.5"
 .  $LFS/sources/lfs-scripts/lfs-cross.sh | tee $LFS/sources/lfs-cross.log
 ```
@@ -150,9 +144,8 @@ Return to being root:
 exit
 ```
 
-:point_right: Run commands below as root.
-
-Make root own the entire filesystem again:
+:point_right: Run commands below as root. Make root own the entire filesystem again:
+. $LFS/sources/lfs-scripts/step3.sh
 
 ```
 chown -R root:root $LFS/{usr,lib,var,etc,bin,sbin,tools}
@@ -184,9 +177,9 @@ chroot "$LFS" /usr/bin/env -i   \
 ```
 
 Create essential directories, files and symlinks:
+. $LFS/sources/lfs-scripts/step4.sh
 
 ```
-source 
 mkdir -pv /{boot,home,mnt,opt,srv}
 mkdir -pv /etc/{opt,sysconfig}
 mkdir -pv /lib/firmware
