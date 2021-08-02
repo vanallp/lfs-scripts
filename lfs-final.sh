@@ -196,7 +196,10 @@ efivarfs       /sys/firmware/efi/efivars  efivarfs  defaults     0 1
 # End /etc/fstab
 EOF
 
+return
+
 cd /sources
+exit
 
 # 10.3. Linux-"$kernel"
 begin linux-"$kernel" tar.xz
@@ -222,7 +225,7 @@ install uhci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i uhci_hcd ; true
 # End /etc/modprobe.d/usb.conf
 EOF
 
-exit
+
 
 # 10.4. Using GRUB to Set Up the Boot Process
 mountpoint /sys/firmware/efi/efivars || mount -v -t efivarfs efivarfs /sys/firmware/efi/efivars
