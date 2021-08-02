@@ -35,9 +35,9 @@ dnf -y reinstall bison
 ln -s `which bison` /usr/bin/yacc
 export LFS=/mnt/lfs
 echo "export LFS=/mnt/lfs" >>  .bash_profile 
-mkdir -v $LFS/sources
+mkdir -v $LFS/sources/lfs-scripts
 chmod -v a+wt $LFS/sources
-git clone https://github.com/vanallp/lfs-scripts.git $LFS/sources
+git clone https://github.com/vanallp/lfs-scripts.git $LFS/sources/lfs-scripts
 wget https://www.linuxfromscratch.org/lfs/view/10.1/wget-list
 wget https://prdownloads.sourceforge.net/expat/expat-2.4.1.tar.xz --directory-prefix=$LFS/sources
 wget --input-file=wget-list --continue --directory-prefix=$LFS/sources
