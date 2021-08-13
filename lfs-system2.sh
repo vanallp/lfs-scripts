@@ -35,9 +35,9 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 rm -fv /usr/lib/libltdl.a
 finish
 
-# 8.36. GDBM-1.19
-begin gdbm-1.19 tar.gz
-sed -r -i '/^char.*parseopt_program_(doc|args)/d' src/parseopt.c
+# 8.36. GDBM-1.20
+begin gdbm-1.20 tar.gz
+#sed -r -i '/^char.*parseopt_program_(doc|args)/d' src/parseopt.c
 ./configure --prefix=/usr    \
             --disable-static \
             --enable-libgdbm-compat
@@ -62,8 +62,8 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 install -v -m644 doc/*.{html,png,css} /usr/share/doc/expat-2.4.1
 finish
 
-# 8.39. Inetutils-2.0
-begin inetutils-2.0 tar.xz
+# 8.39. Inetutils-2.1
+begin inetutils-2.1 tar.xz
 ./configure --prefix=/usr        \
             --localstatedir=/var \
             --disable-logger     \
@@ -75,23 +75,32 @@ begin inetutils-2.0 tar.xz
             --disable-servers
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/bin/{hostname,ping,ping6,traceroute} /bin
-mv -v /usr/bin/ifconfig /sbin
+mv -v /usr/{,s}bin/ifconfig
+#mv -v /usr/bin/{hostname,ping,ping6,traceroute} /bin
+#mv -v /usr/bin/ifconfig /sbin
 finish
 
-# 8.40. Perl-5.32.1
-begin perl-5.32.1 tar.xz
+# 8.40. Less-590
+begin less-590 tar.gz
+./configure --prefix=/usr --sysconfdir=/etc
+make
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
+finish
+
+# 8.41. Perl-5.34.0
+begin perl-5.34.0 tar.xz
+patch -Np1 -i ../perl-5.34.0-upstream_fixes-1.patch
 export BUILD_ZLIB=False
 export BUILD_BZIP2=0
 sh Configure -des                                         \
              -Dprefix=/usr                                \
              -Dvendorprefix=/usr                          \
-             -Dprivlib=/usr/lib/perl5/5.32/core_perl      \
-             -Darchlib=/usr/lib/perl5/5.32/core_perl      \
-             -Dsitelib=/usr/lib/perl5/5.32/site_perl      \
-             -Dsitearch=/usr/lib/perl5/5.32/site_perl     \
-             -Dvendorlib=/usr/lib/perl5/5.32/vendor_perl  \
-             -Dvendorarch=/usr/lib/perl5/5.32/vendor_perl \
+             -Dprivlib=/usr/lib/perl5/5.34/core_perl      \
+             -Darchlib=/usr/lib/perl5/5.34/core_perl      \
+             -Dsitelib=/usr/lib/perl5/5.34/site_perl      \
+             -Dsitearch=/usr/lib/perl5/5.34/site_perl     \
+             -Dvendorlib=/usr/lib/perl5/5.34/vendor_perl  \
+             -Dvendorarch=/usr/lib/perl5/5.34/vendor_perl \
              -Dman1dir=/usr/share/man/man1                \
              -Dman3dir=/usr/share/man/man3                \
              -Dpager="/usr/bin/less -isR"                 \
@@ -102,14 +111,14 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 unset BUILD_ZLIB BUILD_BZIP2
 finish
 
-# 8.41. XML::Parser-2.46
+# 8.42. XML::Parser-2.46
 begin XML-Parser-2.46 tar.gz
 perl Makefile.PL
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.42. Intltool-0.51.0
+# 8.43. Intltool-0.51.0
 begin intltool-0.51.0 tar.gz
 sed -i 's:\\\${:\\\$\\{:' intltool-update.in
 ./configure --prefix=/usr
@@ -118,23 +127,23 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 install -v -Dm644 doc/I18N-HOWTO /usr/share/doc/intltool-0.51.0/I18N-HOWTO
 finish
 
-# 8.43. Autoconf-2.71
+# 8.44. Autoconf-2.71
 begin autoconf-2.71 tar.xz
 ./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.44. Automake-1.16.3
-begin automake-1.16.3 tar.xz
-sed -i "s/''/etags/" t/tags-lisp-space.sh
-./configure --prefix=/usr --docdir=/usr/share/doc/automake-1.16.3
+# 8.45. Automake-1.16.4
+begin automake-1.16.4 tar.xz
+#sed -i "s/''/etags/" t/tags-lisp-space.sh
+./configure --prefix=/usr --docdir=/usr/share/doc/automake-1.16.4
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.45. Kmod-28
-begin kmod-28 tar.xz
+# 8.46. Kmod-29
+begin kmod-29 tar.xz
 ./configure --prefix=/usr          \
             --bindir=/bin          \
             --sysconfdir=/etc      \
@@ -149,27 +158,26 @@ done
 ln -sfv kmod /bin/lsmod
 finish
 
-# 8.46. Libelf from Elfutils-0.183
-begin elfutils-0.183 tar.bz2
+# 8.47. Libelf from Elfutils-0.185
+begin elfutils-0.185 tar.bz2
 ./configure --prefix=/usr                \
             --disable-debuginfod         \
-            --enable-libdebuginfod=dummy \
-            --libdir=/lib
+            --enable-libdebuginfod=dummy 
 make
 make -C libelf install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 install -vm644 config/libelf.pc /usr/lib/pkgconfig
 rm /lib/libelf.a
 finish
 
-# 8.47. Libffi-3.3
-begin libffi-3.3 tar.gz
-./configure --prefix=/usr --disable-static --with-gcc-arch=native
+# 8.48. Libffi-3.4.2
+begin libffi-3.4.2 tar.gz
+./configure --prefix=/usr --disable-static --with-gcc-arch=native --disable-exec-static-tramp
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.48. OpenSSL-1.1.1j
-begin openssl-1.1.1j tar.gz
+# 8.49. OpenSSL-1.1.1k
+begin openssl-1.1.1k tar.gz
 ./config --prefix=/usr         \
          --openssldir=/etc/ssl \
          --libdir=lib          \
@@ -178,28 +186,29 @@ begin openssl-1.1.1j tar.gz
 make
 sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
 make MANSUFFIX=ssl install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/share/doc/openssl /usr/share/doc/openssl-1.1.1j
-cp -vfr doc/* /usr/share/doc/openssl-1.1.1j
+mv -v /usr/share/doc/openssl /usr/share/doc/openssl-1.1.1k
+cp -vfr doc/* /usr/share/doc/openssl-1.1.1k
 finish
 
-# 8.49. Python-3.9.2
-begin Python-3.9.2 tar.xz
+# 8.50. Python-3.9.6
+begin Python-3.9.6 tar.xz
 ./configure --prefix=/usr       \
             --enable-shared     \
             --with-system-expat \
             --with-system-ffi   \
-            --with-ensurepip=yes
+            --with-ensurepip=yes \
+	    --enable-optimizations
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-install -v -dm755 /usr/share/doc/python-3.9.2/html 
+install -v -dm755 /usr/share/doc/python-3.9.6/html 
 tar --strip-components=1  \
     --no-same-owner       \
     --no-same-permissions \
-    -C /usr/share/doc/python-3.9.2/html \
-    -xvf ../python-3.9.2-docs-html.tar.bz2
+    -C /usr/share/doc/python-3.9.6/html \
+    -xvf ../python-3.9.6-docs-html.tar.bz2
 finish
 
-# 8.50. Ninja-1.10.2
+# 8.51. Ninja-1.10.2
 begin ninja-1.10.2 tar.gz
 sed -i '/int Guess/a \
   int   j = 0;\
@@ -213,41 +222,43 @@ install -vDm644 misc/bash-completion /usr/share/bash-completion/completions/ninj
 install -vDm644 misc/zsh-completion  /usr/share/zsh/site-functions/_ninja
 finish
 
-# 8.51. Meson-0.57.1
-begin meson-0.57.1 tar.gz
+# 8.52. Meson-0.59.0
+begin meson-0.59.0 tar.gz
 python3 setup.py build
 python3 setup.py install --root=dest;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 cp -rv dest/* /
+install -vDm644 data/shell-completions/bash/meson /usr/share/bash-completion/completions/meson
+install -vDm644 data/shell-completions/zsh/_meson /usr/share/zsh/site-functions/_meson
 finish
 
-# 8.52. Coreutils-8.32
+# 8.53. Coreutils-8.32
 begin coreutils-8.32 tar.xz
 patch -Np1 -i ../coreutils-8.32-i18n-1.patch
-sed -i '/test.lock/s/^/#/' gnulib-tests/gnulib.mk
+#sed -i '/test.lock/s/^/#/' gnulib-tests/gnulib.mk
 autoreconf -fiv 
 FORCE_UNSAFE_CONFIGURE=1 ./configure \
             --prefix=/usr            \
             --enable-no-install-program=kill,uptime
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} /bin
-mv -v /usr/bin/{false,ln,ls,mkdir,mknod,mv,pwd,rm} /bin
-mv -v /usr/bin/{rmdir,stty,sync,true,uname} /bin
+#mv -v /usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} /bin
+#mv -v /usr/bin/{false,ln,ls,mkdir,mknod,mv,pwd,rm} /bin
+#mv -v /usr/bin/{rmdir,stty,sync,true,uname} /bin
 mv -v /usr/bin/chroot /usr/sbin
 mv -v /usr/share/man/man1/chroot.1 /usr/share/man/man8/chroot.8
 sed -i 's/"1"/"8"/' /usr/share/man/man8/chroot.8
-mv -v /usr/bin/{head,nice,sleep,touch} /bin
+#mv -v /usr/bin/{head,nice,sleep,touch} /bin
 finish
 
-# 8.53. Check-0.15.2
+# 8.54. Check-0.15.2
 begin check-0.15.2 tar.gz
 ./configure --prefix=/usr --disable-static
 make
 make docdir=/usr/share/doc/check-0.15.2 install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.54. Diffutils-3.7
-begin diffutils-3.7 tar.xz
+# 8.55. Diffutils-3.8
+begin diffutils-3.8 tar.xz
 ./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
@@ -263,21 +274,23 @@ mkdir -v /usr/share/doc/gawk-5.1.0
 cp    -v doc/{awkforai.txt,*.{eps,pdf,jpg}} /usr/share/doc/gawk-5.1.0
 finish
 
-# 8.56. Findutils-4.8.0
+# 8.57. Findutils-4.8.0
 begin findutils-4.8.0 tar.xz
 ./configure --prefix=/usr --localstatedir=/var/lib/locate
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/bin/find /bin
-sed -i 's|find:=${BINDIR}|find:=/bin|' /usr/bin/updatedb
+#mv -v /usr/bin/find /bin
+#sed -i 's|find:=${BINDIR}|find:=/bin|' /usr/bin/updatedb
 finish
 
-# 8.57. Groff-1.22.4
+# 8.58. Groff-1.22.4
 begin groff-1.22.4 tar.gz
 PAGE=letter ./configure --prefix=/usr
 make -j1
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
+
+# 8.59 grub   skip
 
 #efivar efivar-37.tar.bz2
 begin efivar-37 tar.bz2
@@ -329,28 +342,23 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /etc/bash_completion.d/grub /usr/share/bash-completion/completions
 finish
 
-# 8.59. Less-563
-begin less-563 tar.gz
-./configure --prefix=/usr --sysconfdir=/etc
-make
-make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-finish
-
 # 8.60. Gzip-1.10
 begin gzip-1.10 tar.xz
 ./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/bin/gzip /bin
+#mv -v /usr/bin/gzip /bin
 finish
 
-# 8.61. IPRoute2-5.10.0
-begin iproute2-5.10.0 tar.xz
+# 8.61. IPRoute2-5.13.0
+begin iproute2-5.13.0 tar.xz
 sed -i /ARPD/d Makefile
 rm -fv man/man8/arpd.8
 sed -i 's/.m_ipt.o//' tc/Makefile
 make
-make DOCDIR=/usr/share/doc/iproute2-5.10.0 install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
+make SBINDIR=/usr/sbin install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
+mkdir -v              /usr/share/doc/iproute2-5.13.0
+cp -v COPYING README* /usr/share/doc/iproute2-5.13.0
 finish
 
 # 8.62. Kbd-2.4.0
@@ -361,7 +369,7 @@ sed -i 's/resizecons.8 //' docs/man/man8/Makefile.in
 ./configure --prefix=/usr --disable-vlock
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-rm -v /usr/lib/libtswrap.{a,la,so*}
+#rm -v /usr/lib/libtswrap.{a,la,so*}
 mkdir -v            /usr/share/doc/kbd-2.4.0
 cp -R -v docs/doc/* /usr/share/doc/kbd-2.4.0
 finish

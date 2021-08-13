@@ -23,8 +23,8 @@ finish() {
 
 cd $LFS/sources
 
-# 5.2. Binutils-2.36.1 - Pass 1
-begin binutils-2.36.1 tar.xz
+# 5.2. Binutils-2.37 - Pass 1
+begin binutils-2.37 tar.xz
 mkdir -v build
 cd build
 ../configure --prefix=$LFS/tools        \
@@ -33,11 +33,11 @@ cd build
              --disable-nls              \
 	     --disable-werror
 make
-make install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
+make install -j1 ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
-# 5.3. GCC-10.2.0 - Pass 1
-begin gcc-10.2.0 tar.xz
+# 5.3. GCC-11.2.0 - Pass 1
+begin gcc-11.2.0 tar.xz
 tar -xf ../mpfr-4.1.0.tar.xz
 mv -v mpfr-4.1.0 mpfr
 tar -xf ../gmp-6.2.1.tar.xz
@@ -88,8 +88,8 @@ rm usr/include/Makefile
 cp -rv usr/include $LFS/usr
 finish
 
-# 5.5. Glibc-2.33
-begin glibc-2.33 tar.xz
+# 5.5. Glibc-2.34
+begin glibc-2.34 tar.xz
 case $(uname -m) in
     i?86)   ln -sfv ld-linux.so.2 $LFS/lib/ld-lsb.so.3
     ;;
@@ -97,7 +97,7 @@ case $(uname -m) in
             ln -sfv ../lib/ld-linux-x86-64.so.2 $LFS/lib64/ld-lsb-x86-64.so.3
     ;;
 esac
-patch -Np1 -i ../glibc-2.33-fhs-1.patch
+patch -Np1 -i ../glibc-2.34-fhs-1.patch
 mkdir -v build
 cd       build
 ../configure                             \
@@ -109,15 +109,18 @@ cd       build
       libc_cv_slibdir=/lib
 make
 make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
+sed '/RTLDLIST=/s@/usr@@g' -i $LFS/usr/bin/ldd
+
 echo 'int main(){}' > dummy.c
 $LFS_TGT-gcc dummy.c
 readelf -l a.out | grep '/ld-linux'
 rm -v dummy.c a.out
-$LFS/tools/libexec/gcc/$LFS_TGT/10.2.0/install-tools/mkheaders
+
+$LFS/tools/libexec/gcc/$LFS_TGT/11.2.0/install-tools/mkheaders
 finish
 
-# 5.6. Libstdc++ from GCC-10.2.0, Pass 1
-begin gcc-10.2.0 tar.xz
+# 5.6. Libstdc++ from GCC-11.2.0, Pass 1
+begin gcc-11.2.0 tar.xz
 mkdir -v build
 cd       build
 ../libstdc++-v3/configure           \
@@ -127,15 +130,15 @@ cd       build
     --disable-multilib              \
     --disable-nls                   \
     --disable-libstdcxx-pch         \
-    --with-gxx-include-dir=/tools/$LFS_TGT/include/c++/10.2.0
+    --with-gxx-include-dir=/tools/$LFS_TGT/include/c++/11.2.0
 make
 make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
-# 6.2. M4-1.4.18
-begin m4-1.4.18 tar.xz
-sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
-echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
+# 6.2. M4-1.4.19
+begin m4-1.4.19 tar.xz
+#sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
+#echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
 ./configure --prefix=/usr   \
             --host=$LFS_TGT \
             --build=$(build-aux/config.guess)
@@ -165,19 +168,19 @@ popd
 make
 make DESTDIR=$LFS TIC_PATH=$(pwd)/build/progs/tic install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 echo "INPUT(-lncursesw)" > $LFS/usr/lib/libncurses.so
-mv -v $LFS/usr/lib/libncursesw.so.6* $LFS/lib
-ln -sfv ../../lib/$(readlink $LFS/usr/lib/libncursesw.so) $LFS/usr/lib/libncursesw.so
+#mv -v $LFS/usr/lib/libncursesw.so.6* $LFS/lib
+#ln -sfv ../../lib/$(readlink $LFS/usr/lib/libncursesw.so) $LFS/usr/lib/libncursesw.so
 finish
 
-# 6.4. Bash-5.1
-begin bash-5.1 tar.gz
+# 6.4. Bash-5.1.8
+begin bash-5.1.8 tar.gz
 ./configure --prefix=/usr                   \
             --build=$(support/config.guess) \
             --host=$LFS_TGT                 \
             --without-bash-malloc
 make
 make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
-mv $LFS/usr/bin/bash $LFS/bin/bash
+#mv $LFS/usr/bin/bash $LFS/bin/bash
 ln -sv bash $LFS/bin/sh
 finish
 
@@ -190,25 +193,25 @@ begin coreutils-8.32 tar.xz
             --enable-no-install-program=kill,uptime
 make
 make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
-mv -v $LFS/usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} $LFS/bin
-mv -v $LFS/usr/bin/{false,ln,ls,mkdir,mknod,mv,pwd,rm}        $LFS/bin
-mv -v $LFS/usr/bin/{rmdir,stty,sync,true,uname}               $LFS/bin
-mv -v $LFS/usr/bin/{head,nice,sleep,touch}                    $LFS/bin
+#mv -v $LFS/usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} $LFS/bin
+#mv -v $LFS/usr/bin/{false,ln,ls,mkdir,mknod,mv,pwd,rm}        $LFS/bin
+#mv -v $LFS/usr/bin/{rmdir,stty,sync,true,uname}               $LFS/bin
+#mv -v $LFS/usr/bin/{head,nice,sleep,touch}                    $LFS/bin
 mv -v $LFS/usr/bin/chroot                                     $LFS/usr/sbin
 mkdir -pv $LFS/usr/share/man/man8
 mv -v $LFS/usr/share/man/man1/chroot.1                        $LFS/usr/share/man/man8/chroot.8
 sed -i 's/"1"/"8"/'                                           $LFS/usr/share/man/man8/chroot.8
 finish
 
-# 6.6. Diffutils-3.7
-begin diffutils-3.7 tar.xz
+# 6.6. Diffutils-3.8
+begin diffutils-3.8 tar.xz
 ./configure --prefix=/usr --host=$LFS_TGT
 make
 make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
-# 6.7. File-5.39
-begin file-5.39 tar.gz
+# 6.7. File-5.40
+begin file-5.40 tar.gz
 mkdir build
 pushd build
   ../configure --disable-bzlib      \
@@ -229,8 +232,8 @@ begin findutils-4.8.0 tar.xz
             --build=$(build-aux/config.guess)
 make
 make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
-mv -v $LFS/usr/bin/find $LFS/bin
-sed -i 's|find:=${BINDIR}|find:=/bin|' $LFS/usr/bin/updatedb
+#mv -v $LFS/usr/bin/find $LFS/bin
+#sed -i 's|find:=${BINDIR}|find:=/bin|' $LFS/usr/bin/updatedb
 finish
 
 # 6.9. Gawk-5.1.0
@@ -257,7 +260,7 @@ begin gzip-1.10 tar.xz
 ./configure --prefix=/usr --host=$LFS_TGT
 make
 make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
-mv -v $LFS/usr/bin/gzip $LFS/bin
+#mv -v $LFS/usr/bin/gzip $LFS/bin
 finish
 
 # 6.12. Make-4.3
@@ -307,13 +310,13 @@ begin xz-5.2.5 tar.xz
             --docdir=/usr/share/doc/xz-5.2.5
 make
 make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
-mv -v $LFS/usr/bin/{lzma,unlzma,lzcat,xz,unxz,xzcat}  $LFS/bin
-mv -v $LFS/usr/lib/liblzma.so.*                       $LFS/lib
-ln -svf ../../lib/$(readlink $LFS/usr/lib/liblzma.so) $LFS/usr/lib/liblzma.so
+#mv -v $LFS/usr/bin/{lzma,unlzma,lzcat,xz,unxz,xzcat}  $LFS/bin
+#mv -v $LFS/usr/lib/liblzma.so.*                       $LFS/lib
+#ln -svf ../../lib/$(readlink $LFS/usr/lib/liblzma.so) $LFS/usr/lib/liblzma.so
 finish
 
-# 6.17. Binutils-2.36.1 - Pass 2
-begin binutils-2.36.1 tar.xz
+# 6.17. Binutils-2.37 - Pass 2
+begin binutils-2.37 tar.xz
 mkdir -v build
 cd       build
 ../configure                   \
@@ -329,8 +332,8 @@ make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 install -vm755 libctf/.libs/libctf.so.0.0.0 $LFS/usr/lib
 finish
 
-# 6.18. GCC-10.2.0 - Pass 2
-begin gcc-10.2.0 tar.xz
+# 6.18. GCC-11.2.0 - Pass 2
+begin gcc-11.2.0 tar.xz
 tar -xf ../mpfr-4.1.0.tar.xz
 mv -v mpfr-4.1.0 mpfr
 tar -xf ../gmp-6.2.1.tar.xz
@@ -368,4 +371,6 @@ make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 ln -sv gcc $LFS/usr/bin/cc
 finish
 
+echo "lfs-cross"
+cat $LFS/sources/rc.log
 

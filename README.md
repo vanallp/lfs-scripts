@@ -1,5 +1,5 @@
 # lfs-scripts :penguin:
-Instructions and scripts to build LFS (Linux From Scratch), version 10.1. I'm performing the build on a Fedora 34 Workstation.
+Instructions and scripts to build [LFS](https://linuxfromscratch.org) (Linux From Scratch), the dev version of 10.1. I'm performing the build on a Fedora 34 Workstation.
 This script is still under construction...  !!!!
 
 # Foreword
@@ -16,7 +16,9 @@ sda3 /mnt/lfs  [everything else] ext4
 ```
 
 
-Pick a kernel. [here](https://www.kernel.org/)
+Pick a kernel. [here](https://www.kernel.org/) I have been successful with the stable: 5.13.8 branch with LFSv10.1. Attempting to build anythig in the 5.13.x fail with "cyclades.h is removed from linux kernel header files" [bug](https://www.mail-archive.com/gcc-bugs@gcc.gnu.org/msg688380.html)
+
+
 
 # Build instructions
 
@@ -24,7 +26,7 @@ Pick a kernel. [here](https://www.kernel.org/)
 
 ```
 # several times below I have to set the kernel version with:
-kernel="5.12.19"
+kernel="5.13.8"
 
 dnf install -y vim-default-editor --allowerasing
 dnf -y group install "C Development Tools and Libraries"
@@ -38,11 +40,19 @@ echo "export LFS=/mnt/lfs" >>  .bash_profile
 mkdir -v $LFS/sources/lfs-scripts
 chmod -v a+wt $LFS/sources
 git clone https://github.com/vanallp/lfs-scripts.git $LFS/sources/lfs-scripts
-wget https://www.linuxfromscratch.org/lfs/view/10.1/wget-list
-wget https://prdownloads.sourceforge.net/expat/expat-2.4.1.tar.xz --directory-prefix=$LFS/sources
-wget --input-file=wget-list --continue --directory-prefix=$LFS/sources
-wget https://www.linuxfromscratch.org/lfs/view/10.1/md5sums --directory-prefix=$LFS/sources
 
+# chapt 3.1
+#wget https://www.linuxfromscratch.org/lfs/view/10.1/wget-list
+#wget https://prdownloads.sourceforge.net/expat/expat-2.4.1.tar.xz --directory-prefix=$LFS/sources
+#wget https://www.linuxfromscratch.org/lfs/view/10.1/md5sums --directory-prefix=$LFS/sources
+
+wget https://www.linuxfromscratch.org/lfs/view/systemd/md5sums
+#wget https://www.linuxfromscratch.org/lfs/view/development/md5sums
+
+wget https://www.linuxfromscratch.org/lfs/view/systemd/wget-list
+#wget https://www.linuxfromscratch.org/lfs/view/development/wget-list
+
+wget --input-file=wget-list --continue --directory-prefix=$LFS/sources
 pushd $LFS/sources
   md5sum -c md5sums
 popd
@@ -134,10 +144,10 @@ Run the lfs-cross.sh script, which will build the cross-toolchain and cross comp
 
 ```
 source ~/.bashrc
-kernel="5.12.19"
+kernel="5.13.8"
 .  $LFS/sources/lfs-scripts/lfs-cross.sh | tee $LFS/sources/lfs-cross.log
 ```
-
+# Chapter 7
 Return to being root:
 
 ```
@@ -165,7 +175,7 @@ if [ -h $LFS/dev/shm ]; then
 fi
 ```
 
-Enter the chroot environment:
+ 7.4  Enter the chroot environment:
 
 ```
 chroot "$LFS" /usr/bin/env -i   \
@@ -195,12 +205,25 @@ ln -sfv /run/lock /var/lock
 install -dv -m 0750 /root
 install -dv -m 1777 /tmp /var/tmp
 ln -sv /proc/self/mounts /etc/mtab
-echo "127.0.0.1 localhost $(hostname)" > /etc/hosts
+cat > /etc/hosts << EOF
+127.0.0.1  localhost $(hostname)
+::1        localhost
+EOF
 cat > /etc/passwd << "EOF"
 root:x:0:0:root:/root:/bin/bash
 bin:x:1:1:bin:/dev/null:/bin/false
 daemon:x:6:6:Daemon User:/dev/null:/bin/false
-messagebus:x:18:18:D-Bus Message Daemon User:/var/run/dbus:/bin/false
+messagebus:x:18:18:D-Bus Message Daemon User:/run/dbus:/bin/false
+systemd-bus-proxy:x:72:72:systemd Bus Proxy:/:/bin/false
+systemd-journal-gateway:x:73:73:systemd Journal Gateway:/:/bin/false
+systemd-journal-remote:x:74:74:systemd Journal Remote:/:/bin/false
+systemd-journal-upload:x:75:75:systemd Journal Upload:/:/bin/false
+systemd-network:x:76:76:systemd Network Management:/:/bin/false
+systemd-resolve:x:77:77:systemd Resolver:/:/bin/false
+systemd-timesync:x:78:78:systemd Time Synchronization:/:/bin/false
+systemd-coredump:x:79:79:systemd Core Dumper:/:/bin/false
+uuidd:x:80:80:UUID Generation Daemon User:/dev/null:/bin/false
+systemd-oom:x:81:81:systemd Out Of Memory Daemon:/:/bin/false
 nobody:x:99:99:Unprivileged User:/dev/null:/bin/false
 EOF
 cat > /etc/group << "EOF"
@@ -222,14 +245,24 @@ usb:x:14:
 cdrom:x:15:
 adm:x:16:
 messagebus:x:18:
+systemd-journal:x:23:
 input:x:24:
 mail:x:34:
 kvm:x:61:
+systemd-bus-proxy:x:72:
+systemd-journal-gateway:x:73:
+systemd-journal-remote:x:74:
+systemd-journal-upload:x:75:
+systemd-network:x:76:
+systemd-resolve:x:77:
+systemd-timesync:x:78:
+systemd-coredump:x:79:
+uuidd:x:80:
+systemd-oom:x:81:81:
 wheel:x:97:
 nogroup:x:99:
 users:x:999:
 EOF
-
 echo "tester:x:$(ls -n $(tty) | cut -d" " -f3):101::/home/tester:/bin/bash" >> /etc/passwd
 echo "tester:x:101:" >> /etc/group
 install -o tester -d /home/tester
@@ -245,7 +278,7 @@ exec /bin/bash --login +h
 Run the lfs-chroot.sh script, which will build additional temporary tools:
 
 ``` 
-kernel="5.12.19"
+kernel="5.13.8"
 . sources/lfs-scripts/lfs-chroot.sh | tee /lfs-chroot.log
 ```
 
@@ -253,13 +286,15 @@ Leave the chroot environment and unmount the kernel virtual file systems
 
 ```
 exit
+cd $LFS/tools/$LFS_TGT
+bin/strip --strip-unneeded $LFS/usr/lib/*
+bin/strip --strip-unneeded $LFS/usr/{,s}bin/*
+bin/strip --strip-unneeded $LFS/tools/bin/*
+
 umount $LFS/dev{/pts,}
 umount $LFS/{sys,proc,run}
-strip --strip-debug $LFS/usr/lib/*
-strip --strip-unneeded $LFS/usr/{,s}bin/*
-strip --strip-unneeded $LFS/tools/bin/*
-
-cd $LFS &&
+# backup
+cd $LFS 
 tar -cJpf $HOME/lfs-temp-tools-10.1.tar.xz .
 ```
 
@@ -279,12 +314,14 @@ chroot "$LFS" /usr/bin/env -i   \
     PATH=/bin:/usr/bin:/sbin:/usr/sbin \
     /bin/bash --login +h
 
-kernel="5.12.19"
+# chap 8
+
+kernel="5.13.8"
 . sources/lfs-scripts/lfs-system.sh | tee /lfs-system.log
 
 exec /bin/bash --login +h
 passwd root
-kernel="5.12.19"
+kernel="5.13.8"
 . sources/lfs-scripts/lfs-system2.sh | tee /lfs-system2.log
 ```
 
@@ -303,22 +340,22 @@ chroot "$LFS" /usr/bin/env -i          \
 Run the final script to configure the rest of the system:
 
 ```
-kernel="5.12.19"
+kernel="5.13.8"
 . sources/lfs-scripts/lfs-final.sh | tee /lfs-final.log
 ```
 
 ```
-Processor type and features --->  ( all defaults )
+Processor type and features --->  ( all defaults )                                         ***=edit
   [*] EFI runtime service support                              [CONFIG_EFI]
   [*]   EFI stub support                                       [CONFIG_EFI_STUB]
   [*]     EFI mixed-mode support
 Firmware Drivers --->             ( all defaults ) 
   EFI (Extensible Firmware Interface) Support --->
-    < > EFI Variable Support via sysfs                         [CONFIG_EFI_VARS]
+    < > EFI Variable Support via sysfs                         [CONFIG_EFI_VARS]           ***
     [*] Export efi runtime maps to sysfs                       [CONFIG_EFI_RUNTIME_MAP]
 Enable the block layer --->       ( all defaults )
   Partition Types --->
-    [*] Advanced partition selection                           [CONFIG_PARTITION_ADVANCED]
+    [*] Advanced partition selection                           [CONFIG_PARTITION_ADVANCED] ***
     [*] EFI GUID Partition support                             [CONFIG_EFI_PARTITION]
 Device Drivers --->               
   Generic Driver Options  --->

@@ -26,23 +26,24 @@ finish() {
 
 cd /sources
 
-# 8.3. Man-pages-5.10
-begin man-pages-5.10 tar.xz
+# 8.3. Man-pages-5.12
+begin man-pages-5.12 tar.xz
 make install ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.4. Iana-Etc-20210202
-begin iana-etc-20210202 tar.gz
+# 8.4. Iana-Etc-20210611
+begin iana-etc-20210611 tar.gz
 cp services protocols /etc ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.5. Glibc-2.33
-begin glibc-2.33 tar.xz
-patch -Np1 -i ../glibc-2.33-fhs-1.patch
-sed -e '402a\      *result = local->data.services[database_index];' \
-    -i nss/nss_database.c
+# 8.5. Glibc-2.34
+begin glibc-2.34 tar.xz
+patch -Np1 -i ../glibc-2.34-fhs-1.patch
+#sed -e '402a\      *result = local->data.services[database_index];' \
+#    -i nss/nss_database.c
 mkdir -v build
 cd       build
+echo "rootsbindir=/usr/sbin" > configparms
 ../configure --prefix=/usr                            \
              --disable-werror                         \
              --enable-kernel=3.2                      \
@@ -57,8 +58,12 @@ make
 touch /etc/ld.so.conf
 sed '/test-installation/s@$(PERL)@echo not running@' -i ../Makefile
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
+sed '/RTLDLIST=/s@/usr@@g' -i /usr/bin/ldd
 cp -v ../nscd/nscd.conf /etc/nscd.conf
 mkdir -pv /var/cache/nscd
+install -v -Dm644 ../nscd/nscd.tmpfiles /usr/lib/tmpfiles.d/nscd.conf
+install -v -Dm644 ../nscd/nscd.service /usr/lib/systemd/system/nscd.service
+
 mkdir -pv /usr/lib/locale
 localedef -i POSIX -f UTF-8 C.UTF-8 2> /dev/null || true
 localedef -i cs_CZ -f UTF-8 cs_CZ.UTF-8
@@ -86,6 +91,7 @@ localedef -i ru_RU -f UTF-8 ru_RU.UTF-8
 localedef -i tr_TR -f UTF-8 tr_TR.UTF-8
 localedef -i zh_CN -f GB18030 zh_CN.GB18030
 localedef -i zh_HK -f BIG5-HKSCS zh_HK.BIG5-HKSCS
+
 cat > /etc/nsswitch.conf << "EOF"
 # Begin /etc/nsswitch.conf
 
@@ -135,8 +141,8 @@ begin zlib-1.2.11 tar.xz
 ./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/lib/libz.so.* /lib
-ln -sfv ../../lib/$(readlink /usr/lib/libz.so) /usr/lib/libz.so
+#mv -v /usr/lib/libz.so.* /lib
+#ln -sfv ../../lib/$(readlink /usr/lib/libz.so) /usr/lib/libz.so
 rm -fv /usr/lib/libz.a
 finish
 
@@ -149,12 +155,17 @@ make -f Makefile-libbz2_so
 make clean
 make
 make PREFIX=/usr install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-cp -v bzip2-shared /bin/bzip2
+#cp -v bzip2-shared /bin/bzip2
 cp -av libbz2.so* /lib
 ln -sv ../../lib/libbz2.so.1.0 /usr/lib/libbz2.so
-rm -v /usr/bin/{bunzip2,bzcat,bzip2}
-ln -sv bzip2 /bin/bunzip2
-ln -sv bzip2 /bin/bzcat
+
+#rm -v /usr/bin/{bunzip2,bzcat,bzip2}
+#ln -sv bzip2 /bin/bunzip2
+#ln -sv bzip2 /bin/bzcat
+cp -v bzip2-shared /usr/bin/bzip2
+for i in /usr/bin/{bzcat,bunzip2}; do
+  ln -sfv bzip2 $i
+done
 rm -fv /usr/lib/libbz2.a
 finish
 
@@ -165,22 +176,22 @@ begin xz-5.2.5 tar.xz
             --docdir=/usr/share/doc/xz-5.2.5
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v   /usr/bin/{lzma,unlzma,lzcat,xz,unxz,xzcat} /bin
-mv -v /usr/lib/liblzma.so.* /lib
-ln -svf ../../lib/$(readlink /usr/lib/liblzma.so) /usr/lib/liblzma.so
+#mv -v   /usr/bin/{lzma,unlzma,lzcat,xz,unxz,xzcat} /bin
+#mv -v /usr/lib/liblzma.so.* /lib
+#ln -svf ../../lib/$(readlink /usr/lib/liblzma.so) /usr/lib/liblzma.so
 finish
 
-# 8.9. Zstd-1.4.8
-begin zstd-1.4.8 tar.gz
+# 8.9. Zstd-1.5.0
+begin zstd-1.5.0 tar.gz
 make
 make prefix=/usr install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 rm -v /usr/lib/libzstd.a
-mv -v /usr/lib/libzstd.so.* /lib
-ln -sfv ../../lib/$(readlink /usr/lib/libzstd.so) /usr/lib/libzstd.so
+#mv -v /usr/lib/libzstd.so.* /lib
+#ln -sfv ../../lib/$(readlink /usr/lib/libzstd.so) /usr/lib/libzstd.so
 finish
 
-# 8.10. File-5.39
-begin file-5.39 tar.gz
+# 8.10. File-5.40
+begin file-5.40 tar.gz
 ./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
@@ -196,26 +207,26 @@ sed -i '/{OLDSUFF}/c:' support/shlib-install
             --docdir=/usr/share/doc/readline-8.1
 make SHLIB_LIBS="-lncursesw"
 make SHLIB_LIBS="-lncursesw" install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/lib/lib{readline,history}.so.* /lib
+#mv -v /usr/lib/lib{readline,history}.so.* /lib
 ## chmod -v u+w /lib/lib{readline,history}.so.*
-ln -sfv ../../lib/$(readlink /usr/lib/libreadline.so) /usr/lib/libreadline.so
-ln -sfv ../../lib/$(readlink /usr/lib/libhistory.so ) /usr/lib/libhistory.so
+#ln -sfv ../../lib/$(readlink /usr/lib/libreadline.so) /usr/lib/libreadline.so
+#ln -sfv ../../lib/$(readlink /usr/lib/libhistory.so ) /usr/lib/libhistory.so
 install -v -m644 doc/*.{ps,pdf,html,dvi} /usr/share/doc/readline-8.1
 finish
 
-# 8.12. M4-1.4.18
-begin m4-1.4.18 tar.xz
-sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
-echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
+# 8.12. M4-1.4.19
+begin m4-1.4.19 tar.xz
+#sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
+#echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
 ./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.13. Bc-3.3.0
-begin bc-3.3.0 tar.xz
+# 8.13. Bc-4.0.2
+begin bc-4.0.2 tar.xz
 #PREFIX=/usr CC=gcc CFLAGS="-std=c99" ./configure.sh -G -O3
-PREFIX=/usr CC=gcc  ./configure.sh -G -O3
+CC=gcc ./configure --prefix=/usr -G -O3
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
@@ -272,18 +283,20 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 ln -svf expect5.45.4/libexpect5.45.4.so /usr/lib
 finish
 
-# 8.17. DejaGNU-1.6.2
-begin dejagnu-1.6.2 tar.gz
+# 8.17. DejaGNU-1.6.3
+begin dejagnu-1.6.3 tar.gz
 ./configure --prefix=/usr
 makeinfo --html --no-split -o doc/dejagnu.html doc/dejagnu.texi
 makeinfo --plaintext       -o doc/dejagnu.txt  doc/dejagnu.texi
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-install -v -dm755  /usr/share/doc/dejagnu-1.6.2
-install -v -m644   doc/dejagnu.{html,txt} /usr/share/doc/dejagnu-1.6.2
+install -v -dm755  /usr/share/doc/dejagnu-1.6.3
+install -v -m644   doc/dejagnu.{html,txt} /usr/share/doc/dejagnu-1.6.3
 finish
 
-# 8.18. Binutils-2.36.1
-begin binutils-2.36.1 tar.xz
+# 8.18. Binutils-2.37
+begin binutils-2.37 tar.xz
+sed -i '63d' etc/texi2pod.pl
+find -name \*.1 -delete
 sed -i '/@\tincremental_copy/d' gold/testsuite/Makefile.in
 mkdir -v build
 cd       build
@@ -296,7 +309,7 @@ cd       build
              --enable-64-bit-bfd \
              --with-system-zlib
 make tooldir=/usr
-make tooldir=/usr install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
+make tooldir=/usr install -j1;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 rm -fv /usr/lib/lib{bfd,ctf,ctf-nobfd,opcodes}.a
 finish
 
@@ -335,68 +348,76 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 make install-html
 finish
 
-# 8.22. Attr-2.4.48
-begin attr-2.4.48 tar.gz
+# 8.22. Attr-2.5.1
+begin attr-2.5.1 tar.gz
 ./configure --prefix=/usr     \
             --bindir=/bin     \
             --disable-static  \
             --sysconfdir=/etc \
-            --docdir=/usr/share/doc/attr-2.4.48
+            --docdir=/usr/share/doc/attr-2.5.1
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/lib/libattr.so.* /lib
-ln -sfv ../../lib/$(readlink /usr/lib/libattr.so) /usr/lib/libattr.so
+#mv -v /usr/lib/libattr.so.* /lib
+#ln -sfv ../../lib/$(readlink /usr/lib/libattr.so) /usr/lib/libattr.so
 finish
 
-# 8.23. Acl-2.2.53
-begin acl-2.2.53 tar.gz
+# 8.23. Acl-2.3.1 
+begin acl-2.3.1  tar.gz
 ./configure --prefix=/usr         \
-            --bindir=/bin         \
             --disable-static      \
-            --libexecdir=/usr/lib \
-            --docdir=/usr/share/doc/acl-2.2.53
+            --docdir=/usr/share/doc/acl-2.3.1 
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/lib/libacl.so.* /lib
-ln -sfv ../../lib/$(readlink /usr/lib/libacl.so) /usr/lib/libacl.so
+#mv -v /usr/lib/libacl.so.* /lib
+#ln -sfv ../../lib/$(readlink /usr/lib/libacl.so) /usr/lib/libacl.so
 finish
 
-# 8.24. Libcap-2.48
-begin libcap-2.48 tar.xz
-sed -i '/install -m.*STACAPLIBNAME/d' libcap/Makefile
+# 8.24. Libcap-2.52
+begin libcap-2.52 tar.xz
+sed -i '/install -m.*STA/d' libcap/Makefile
 make prefix=/usr lib=lib
-make test
+#make test
 make prefix=/usr lib=lib install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-for libname in cap psx; do
-    mv -v /usr/lib/lib${libname}.so.* /lib
-    ln -sfv ../../lib/lib${libname}.so.2 /usr/lib/lib${libname}.so
-    chmod -v 755 /lib/lib${libname}.so.2.48
-done
+chmod -v 755 /usr/lib/lib{cap,psx}.so.2.52
+#for libname in cap psx; do
+#    mv -v /usr/lib/lib${libname}.so.* /lib
+#    ln -sfv ../../lib/lib${libname}.so.2 /usr/lib/lib${libname}.so
+#    chmod -v 755 /lib/lib${libname}.so.2.48
+#done
 finish
 
-# 8.25. Shadow-4.8.1
-begin shadow-4.8.1 tar.xz
+# 8.25. Shadow-4.9
+begin shadow-4.9 tar.xz
 sed -i 's/groups$(EXEEXT) //' src/Makefile.in
 find man -name Makefile.in -exec sed -i 's/groups\.1 / /'   {} \;
 find man -name Makefile.in -exec sed -i 's/getspnam\.3 / /' {} \;
 find man -name Makefile.in -exec sed -i 's/passwd\.5 / /'   {} \;
 sed -e 's:#ENCRYPT_METHOD DES:ENCRYPT_METHOD SHA512:' \
     -e 's:/var/spool/mail:/var/mail:'                 \
+    -e '/PATH=/{s@/sbin:@@;s@/bin:@@}'                \
     -i etc/login.defs
-sed -i 's/1000/999/' etc/useradd
+sed -e "224s/rounds/min_rounds/" -i libmisc/salt.c
+#sed -i 's/1000/999/' etc/useradd
 touch /usr/bin/passwd
 ./configure --sysconfdir=/etc \
             --with-group-name-max-length=32
 make
-make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
+#make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
+make exec_prefix=/usr install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
+make -C man install-man
+mkdir -p /etc/default
+useradd -D --gid 999
 pwconv
 grpconv
 #echo "root" | passwd --stdin root
 #sh -c 'echo root:root | chpasswd'
 finish
 
-# 8.26. GCC-10.2.0
-begin gcc-10.2.0 tar.xz
+# 8.26. GCC-11.2.0
+begin gcc-11.2.0 tar.xz
+sed -e '/static.*SIGSTKSZ/d' \
+    -e 's/return kAltStackSize/return SIGSTKSZ * 4/' \
+    -i libsanitizer/sanitizer_common/sanitizer_posix_libcdep.cpp
 case $(uname -m) in
   x86_64)
     sed -e '/m64=/s/lib64/lib/' \
@@ -413,12 +434,12 @@ cd       build
              --with-system-zlib
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-rm -rf /usr/lib/gcc/$(gcc -dumpmachine)/10.2.0/include-fixed/bits/
+rm -rf /usr/lib/gcc/$(gcc -dumpmachine)/11.2.0/include-fixed/bits/
 chown -v -R root:root \
-    /usr/lib/gcc/*linux-gnu/10.2.0/include{,-fixed}
+    /usr/lib/gcc/*linux-gnu/11.2.0/include{,-fixed}
 ln -sv ../usr/bin/cpp /lib
 #install -v -dm755 /usr/lib/bfd-plugins
-ln -sfv ../../libexec/gcc/$(gcc -dumpmachine)/10.2.0/liblto_plugin.so \
+ln -sfv ../../libexec/gcc/$(gcc -dumpmachine)/11.2.0/liblto_plugin.so \
         /usr/lib/bfd-plugins/
 echo 'int main(){}' > dummy.c
 cc dummy.c -v -Wl,--verbose &> dummy.log
@@ -445,7 +466,7 @@ finish
 
 # 8.28. Ncurses-6.2
 begin ncurses-6.2 tar.gz
-sed -i '/LIBTOOL_INSTALL/d' c++/Makefile.in
+#sed -i '/LIBTOOL_INSTALL/d' c++/Makefile.in
 ./configure --prefix=/usr           \
             --mandir=/usr/share/man \
             --with-shared           \
@@ -455,8 +476,8 @@ sed -i '/LIBTOOL_INSTALL/d' c++/Makefile.in
             --enable-widec
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/lib/libncursesw.so.6* /lib
-ln -sfv ../../lib/$(readlink /usr/lib/libncursesw.so) /usr/lib/libncursesw.so
+#mv -v /usr/lib/libncursesw.so.6* /lib
+#ln -sfv ../../lib/$(readlink /usr/lib/libncursesw.so) /usr/lib/libncursesw.so
 for lib in ncurses form panel menu ; do
     rm -vf                    /usr/lib/lib${lib}.so
     echo "INPUT(-l${lib}w)" > /usr/lib/lib${lib}.so
@@ -465,6 +486,7 @@ done
 rm -vf                     /usr/lib/libcursesw.so
 echo "INPUT(-lncursesw)" > /usr/lib/libcursesw.so
 ln -sfv libncurses.so      /usr/lib/libcurses.so
+rm -fv /usr/lib/libncurses++w.a
 mkdir -v       /usr/share/doc/ncurses-6.2
 cp -v -R doc/* /usr/share/doc/ncurses-6.2
 
@@ -485,8 +507,8 @@ begin psmisc-23.4 tar.xz
 ./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/bin/fuser   /bin
-mv -v /usr/bin/killall /bin
+#mv -v /usr/bin/fuser   /bin
+#mv -v /usr/bin/killall /bin
 finish
 
 # 8.31. Gettext-0.21
@@ -499,30 +521,30 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 chmod -v 0755 /usr/lib/preloadable_libintl.so
 finish
 
-# 8.32. Bison-3.7.5
-begin bison-3.7.5 tar.xz
-./configure --prefix=/usr --docdir=/usr/share/doc/bison-3.7.5
+# 8.32. Bison-3.7.6
+begin bison-3.7.6 tar.xz
+./configure --prefix=/usr --docdir=/usr/share/doc/bison-3.7.6
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.33. Grep-3.6
 begin grep-3.6 tar.xz
-./configure --prefix=/usr --bindir=/bin
+./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.34. Bash-5.1
-begin bash-5.1 tar.gz
-sed -i  '/^bashline.o:.*shmbchar.h/a bashline.o: ${DEFDIR}/builtext.h' Makefile.in
+# 8.34. Bash-5.1.8
+begin bash-5.1.8 tar.gz
+#sed -i  '/^bashline.o:.*shmbchar.h/a bashline.o: ${DEFDIR}/builtext.h' Makefile.in
 ./configure --prefix=/usr                    \
-            --docdir=/usr/share/doc/bash-5.1 \
+            --docdir=/usr/share/doc/bash-5.1.8 \
             --without-bash-malloc            \
             --with-installed-readline
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -vf /usr/bin/bash /bin
+#mv -vf /usr/bin/bash /bin
 finish
 
 echo "lfs-system.sh"
