@@ -100,6 +100,7 @@ esac
 patch -Np1 -i ../glibc-2.34-fhs-1.patch
 mkdir -v build
 cd       build
+echo "rootsbindir=/usr/sbin" > configparms
 ../configure                             \
       --prefix=/usr                      \
       --host=$LFS_TGT                    \
@@ -246,8 +247,8 @@ make
 make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
-# 6.10. Grep-3.6
-begin grep-3.6 tar.xz
+# 6.10. Grep-3.7
+begin grep-3.7 tar.xz
 ./configure --prefix=/usr   \
             --host=$LFS_TGT \
             --bindir=/bin
