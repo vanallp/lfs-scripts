@@ -16,7 +16,7 @@ sda3 /mnt/lfs  [everything else] ext4
 ```
 
 
-Pick a kernel. [here](https://www.kernel.org/) I have been successful with the stable: 5.13.11 branch with LFSv10.1. Attempting to build anythig in the 5.13.x fail with "cyclades.h is removed from linux kernel header files" [bug](https://www.mail-archive.com/gcc-bugs@gcc.gnu.org/msg688380.html)
+Pick a kernel. [here](https://www.kernel.org/) I have been successful with the stable: 5.13.12 branch with LFSv10.1. Attempting to build anythig in the 5.13.x fail with "cyclades.h is removed from linux kernel header files" [bug](https://www.mail-archive.com/gcc-bugs@gcc.gnu.org/msg688380.html)
 
 
 
@@ -26,7 +26,7 @@ Pick a kernel. [here](https://www.kernel.org/) I have been successful with the s
 
 ```
 # several times below I have to set the kernel version with:
-kernel="5.13.11"
+kernel="5.13.12"
 
 dnf install -y vim-default-editor --allowerasing
 dnf -y group install "C Development Tools and Libraries"
@@ -88,7 +88,10 @@ wget https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.6p1.tar.gz
 wget https://www.sudo.ws/dist/sudo-1.9.7p1.tar.gz
 wget https://ftp.gnu.org/gnu/parted/parted-3.4.tar.xz
 
-mkdir -pv $LFS/{bin,etc,lib,sbin,usr,var}
+mkdir -pv $LFS/{etc,var} $LFS/usr/{bin,lib,sbin}
+for i in bin lib sbin; do
+  ln -sv usr/$i $LFS/$i
+done
 case $(uname -m) in
   x86_64) mkdir -pv $LFS/lib64 ;;
 esac
@@ -97,7 +100,7 @@ mkdir -pv $LFS/tools
 groupadd lfs
 useradd -s /bin/bash -g lfs -m -k /dev/null lfs
 # passwd lfs
-chown -v lfs $LFS/{usr,lib,var,etc,bin,sbin,tools}
+chown -v lfs $LFS/{usr{,/*},lib,var,etc,bin,sbin,tools}
 case $(uname -m) in
   x86_64) chown -v lfs $LFS/lib64 ;;
 esac
@@ -139,7 +142,7 @@ Run the lfs-cross.sh script, which will build the cross-toolchain and cross comp
 
 ```
 source ~/.bash_profile
-kernel="5.13.11"
+kernel="5.13.12"
 .  $LFS/sources/lfs-scripts/lfs-cross.sh | tee $LFS/sources/lfs-cross.log
 ```
 # Chapter 7
@@ -273,7 +276,7 @@ exec /bin/bash --login +h
 Run the lfs-chroot.sh script, which will build additional temporary tools:
 
 ``` 
-kernel="5.13.11"
+kernel="5.13.12"
 . sources/lfs-scripts/lfs-chroot.sh | tee /lfs-chroot.log
 ```
 
@@ -281,10 +284,10 @@ Leave the chroot environment and unmount the kernel virtual file systems
 
 ```
 exit
-cd $LFS/tools/$LFS_TGT
-bin/strip --strip-unneeded $LFS/usr/lib/*
-bin/strip --strip-unneeded $LFS/usr/{,s}bin/*
-bin/strip --strip-unneeded $LFS/tools/bin/*
+#cd $LFS/tools/$LFS_TGT
+#bin/strip --strip-unneeded $LFS/usr/lib/*
+#bin/strip --strip-unneeded $LFS/usr/{,s}bin/*
+#bin/strip --strip-unneeded $LFS/tools/bin/*
 
 umount $LFS/dev{/pts,}
 umount $LFS/{sys,proc,run}
@@ -311,12 +314,12 @@ chroot "$LFS" /usr/bin/env -i   \
 
 # chap 8
 
-kernel="5.13.11"
+kernel="5.13.12"
 . sources/lfs-scripts/lfs-system.sh | tee /lfs-system.log
 
 exec /bin/bash --login +h
 passwd root
-kernel="5.13.11"
+kernel="5.13.12"
 . sources/lfs-scripts/lfs-system2.sh | tee /lfs-system2.log
 ```
 
@@ -335,7 +338,7 @@ chroot "$LFS" /usr/bin/env -i          \
 Run the final script to configure the rest of the system:
 
 ```
-kernel="5.13.11"
+kernel="5.13.12"
 . sources/lfs-scripts/lfs-final.sh | tee /lfs-final.log
 ```
 

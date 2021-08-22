@@ -105,6 +105,7 @@ make
 make install ;rc=$?;echo $package_name $rc >> /sources/rc.log
 finish
 
+# 7.14 
 find /usr/{lib,libexec} -name \*.la -delete
 rm -rf /usr/share/{info,man,doc}/*
 echo "lfs-chroot"

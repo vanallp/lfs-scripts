@@ -26,24 +26,14 @@ finish() {
 
 cd /sources
 
-# 9.2. LFS-Bootscripts-20210201
-begin lfs-bootscripts-20210201 tar.xz
-make install;rc=$?;echo $package_name $rc >> /sources/finalrc.log
-finish
+# 9.2. 
+cat > /etc/systemd/network/10-eth-static.network << "EOF"
+[Match]
+Name=enp0s3
 
-# 9.4.1.2. Creating Custom Udev Rules
-bash /lib/udev/init-net-rules.sh
-
-# 9.5.1. Creating Network Interface Configuration Files
-cd /etc/sysconfig/
-cat > ifconfig.enp0s3 << "EOF"
-ONBOOT=yes
-IFACE=eno1
-SERVICE=ipv4-static
-IP=192.168.1.108
+[Network]
+Address=192.168.1.108/24
 GATEWAY=192.168.1.1
-PREFIX=24
-BROADCAST=192.168.1.255
 EOF
 
 # 9.5.2. Creating the /etc/resolv.conf File
@@ -71,48 +61,15 @@ ff02::2   ip6-allrouters
 # End /etc/hosts
 EOF
 
-# 9.6.2. Configuring Sysvinit
-cat > /etc/inittab << "EOF"
-# Begin /etc/inittab
-
-id:3:initdefault:
-
-si::sysinit:/etc/rc.d/init.d/rc S
-
-l0:0:wait:/etc/rc.d/init.d/rc 0
-l1:S1:wait:/etc/rc.d/init.d/rc 1
-l2:2:wait:/etc/rc.d/init.d/rc 2
-l3:3:wait:/etc/rc.d/init.d/rc 3
-l4:4:wait:/etc/rc.d/init.d/rc 4
-l5:5:wait:/etc/rc.d/init.d/rc 5
-l6:6:wait:/etc/rc.d/init.d/rc 6
-
-ca:12345:ctrlaltdel:/sbin/shutdown -t1 -a -r now
-
-su:S016:once:/sbin/sulogin
-
-1:2345:respawn:/sbin/agetty --noclear tty1 9600
-2:2345:respawn:/sbin/agetty tty2 9600
-3:2345:respawn:/sbin/agetty tty3 9600
-4:2345:respawn:/sbin/agetty tty4 9600
-5:2345:respawn:/sbin/agetty tty5 9600
-6:2345:respawn:/sbin/agetty tty6 9600
-
-# End /etc/inittab
-EOF
 
 # 9.6.4. Configuring the System Clock
-cat > /etc/sysconfig/clock << "EOF"
-# Begin /etc/sysconfig/clock
-
-UTC=1
-
-# Set this to any options you might need to give to hwclock,
-# such as machine hardware clock type for Alphas.
-CLOCKPARAMS=
-
-# End /etc/sysconfig/clock
+cat > /etc/adjtime << "EOF"
+0.0 0 0.0
+0
+LOCAL
 EOF
+timedatectl set-local-rtc 1
+timedatectl set-timezone TIMEZONE
 
 # 9.7. The Bash Shell Startup Files
 cat > /etc/profile << "EOF"
@@ -196,7 +153,10 @@ efivarfs       /sys/firmware/efi/efivars  efivarfs  defaults     0 1
 # End /etc/fstab
 EOF
 
+return
+
 cd /sources
+exit
 
 # 10.3. Linux-"$kernel"
 begin linux-"$kernel" tar.xz
@@ -222,7 +182,7 @@ install uhci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i uhci_hcd ; true
 # End /etc/modprobe.d/usb.conf
 EOF
 
-exit
+
 
 # 10.4. Using GRUB to Set Up the Boot Process
 mountpoint /sys/firmware/efi/efivars || mount -v -t efivarfs efivarfs /sys/firmware/efi/efivars

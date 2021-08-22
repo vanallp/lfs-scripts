@@ -38,9 +38,9 @@ finish
 
 # 8.5. Glibc-2.34
 begin glibc-2.34 tar.xz
+sed -e '/NOTIFY_REMOVED)/s/)/ \&\& data.attr != NULL)/' \
+    -i sysdeps/unix/sysv/linux/mq_notify.c
 patch -Np1 -i ../glibc-2.34-fhs-1.patch
-#sed -e '402a\      *result = local->data.services[database_index];' \
-#    -i nss/nss_database.c
 mkdir -v build
 cd       build
 echo "rootsbindir=/usr/sbin" > configparms
@@ -51,10 +51,6 @@ echo "rootsbindir=/usr/sbin" > configparms
              --with-headers=/usr/include              \
              libc_cv_slibdir=/lib
 make
-#case $(uname -m) in
-#  i?86)   ln -sfnv $PWD/elf/ld-linux.so.2        /lib ;;
-#  x86_64) ln -sfnv $PWD/elf/ld-linux-x86-64.so.2 /lib ;;
-#esac
 touch /etc/ld.so.conf
 sed '/test-installation/s@$(PERL)@echo not running@' -i ../Makefile
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
@@ -141,8 +137,6 @@ begin zlib-1.2.11 tar.xz
 ./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-#mv -v /usr/lib/libz.so.* /lib
-#ln -sfv ../../lib/$(readlink /usr/lib/libz.so) /usr/lib/libz.so
 rm -fv /usr/lib/libz.a
 finish
 
@@ -507,8 +501,8 @@ begin psmisc-23.4 tar.xz
 ./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/bin/fuser   /bin
-mv -v /usr/bin/killall /bin
+#mv -v /usr/bin/fuser   /bin
+#mv -v /usr/bin/killall /bin
 finish
 
 # 8.31. Gettext-0.21
@@ -521,30 +515,30 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 chmod -v 0755 /usr/lib/preloadable_libintl.so
 finish
 
-# 8.32. Bison-3.7.5
-begin bison-3.7.5 tar.xz
-./configure --prefix=/usr --docdir=/usr/share/doc/bison-3.7.5
+# 8.32. Bison-3.7.6
+begin bison-3.7.6 tar.xz
+./configure --prefix=/usr --docdir=/usr/share/doc/bison-3.7.6
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.33. Grep-3.6
 begin grep-3.6 tar.xz
-./configure --prefix=/usr --bindir=/bin
+./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.34. Bash-5.1
-begin bash-5.1 tar.gz
-sed -i  '/^bashline.o:.*shmbchar.h/a bashline.o: ${DEFDIR}/builtext.h' Makefile.in
+# 8.34. Bash-5.1.8
+begin bash-5.1.8 tar.gz
+#sed -i  '/^bashline.o:.*shmbchar.h/a bashline.o: ${DEFDIR}/builtext.h' Makefile.in
 ./configure --prefix=/usr                    \
-            --docdir=/usr/share/doc/bash-5.1 \
+            --docdir=/usr/share/doc/bash-5.1.8 \
             --without-bash-malloc            \
             --with-installed-readline
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -vf /usr/bin/bash /bin
+#mv -vf /usr/bin/bash /bin
 finish
 
 echo "lfs-system.sh"

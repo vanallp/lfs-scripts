@@ -37,7 +37,6 @@ finish
 
 # 8.36. GDBM-1.20
 begin gdbm-1.20 tar.gz
-#sed -r -i '/^char.*parseopt_program_(doc|args)/d' src/parseopt.c
 ./configure --prefix=/usr    \
             --disable-static \
             --enable-libgdbm-compat
@@ -76,8 +75,6 @@ begin inetutils-2.1 tar.xz
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /usr/{,s}bin/ifconfig
-#mv -v /usr/bin/{hostname,ping,ping6,traceroute} /bin
-#mv -v /usr/bin/ifconfig /sbin
 finish
 
 # 8.40. Less-590
@@ -136,7 +133,6 @@ finish
 
 # 8.45. Automake-1.16.4
 begin automake-1.16.4 tar.xz
-#sed -i "s/''/etags/" t/tags-lisp-space.sh
 ./configure --prefix=/usr --docdir=/usr/share/doc/automake-1.16.4
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
@@ -241,13 +237,9 @@ FORCE_UNSAFE_CONFIGURE=1 ./configure \
             --enable-no-install-program=kill,uptime
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-#mv -v /usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} /bin
-#mv -v /usr/bin/{false,ln,ls,mkdir,mknod,mv,pwd,rm} /bin
-#mv -v /usr/bin/{rmdir,stty,sync,true,uname} /bin
 mv -v /usr/bin/chroot /usr/sbin
 mv -v /usr/share/man/man1/chroot.1 /usr/share/man/man8/chroot.8
 sed -i 's/"1"/"8"/' /usr/share/man/man8/chroot.8
-#mv -v /usr/bin/{head,nice,sleep,touch} /bin
 finish
 
 # 8.54. Check-0.15.2
@@ -279,8 +271,6 @@ begin findutils-4.8.0 tar.xz
 ./configure --prefix=/usr --localstatedir=/var/lib/locate
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-#mv -v /usr/bin/find /bin
-#sed -i 's|find:=${BINDIR}|find:=/bin|' /usr/bin/updatedb
 finish
 
 # 8.58. Groff-1.22.4
@@ -290,7 +280,7 @@ make -j1
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.59 grub   skip
+# 8.59 grub   after...
 
 #efivar efivar-37.tar.bz2
 begin efivar-37 tar.bz2
@@ -325,7 +315,7 @@ make
 make install ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.58. GRUB-2.04
+# 8.59. GRUB-2.06
 begin grub-2.06 tar.xz
 #sed "s/gold-version/& -R .note.gnu.property/" \
 #    -i Makefile.in grub-core/Makefile.in
@@ -347,7 +337,6 @@ begin gzip-1.10 tar.xz
 ./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-#mv -v /usr/bin/gzip /bin
 finish
 
 # 8.61. IPRoute2-5.13.0
@@ -369,7 +358,6 @@ sed -i 's/resizecons.8 //' docs/man/man8/Makefile.in
 ./configure --prefix=/usr --disable-vlock
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-#rm -v /usr/lib/libtswrap.{a,la,so*}
 mkdir -v            /usr/share/doc/kbd-2.4.0
 cp -R -v docs/doc/* /usr/share/doc/kbd-2.4.0
 finish
@@ -395,35 +383,20 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.66. Man-DB-2.9.4
-begin man-db-2.9.4 tar.xz
-./configure --prefix=/usr                        \
-            --docdir=/usr/share/doc/man-db-2.9.4 \
-            --sysconfdir=/etc                    \
-            --disable-setuid                     \
-            --enable-cache-owner=bin             \
-            --with-browser=/usr/bin/lynx         \
-            --with-vgrind=/usr/bin/vgrind        \
-            --with-grap=/usr/bin/grap            \
-            --with-systemdtmpfilesdir=           \
-            --with-systemdsystemunitdir=
-make
-make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-finish
-
-# 8.67. Tar-1.34
+# 8.66. Tar-1.34
 begin tar-1.34 tar.xz
 FORCE_UNSAFE_CONFIGURE=1  \
-./configure --prefix=/usr \
-            --bindir=/bin
+./configure --prefix=/usr 
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 make -C doc install-html docdir=/usr/share/doc/tar-1.34
 finish
 
-# 8.68. Texinfo-6.7
-begin texinfo-6.7 tar.xz
-./configure --prefix=/usr --disable-static
+# 8.67. Texinfo-6.8
+begin texinfo-6.8 tar.xz
+./configure --prefix=/usr 
+sed -e 's/__attribute_nonnull__/__nonnull/' \
+    -i gnulib/lib/malloc/dynarray-skeleton.c
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 make TEXMF=/usr/share/texmf install-tex
@@ -435,7 +408,7 @@ pushd /usr/share/info
 popd
 finish
 
-# 8.69. Vim-8.2.2433
+# 8.68. Vim-8.2.2433
 begin vim-8.2.2433 tar.gz
 echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 ./configure --prefix=/usr
@@ -465,48 +438,105 @@ endif
 EOF
 finish
 
-# 8.70. Eudev-3.2.10
-begin eudev-3.2.10 tar.gz
-./configure --prefix=/usr           \
-            --bindir=/sbin          \
-            --sbindir=/sbin         \
-            --libdir=/usr/lib       \
-            --sysconfdir=/etc       \
-            --libexecdir=/lib       \
-            --with-rootprefix=      \
-            --with-rootlibdir=/lib  \
-            --enable-manpages       \
-            --disable-static
-make
-mkdir -pv /lib/udev/rules.d
-mkdir -pv /etc/udev/rules.d
-make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-tar -xvf ../udev-lfs-20171102.tar.xz
-make -f udev-lfs-20171102/Makefile.lfs install
-udevadm hwdb --update
+# 8.69 MarkupSafe-2.0.1
+begin MarkupSafe-2.0.1 tar.gz
+python3 setup.py build
+python3 setup.py install --optimize=1;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.71. Procps-ng-3.3.17
+# 8.70. Jinja2-3.0.1
+begin Jinja2-3.0.1 tar.gz
+python3 setup.py install --optimize=1;echo $package_name $rc >> /sources/systemrc.log
+finish
+
+# 8.71. Systemd-249
+begin systemd-249 tar.gz
+patch -Np1 -i ../systemd-249-upstream_fixes-1.patch
+sed -i -e 's/GROUP="render"/GROUP="video"/' \
+        -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
+mkdir -p build
+cd       build
+
+LANG=en_US.UTF-8                    \
+meson --prefix=/usr                 \
+      --sysconfdir=/etc             \
+      --localstatedir=/var          \
+      --buildtype=release           \
+      -Dblkid=true                  \
+      -Ddefault-dnssec=no           \
+      -Dfirstboot=false             \
+      -Dinstall-tests=false         \
+      -Dldconfig=false              \
+      -Dsysusers=false              \
+      -Db_lto=false                 \
+      -Drpmmacrosdir=no             \
+      -Dhomed=false                 \
+      -Duserdb=false                \
+      -Dman=false                   \
+      -Dmode=release                \
+      -Ddocdir=/usr/share/doc/systemd-249 \
+      ..
+LANG=en_US.UTF-8 ninja
+LANG=en_US.UTF-8 ninja install;echo $package_name $rc >> /sources/systemrc.log
+tar -xf ../../systemd-man-pages-249.tar.xz --strip-components=1 -C /usr/share/man
+rm -rf /usr/lib/pam.d
+systemd-machine-id-setup
+systemctl preset-all
+systemctl disable systemd-time-wait-sync.service
+finish
+
+# 8.72. D-Bus-1.12.20
+begin dbus-1.12.20 tar.gz
+./configure --prefix=/usr                        \
+            --sysconfdir=/etc                    \
+            --localstatedir=/var                 \
+            --disable-static                     \
+            --disable-doxygen-docs               \
+            --disable-xml-docs                   \
+            --docdir=/usr/share/doc/dbus-1.12.20 \
+            --with-console-auth-dir=/run/console \
+            --with-system-pid-file=/run/dbus/pid \
+            --with-system-socket=/run/dbus/system_bus_socket
+make
+make install ;echo $package_name $rc >> /sources/systemrc.log
+ln -sfv /etc/machine-id /var/lib/dbus
+finish
+
+# 8.73. Man-DB-2.9.4          
+begin man-db-2.9.4 tar.xz
+./configure --prefix=/usr                        \
+            --docdir=/usr/share/doc/man-db-2.9.4 \
+            --sysconfdir=/etc                    \
+            --disable-setuid                     \
+            --enable-cache-owner=bin             \
+            --with-browser=/usr/bin/lynx         \
+            --with-vgrind=/usr/bin/vgrind        \
+            --with-grap=/usr/bin/grap            \
+            --with-systemdtmpfilesdir=           \
+            --with-systemdsystemunitdir=
+make
+make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
+finish
+
+
+# 8.74. Procps-ng-3.3.17
 # This package extracts to the directory procps-3.3.17, not the expected procps-ng-3.3.17
 # the tar file was renamed after d/l 
 begin procps-3.3.17 tar.xz
 ./configure --prefix=/usr                            \
-            --exec-prefix=                           \
-            --libdir=/usr/lib                        \
             --docdir=/usr/share/doc/procps-ng-3.3.17 \
             --disable-static                         \
-            --disable-kill
+            --disable-kill                           \
+	    --with-systemd
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/lib/libprocps.so.* /lib
-ln -sfv ../../lib/$(readlink /usr/lib/libprocps.so) /usr/lib/libprocps.so
 finish
 
-# 8.72. Util-linux-2.36.2
-begin util-linux-2.36.2 tar.xz
-#mkdir -pv /var/lib/hwclock
+# 8.75. Util-linux-2.37.1
+begin util-linux-2.37.1 tar.xz
 ./configure ADJTIME_PATH=/var/lib/hwclock/adjtime   \
-            --docdir=/usr/share/doc/util-linux-2.36.2 \
+	    --libdir=/usr/lib    \
+            --docdir=/usr/share/doc/util-linux-2.37.1 \
             --disable-chfn-chsh  \
             --disable-login      \
             --disable-nologin    \
@@ -516,20 +546,17 @@ begin util-linux-2.36.2 tar.xz
             --disable-pylibmount \
             --disable-static     \
             --without-python     \
-            --without-systemd    \
-            --without-systemdsystemunitdir \
 	    runstatedir=/run
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.73. E2fsprogs-1.46.1
-begin e2fsprogs-1.46.1 tar.gz
+# 8.76. E2fsprogs-1.46.3
+begin e2fsprogs-1.46.3 tar.gz
 mkdir -v build
 cd       build
 ../configure --prefix=/usr           \
-             --bindir=/bin           \
-             --with-root-prefix=""   \
+	     --sysconfdir=/etc       \
              --enable-elf-shlibs     \
              --disable-libblkid      \
              --disable-libuuid       \
@@ -545,57 +572,63 @@ install -v -m644 doc/com_err.info /usr/share/info
 install-info --dir-file=/usr/share/info/dir /usr/share/info/com_err.info
 finish
 
-# 8.74. Sysklogd-1.5.1
-begin sysklogd-1.5.1 tar.gz
-sed -i '/Error loading kernel symbols/{n;n;d}' ksym_mod.c
-sed -i 's/union wait/int/' syslogd.c
-make
-make BINDIR=/sbin install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-cat > /etc/syslog.conf << "EOF"
-# Begin /etc/syslog.conf
-
-auth,authpriv.* -/var/log/auth.log
-*.*;auth,authpriv.none -/var/log/sys.log
-daemon.* -/var/log/daemon.log
-kern.* -/var/log/kern.log
-mail.* -/var/log/mail.log
-user.* -/var/log/user.log
-*.emerg *
-
-# End /etc/syslog.conf
-EOF
-finish
-
-# 8.75. Sysvinit-2.98
-begin sysvinit-2.98 tar.xz
-patch -Np1 -i ../sysvinit-2.98-consolidated-1.patch
-make
-make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-finish
 
 # 8.77. Stripping Again
-save_lib="ld-2.33.so libc-2.33.so libpthread-2.33.so libthread_db-1.0.so"
-cd /lib
-for LIB in $save_lib; do
-    objcopy --only-keep-debug $LIB $LIB.dbg 
-    strip --strip-unneeded $LIB
-    objcopy --add-gnu-debuglink=$LIB.dbg $LIB 
-done    
-save_usrlib="libquadmath.so.0.0.0 libstdc++.so.6.0.28
-             libitm.so.1.0.0 libatomic.so.1.2.0" 
+save_usrlib="$(cd /usr/lib; ls ld-linux*)
+             libc.so.6
+             libthread_db.so.1
+             libquadmath.so.0.0.0 
+             libstdc++.so.6.0.29
+             libitm.so.1.0.0 
+             libatomic.so.1.2.0" 
+
 cd /usr/lib
+
 for LIB in $save_usrlib; do
     objcopy --only-keep-debug $LIB $LIB.dbg
-    strip --strip-unneeded $LIB
-    objcopy --add-gnu-debuglink=$LIB.dbg $LIB
+    cp $LIB /tmp/$LIB
+    strip --strip-unneeded /tmp/$LIB
+    objcopy --add-gnu-debuglink=$LIB.dbg /tmp/$LIB
+    install -vm755 /tmp/$LIB /usr/lib
+    rm /tmp/$LIB
 done
-unset LIB save_lib save_usrlib
-find /usr/lib -type f -name \*.a \
-   -exec strip --strip-debug {} ';'
-find /lib /usr/lib -type f -name \*.so* ! -name \*dbg \
-   -exec strip --strip-unneeded {} ';'
-find /{bin,sbin} /usr/{bin,sbin,libexec} -type f \
-    -exec strip --strip-all {} ';'
+
+online_usrbin="bash find strip"
+online_usrlib="libbfd-2.37.so
+               libhistory.so.8.1
+               libncursesw.so.6.2
+               libm.so.6
+               libreadline.so.8.1
+               libz.so.1.2.11
+               $(cd /usr/lib; find libnss*.so* -type f)"
+
+for BIN in $online_usrbin; do
+    cp /usr/bin/$BIN /tmp/$BIN
+    strip --strip-unneeded /tmp/$BIN
+    install -vm755 /tmp/$BIN /usr/bin
+    rm /tmp/$BIN
+done
+
+for LIB in $online_usrlib; do
+    cp /usr/lib/$LIB /tmp/$LIB
+    strip --strip-unneeded /tmp/$LIB
+    install -vm755 /tmp/$LIB /usr/lib
+    rm /tmp/$LIB
+done
+
+for i in $(find /usr/lib -type f -name \*.so* ! -name \*dbg) \
+         $(find /usr/lib -type f -name \*.a)                 \
+         $(find /usr/{bin,sbin,libexec} -type f); do
+    case "$online_usrbin $online_usrlib $save_usrlib" in
+        *$(basename $i)* ) 
+            ;;
+        * ) strip --strip-unneeded $i 
+            ;;
+    esac
+done
+
+unset BIN LIB save_usrlib online_usrbin online_usrlib
+
 
 # 8.78. Cleaning Up
 rm -rf /tmp/*a

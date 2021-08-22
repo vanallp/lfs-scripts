@@ -284,10 +284,10 @@ Leave the chroot environment and unmount the kernel virtual file systems
 
 ```
 exit
-cd $LFS/tools/$LFS_TGT
-bin/strip --strip-unneeded $LFS/usr/lib/*
-bin/strip --strip-unneeded $LFS/usr/{,s}bin/*
-bin/strip --strip-unneeded $LFS/tools/bin/*
+#cd $LFS/tools/$LFS_TGT
+#bin/strip --strip-unneeded $LFS/usr/lib/*
+#bin/strip --strip-unneeded $LFS/usr/{,s}bin/*
+#bin/strip --strip-unneeded $LFS/tools/bin/*
 
 umount $LFS/dev{/pts,}
 umount $LFS/{sys,proc,run}
@@ -333,6 +333,12 @@ chroot "$LFS" /usr/bin/env -i          \
     PS1='(lfs chroot) \u:\w\$ '        \
     PATH=/bin:/usr/bin:/sbin:/usr/sbin \
     /bin/bash --login
+
+find /usr/lib /usr/libexec -name \*.la -delete
+find /usr -depth -name $(uname -m)-lfs-linux-gnu\* | xargs rm -rf
+userdel -r tester
+
+
 ```
 
 Run the final script to configure the rest of the system:
