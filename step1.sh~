@@ -19,8 +19,6 @@ wget https://ftp.gnu.org/gnu/grub/grub-2.06.tar.xz
 wget https://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
 wget https://downloads.sourceforge.net/freetype/freetype-2.10.4.tar.xz
 
-git clone https://github.com/vanallp/lfs-scripts.git
-
 ## blfs
 wget https://curl.se/download/curl-7.78.0.tar.xz
 wget https://www.kernel.org/pub/software/scm/git/git-2.32.0.tar.xz
