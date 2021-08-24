@@ -64,11 +64,9 @@ mv $LFS/sources/tcl8.6.11-src.tar.gz $LFS/sources/tcl8.6.11.tar.gz
 mv $LFS/sources/procps-ng-3.3.17.tar.xz $LFS/sources/procps-3.3.17.tar.xz
 
 # vim https://github.com/vim/vim/releases
-# https://www.kernel.org/ & vim
+# https://www.kernel.org
 cd $LFS/sources
 wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-"$kernel".tar.xz
-wget https://github.com/vim/vim/archive/refs/tags/v8.2.3043.tar.gz
-mv v8.2.3043.tar.gz vim-8.2.3043.tar.gz
 wget https://github.com/rhboot/efivar/releases/download/37/efivar-37.tar.bz2
 wget https://www.linuxfromscratch.org/patches/blfs/svn/efivar-37-gcc_9-1.patch
 wget https://github.com/rhboot/efibootmgr/archive/17/efibootmgr-17.tar.gz

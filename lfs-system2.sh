@@ -141,10 +141,9 @@ finish
 # 8.46. Kmod-29
 begin kmod-29 tar.xz
 ./configure --prefix=/usr          \
-            --bindir=/bin          \
             --sysconfdir=/etc      \
-            --with-rootlibdir=/lib \
             --with-xz              \
+	    --with-zstd            \
             --with-zlib
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
@@ -408,8 +407,8 @@ pushd /usr/share/info
 popd
 finish
 
-# 8.68. Vim-8.2.2433
-begin vim-8.2.2433 tar.gz
+# 8.68. Vim-8.2.3337
+begin vim-8.2.3337 tar.gz
 echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 ./configure --prefix=/usr
 make
@@ -418,7 +417,7 @@ ln -sv vim /usr/bin/vi
 for L in  /usr/share/man/{,*/}man1/vim.1; do
     ln -sv vim.1 $(dirname $L)/vi.1
 done
-ln -sv ../vim/vim82/doc /usr/share/doc/vim-8.2.2433
+ln -sv ../vim/vim82/doc /usr/share/doc/vim-8.2.3337
 cat > /etc/vimrc << "EOF"
 " Begin /etc/vimrc
 
@@ -441,12 +440,12 @@ finish
 # 8.69 MarkupSafe-2.0.1
 begin MarkupSafe-2.0.1 tar.gz
 python3 setup.py build
-python3 setup.py install --optimize=1;echo $package_name $rc >> /sources/systemrc.log
+python3 setup.py install --optimize=1;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.70. Jinja2-3.0.1
 begin Jinja2-3.0.1 tar.gz
-python3 setup.py install --optimize=1;echo $package_name $rc >> /sources/systemrc.log
+python3 setup.py install --optimize=1;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.71. Systemd-249
@@ -477,7 +476,7 @@ meson --prefix=/usr                 \
       -Ddocdir=/usr/share/doc/systemd-249 \
       ..
 LANG=en_US.UTF-8 ninja
-LANG=en_US.UTF-8 ninja install;echo $package_name $rc >> /sources/systemrc.log
+LANG=en_US.UTF-8 ninja install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 tar -xf ../../systemd-man-pages-249.tar.xz --strip-components=1 -C /usr/share/man
 rm -rf /usr/lib/pam.d
 systemd-machine-id-setup
@@ -498,7 +497,7 @@ begin dbus-1.12.20 tar.gz
             --with-system-pid-file=/run/dbus/pid \
             --with-system-socket=/run/dbus/system_bus_socket
 make
-make install ;echo $package_name $rc >> /sources/systemrc.log
+make install ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 ln -sfv /etc/machine-id /var/lib/dbus
 finish
 

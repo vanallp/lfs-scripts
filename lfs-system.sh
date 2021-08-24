@@ -339,7 +339,7 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.23. Acl-2.3.1 
-begin acl-2.3.1  tar.gz
+begin acl-2.3.1  tar.xz
 ./configure --prefix=/usr         \
             --disable-static      \
             --docdir=/usr/share/doc/acl-2.3.1 
