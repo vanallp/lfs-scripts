@@ -29,11 +29,11 @@ cd /sources
 # 9.2. 
 cat > /etc/systemd/network/10-eth-static.network << "EOF"
 [Match]
-Name=enp0s3
+Name=enp0s25
 
 [Network]
 Address=192.168.1.108/24
-GATEWAY=192.168.1.1
+Gateway=192.168.1.1
 EOF
 
 # 9.5.2. Creating the /etc/resolv.conf File
@@ -170,16 +170,14 @@ efivarfs       /sys/firmware/efi/efivars  efivarfs  defaults     0 1
 # End /etc/fstab
 EOF
 
-return
-
-cd /sources
-exit
 
 # 10.3. Linux-"$kernel"
 begin linux-"$kernel" tar.xz
 make mrproper
-make defconfig
-make
+#make defconfig
+#make menuconfig
+cp /sources/lfs-scripts/saved5-13-12-config .
+make saved5-13-12-config
 make modules_install
 cp -iv arch/x86/boot/bzImage /boot/vmlinuz-"$kernel"-lfs-10.1
 cp -iv System.map /boot/System.map-"$kernel"

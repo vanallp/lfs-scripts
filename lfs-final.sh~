@@ -29,11 +29,11 @@ cd /sources
 # 9.2. 
 cat > /etc/systemd/network/10-eth-static.network << "EOF"
 [Match]
-Name=enp0s3
+Name=enp0s25
 
 [Network]
 Address=192.168.1.108/24
-GATEWAY=192.168.1.1
+Gateway=192.168.1.1
 EOF
 
 # 9.5.2. Creating the /etc/resolv.conf File
@@ -69,7 +69,17 @@ cat > /etc/adjtime << "EOF"
 LOCAL
 EOF
 timedatectl set-local-rtc 1
-timedatectl set-timezone TIMEZONE
+timedatectl set-timezone New_York
+
+cat > /etc/vconsole.conf << "EOF"
+KEYMAP="us"
+FONT="eurlatgr"
+EOF
+
+cat > /etc/locale.conf << "EOF"
+LANG="en_US.UTF-8"
+EOF
+
 
 # 9.7. The Bash Shell Startup Files
 cat > /etc/profile << "EOF"
@@ -135,6 +145,13 @@ cat > /etc/shells << "EOF"
 # End /etc/shells
 EOF
 
+mkdir -pv /etc/systemd/system/getty@tty1.service.d
+
+cat > /etc/systemd/system/getty@tty1.service.d/noclear.conf << EOF
+[Service]
+TTYVTDisallocate=no
+EOF
+
 # 10.2. Creating the /etc/fstab File
 cat > /etc/fstab << "EOF"
 # Begin /etc/fstab
@@ -153,15 +170,13 @@ efivarfs       /sys/firmware/efi/efivars  efivarfs  defaults     0 1
 # End /etc/fstab
 EOF
 
-return
-
-cd /sources
-exit
 
 # 10.3. Linux-"$kernel"
 begin linux-"$kernel" tar.xz
 make mrproper
-make defconfig
+#make defconfig
+#make menuconfig
+cp /sources/saved5-13-12-config 
 make
 make modules_install
 cp -iv arch/x86/boot/bzImage /boot/vmlinuz-"$kernel"-lfs-10.1
