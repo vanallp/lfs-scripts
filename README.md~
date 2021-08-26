@@ -141,7 +141,7 @@ Run the lfs-cross.sh script, which will build the cross-toolchain and cross comp
 ```
 source ~/.bash_profile
 kernel="5.13.12"
-.  $LFS/sources/lfs-scripts/lfs-cross.sh | tee $LFS/sources/lfs-cross.log
+.  $LFS/sources/lfs-scripts/lfs-cross.sh
 ```
 # Chapter 7
 Return to being root:
@@ -275,7 +275,7 @@ Run the lfs-chroot.sh script, which will build additional temporary tools:
 
 ``` 
 kernel="5.13.12"
-. sources/lfs-scripts/lfs-chroot.sh | tee /lfs-chroot.log
+. sources/lfs-scripts/lfs-chroot.sh 
 ```
 
 Leave the chroot environment and unmount the kernel virtual file systems
@@ -313,12 +313,12 @@ chroot "$LFS" /usr/bin/env -i   \
 # chap 8
 
 kernel="5.13.12"
-. sources/lfs-scripts/lfs-system.sh | tee /lfs-system.log
+. sources/lfs-scripts/lfs-system.sh
 
 exec /bin/bash --login +h
 passwd root
 kernel="5.13.12"
-. sources/lfs-scripts/lfs-system2.sh | tee /lfs-system2.log
+. sources/lfs-scripts/lfs-system2.sh 
 ```
 
 
@@ -343,7 +343,7 @@ Run the final script to configure the rest of the system:
 
 ```
 kernel="5.13.12"
-. sources/lfs-scripts/lfs-final.sh | tee /lfs-final.log
+. sources/lfs-scripts/lfs-final.sh 
 ```
 
 ```

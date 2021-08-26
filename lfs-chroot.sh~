@@ -100,7 +100,8 @@ mkdir -pv /var/lib/hwclock
             --disable-runuser    \
             --disable-pylibmount \
             --disable-static     \
-            --without-python
+            --without-python     \
+	    runstatedir=/run
 make
 make install ;rc=$?;echo $package_name $rc >> /sources/rc.log
 finish
@@ -108,6 +109,8 @@ finish
 # 7.14 
 find /usr/{lib,libexec} -name \*.la -delete
 rm -rf /usr/share/{info,man,doc}/*
+rm -rf /tools
+
 echo "lfs-chroot"
 cat /sources/rc.log
 

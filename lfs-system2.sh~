@@ -171,8 +171,8 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.49. OpenSSL-1.1.1k
-begin openssl-1.1.1k tar.gz
+# 8.49. OpenSSL-1.1.1l
+begin openssl-1.1.1l tar.gz
 ./config --prefix=/usr         \
          --openssldir=/etc/ssl \
          --libdir=lib          \
@@ -181,8 +181,8 @@ begin openssl-1.1.1k tar.gz
 make
 sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
 make MANSUFFIX=ssl install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/share/doc/openssl /usr/share/doc/openssl-1.1.1k
-cp -vfr doc/* /usr/share/doc/openssl-1.1.1k
+mv -v /usr/share/doc/openssl /usr/share/doc/openssl-1.1.1l
+cp -vfr doc/* /usr/share/doc/openssl-1.1.1l
 finish
 
 # 8.50. Python-3.9.6
@@ -217,8 +217,8 @@ install -vDm644 misc/bash-completion /usr/share/bash-completion/completions/ninj
 install -vDm644 misc/zsh-completion  /usr/share/zsh/site-functions/_ninja
 finish
 
-# 8.52. Meson-0.59.0
-begin meson-0.59.0 tar.gz
+# 8.52. Meson-0.59.1
+begin meson-0.59.1 tar.gz
 python3 setup.py build
 python3 setup.py install --root=dest;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 cp -rv dest/* /
@@ -440,12 +440,12 @@ finish
 # 8.69 MarkupSafe-2.0.1
 begin MarkupSafe-2.0.1 tar.gz
 python3 setup.py build
-python3 setup.py install --optimize=1;echo $package_name $rc >> /sources/systemrc.log
+python3 setup.py install --optimize=1;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.70. Jinja2-3.0.1
 begin Jinja2-3.0.1 tar.gz
-python3 setup.py install --optimize=1;echo $package_name $rc >> /sources/systemrc.log
+python3 setup.py install --optimize=1;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.71. Systemd-249
@@ -476,7 +476,7 @@ meson --prefix=/usr                 \
       -Ddocdir=/usr/share/doc/systemd-249 \
       ..
 LANG=en_US.UTF-8 ninja
-LANG=en_US.UTF-8 ninja install;echo $package_name $rc >> /sources/systemrc.log
+LANG=en_US.UTF-8 ninja install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 tar -xf ../../systemd-man-pages-249.tar.xz --strip-components=1 -C /usr/share/man
 rm -rf /usr/lib/pam.d
 systemd-machine-id-setup
@@ -497,7 +497,7 @@ begin dbus-1.12.20 tar.gz
             --with-system-pid-file=/run/dbus/pid \
             --with-system-socket=/run/dbus/system_bus_socket
 make
-make install ;echo $package_name $rc >> /sources/systemrc.log
+make install ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 ln -sfv /etc/machine-id /var/lib/dbus
 finish
 

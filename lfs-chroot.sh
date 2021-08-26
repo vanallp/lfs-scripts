@@ -87,11 +87,12 @@ make
 make install ;rc=$?;echo $package_name $rc >> /sources/rc.log
 finish
 
-# 7.13. Util-linux-2.37.1
-begin util-linux-2.37.1 tar.xz
+# 7.13. Util-linux-2.37.2
+begin util-linux-2.37.2 tar.xz
 mkdir -pv /var/lib/hwclock
 ./configure ADJTIME_PATH=/var/lib/hwclock/adjtime    \
-            --docdir=/usr/share/doc/util-linux-2.37.1 \
+	    --libdir=/usr/lib    \
+            --docdir=/usr/share/doc/util-linux-2.37.2 \
             --disable-chfn-chsh  \
             --disable-login      \
             --disable-nologin    \

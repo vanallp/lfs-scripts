@@ -171,8 +171,8 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.49. OpenSSL-1.1.1k
-begin openssl-1.1.1k tar.gz
+# 8.49. OpenSSL-1.1.1l
+begin openssl-1.1.1l tar.gz
 ./config --prefix=/usr         \
          --openssldir=/etc/ssl \
          --libdir=lib          \
@@ -181,8 +181,8 @@ begin openssl-1.1.1k tar.gz
 make
 sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
 make MANSUFFIX=ssl install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/share/doc/openssl /usr/share/doc/openssl-1.1.1k
-cp -vfr doc/* /usr/share/doc/openssl-1.1.1k
+mv -v /usr/share/doc/openssl /usr/share/doc/openssl-1.1.1l
+cp -vfr doc/* /usr/share/doc/openssl-1.1.1l
 finish
 
 # 8.50. Python-3.9.6
@@ -217,8 +217,8 @@ install -vDm644 misc/bash-completion /usr/share/bash-completion/completions/ninj
 install -vDm644 misc/zsh-completion  /usr/share/zsh/site-functions/_ninja
 finish
 
-# 8.52. Meson-0.59.0
-begin meson-0.59.0 tar.gz
+# 8.52. Meson-0.59.1
+begin meson-0.59.1 tar.gz
 python3 setup.py build
 python3 setup.py install --root=dest;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 cp -rv dest/* /
@@ -550,8 +550,8 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.76. E2fsprogs-1.46.3
-begin e2fsprogs-1.46.3 tar.gz
+# 8.76. E2fsprogs-1.46.4
+begin e2fsprogs-1.46.4 tar.gz
 mkdir -v build
 cd       build
 ../configure --prefix=/usr           \
