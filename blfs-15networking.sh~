@@ -19,13 +19,17 @@ finish() {
 
 	cd /sources
 	rm -rf $package_name
+#strip
+        find /usr/{bin,lib,sbin} \
+             -type f \( -name \*.so* -a ! -name \*dbg \) \
+             -exec strip --strip-unneeded {} \;
 }
 
 cd /sources
 
 
-# https://www.samba.org/ftp/rsync/src/rsync-3.2.3.tar.gz
-wget https://www.samba.org/ftp/rsync/src/rsync-3.2.3.tar.gz
+#     https://www.samba.org/ftp/rsync/src/rsync-3.2.3.tar.gz
+#wget https://www.samba.org/ftp/rsync/src/rsync-3.2.3.tar.gz
 begin rsync-3.2.3 tar.gz
 groupadd -g 48 rsyncd &&
 useradd -c "rsyncd Daemon" -m -d /home/rsync -g rsyncd \
@@ -55,11 +59,11 @@ use chroot = yes
 
 EOF
 finish
-
+cd /sources/blfs-systemd-units
 make install-rsyncd
 
-# https://ftp.gnu.org/gnu/wget/wget-1.21.1.tar.gz
-wget https://ftp.gnu.org/gnu/wget/wget-1.21.1.tar.gz
+#     https://ftp.gnu.org/gnu/wget/wget-1.21.1.tar.gz
+#wget https://ftp.gnu.org/gnu/wget/wget-1.21.1.tar.gz
 begin wget-1.21.1 tar.gz
 ./configure --prefix=/usr      \
             --sysconfdir=/etc  \
@@ -67,7 +71,7 @@ begin wget-1.21.1 tar.gz
 make
 make install ;rc=$?;echo $package_name $rc >> /sources/blfsnetworkrc.log
 finish
-
+#make-ca-1.7 
 
 
 

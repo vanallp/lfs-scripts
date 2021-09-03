@@ -26,9 +26,9 @@ finish() {
 
 cd /sources
 
-# 8.3. Man-pages-5.12
-begin man-pages-5.12 tar.xz
-make install ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
+# 8.3. Man-pages-5.13
+begin man-pages-5.13 tar.xz
+make prefix=/usr install ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.4. Iana-Etc-20210611
@@ -505,6 +505,8 @@ begin bash-5.1.8 tar.gz
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
+
+cd /
 
 echo "lfs-system.sh"
 cat /sources/systemrc.log

@@ -19,9 +19,16 @@ finish() {
 
 	cd /sources
 	rm -rf $package_name
+#strip 
+	find /usr/{bin,lib,sbin} \
+             -type f \( -name \*.so* -a ! -name \*dbg \) \
+             -exec strip --strip-unneeded {} \;
 }
 
 cd /sources
+
+#https://kernel.googlesource.com/pub/scm/linux/kernel/git/firmware/linux-firmware/
+#git clone https://kernel.googlesource.com/pub/scm/linux/kernel/git/firmware/linux-firmware
 
 
 cat > /etc/profile << "EOF"
@@ -268,19 +275,17 @@ EOF
 
 dircolors -p > /etc/dircolors
 
-cat > /etc/issue << "EOF"
-# 
-new-build! 
 
+
+cat > /etc/issue << "EOF"
+\d \t \s \m
+\n \r \v
 EOF
 
-#bootscripts
-# https://anduin.linuxfromscratch.org/BLFS/blfs-bootscripts/blfs-bootscripts-20210711.tar.xz
-wget https://anduin.linuxfromscratch.org/BLFS/blfs-bootscripts/blfs-bootscripts-20210711.tar.xz
 cd /sources
-tar xf blfs-bootscripts-20210711.tar.xz
-cd blfs-bootscripts-20210711
-make install-random
+#wget https://www.linuxfromscratch.org/blfs/downloads/systemd/blfs-systemd-units-20210819.tar.xz
+tar xf blfs-systemd-units-20210819.tar.xz
+mv blfs-systemd-units-20210819 blfs-systemd-units
 
 
 

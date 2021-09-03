@@ -19,13 +19,17 @@ finish() {
 
 	cd /sources
 	rm -rf $package_name
+#strip
+        find /usr/{bin,lib,sbin} \
+             -type f \( -name \*.so* -a ! -name \*dbg \) \
+             -exec strip --strip-unneeded {} \;
 }
 
 cd /sources
 
 
-# https://www.samba.org/ftp/rsync/src/rsync-3.2.3.tar.gz
-wget https://www.samba.org/ftp/rsync/src/rsync-3.2.3.tar.gz
+#     https://www.samba.org/ftp/rsync/src/rsync-3.2.3.tar.gz
+#wget https://www.samba.org/ftp/rsync/src/rsync-3.2.3.tar.gz
 begin rsync-3.2.3 tar.gz
 groupadd -g 48 rsyncd &&
 useradd -c "rsyncd Daemon" -m -d /home/rsync -g rsyncd \
@@ -35,7 +39,7 @@ useradd -c "rsyncd Daemon" -m -d /home/rsync -g rsyncd \
             --disable-xxhash \
             --without-included-zlib 
 make
-make install ;rc=$?;echo $package_name $rc >> /sources/blfsnetworkrc.log
+make install ;rc=$?;echo $package_name $rc >> /sources/15rc.log
 install -v -m755 -d          /usr/share/doc/rsync-3.2.3/api &&
 install -v -m644 dox/html/*  /usr/share/doc/rsync-3.2.3/api
 cat > /etc/rsyncd.conf << "EOF"
@@ -55,19 +59,19 @@ use chroot = yes
 
 EOF
 finish
-
+cd /sources/blfs-systemd-units
 make install-rsyncd
 
-# https://ftp.gnu.org/gnu/wget/wget-1.21.1.tar.gz
-wget https://ftp.gnu.org/gnu/wget/wget-1.21.1.tar.gz
+#     https://ftp.gnu.org/gnu/wget/wget-1.21.1.tar.gz
+#wget https://ftp.gnu.org/gnu/wget/wget-1.21.1.tar.gz
 begin wget-1.21.1 tar.gz
 ./configure --prefix=/usr      \
             --sysconfdir=/etc  \
             --with-ssl=openssl 
 make
-make install ;rc=$?;echo $package_name $rc >> /sources/blfsnetworkrc.log
+make install ;rc=$?;echo $package_name $rc >> /sources/15rc.log
 finish
-
+#make-ca-1.7 
 
 
 
@@ -75,6 +79,6 @@ finish
 #  Cleaning Up
 rm -rf /tmp/*a
 
-echo "blfs-security.sh"
-cat  /sources/blfsnetworkrc.log
+echo "blfs-15.sh"
+cat  /sources/15rc.log
 

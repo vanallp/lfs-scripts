@@ -41,11 +41,6 @@ mkdir -vp $LFS/sources
 chmod -v a+wt $LFS/sources
 git clone https://github.com/vanallp/lfs-scripts.git $LFS/sources/lfs-scripts
 
-# chapt 3.1
-#wget https://www.linuxfromscratch.org/lfs/view/10.1/wget-list
-#wget https://prdownloads.sourceforge.net/expat/expat-2.4.1.tar.xz --directory-prefix=$LFS/sources
-#wget https://www.linuxfromscratch.org/lfs/view/10.1/md5sums --directory-prefix=$LFS/sources
-
 wget https://www.linuxfromscratch.org/lfs/view/systemd/md5sums --directory-prefix=$LFS/sources
 wget https://www.linuxfromscratch.org/lfs/view/systemd/wget-list
 wget --input-file=wget-list --continue --directory-prefix=$LFS/sources
@@ -63,28 +58,17 @@ Check and confirm everything downloaded and passed OK
 mv $LFS/sources/tcl8.6.11-src.tar.gz $LFS/sources/tcl8.6.11.tar.gz
 mv $LFS/sources/procps-ng-3.3.17.tar.xz $LFS/sources/procps-3.3.17.tar.xz
 
-# vim https://github.com/vim/vim/releases
 # https://www.kernel.org
 cd $LFS/sources
 wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-"$kernel".tar.xz
-wget https://github.com/rhboot/efivar/releases/download/37/efivar-37.tar.bz2
-wget https://www.linuxfromscratch.org/patches/blfs/svn/efivar-37-gcc_9-1.patch
-wget https://github.com/rhboot/efibootmgr/archive/17/efibootmgr-17.tar.gz
-wget http://ftp.rpm.org/popt/releases/popt-1.x/popt-1.18.tar.gz
-wget https://downloads.sourceforge.net/freetype/freetype-2.10.4.tar.xz
-wget https://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
-wget https://downloads.sourceforge.net/freetype/freetype-2.10.4.tar.xz
-
 
 ## blfs 
-wget https://curl.se/download/curl-7.78.0.tar.xz
-wget https://www.kernel.org/pub/software/scm/git/git-2.32.0.tar.xz
-wget https://anduin.linuxfromscratch.org/BLFS/blfs-bootscripts/blfs-bootscripts-20210711.tar.xz
-wget https://www.samba.org/ftp/rsync/src/rsync-3.2.3.tar.gz
-wget https://ftp.gnu.org/gnu/wget/wget-1.21.1.tar.gz
-wget https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.6p1.tar.gz
-wget https://www.sudo.ws/dist/sudo-1.9.7p1.tar.gz
-wget https://ftp.gnu.org/gnu/parted/parted-3.4.tar.xz
+for getfile in $(grep wget lfs-system2.sh    | cut -c 7- ); do wget $getfile; done
+for getfile in $(grep wget blfs-3afterlfs.sh | cut -c 7- ); do wget $getfile; done
+for getfile in $(grep wget blfs-4security.sh | cut -c 7- ); do wget $getfile; done
+for getfile in $(grep wget blfs-5filedisk.sh | cut -c 7- ); do wget $getfile; done
+for getfile in $(grep wget blfs-11generalutil.sh  | cut -c 7- ); do wget $getfile; done
+for getfile in $(grep wget blfs-15networking.sh   | cut -c 7- ); do wget $getfile; done
 
 mkdir -pv $LFS/{etc,var} $LFS/usr/{bin,lib,sbin}
 for i in bin lib sbin; do
@@ -353,7 +337,7 @@ Processor type and features --->  ( all defaults )                              
   [*]     EFI mixed-mode support
 Firmware Drivers --->             ( all defaults ) 
   EFI (Extensible Firmware Interface) Support --->
-    < > EFI Variable Support via sysfs                         [CONFIG_EFI_VARS]           ***
+    < > EFI Variable Support via sysfs                         [CONFIG_EFI_VARS]           *** off!
     [*] Export efi runtime maps to sysfs                       [CONFIG_EFI_RUNTIME_MAP]
 Enable the block layer --->       ( all defaults )
   Partition Types --->
@@ -372,6 +356,8 @@ Device Drivers --->
 File systems --->
   Pseudo filesystems --->
     <*/M> EFI Variable filesystem                              [CONFIG_EFIVAR_FS]
+
+  <*/M> XFS filesystem support                                 [CONFIG_XFS_FS]
 ```
 
 # The end
