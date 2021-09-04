@@ -63,12 +63,12 @@ cd $LFS/sources
 wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-"$kernel".tar.xz
 
 ## blfs 
-for getfile in $(grep wget lfs-system2.sh    | cut -c 7- ); do wget $getfile; done
-for getfile in $(grep wget blfs-3afterlfs.sh | cut -c 7- ); do wget $getfile; done
-for getfile in $(grep wget blfs-4security.sh | cut -c 7- ); do wget $getfile; done
-for getfile in $(grep wget blfs-5filedisk.sh | cut -c 7- ); do wget $getfile; done
-for getfile in $(grep wget blfs-11generalutil.sh  | cut -c 7- ); do wget $getfile; done
-for getfile in $(grep wget blfs-15networking.sh   | cut -c 7- ); do wget $getfile; done
+for getfile in $(grep "#wget" lfs-scripts/lfs-system2.sh    | cut -c 7- ); do wget $getfile; done
+for getfile in $(grep "#wget" lfs-scripts/blfs-3afterlfs.sh | cut -c 7- ); do wget $getfile; done
+for getfile in $(grep "#wget" lfs-scripts/blfs-4security.sh | cut -c 7- ); do wget $getfile; done
+for getfile in $(grep "#wget" lfs-scripts/blfs-5filedisk.sh | cut -c 7- ); do wget $getfile; done
+for getfile in $(grep "#wget" lfs-scripts/blfs-11generalutil.sh  | cut -c 7- ); do wget $getfile; done
+for getfile in $(grep "#wget" lfs-scripts/blfs-15networking.sh   | cut -c 7- ); do wget $getfile; done
 
 mkdir -pv $LFS/{etc,var} $LFS/usr/{bin,lib,sbin}
 for i in bin lib sbin; do

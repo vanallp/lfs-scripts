@@ -45,14 +45,16 @@ begin  libevent-2.1.12-stable tar.gz
 sed -i 's/python/&3/' event_rpcgen.py
 ./configure --prefix=/usr --disable-static &&
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/11rc.log
+finish
 
 #     https://github.com/tmux/tmux/releases/download/3.2a/tmux-3.2a.tar.gz
 #wget https://github.com/tmux/tmux/releases/download/3.2a/tmux-3.2a.tar.gz
+#requires ncurses libevent-2
 begin tmux-3.2a tar.gz
 ./configure --prefix=/usr 
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/11rc.log
 finish
 
 
@@ -60,6 +62,6 @@ finish
 #  Cleaning Up
 rm -rf /tmp/*a
 
-echo "blfs-security.sh"
-cat  /sources/blfsnetworkrc.log
+echo "blfs-11.sh"
+cat  /sources/11rc.log
 

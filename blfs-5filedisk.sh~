@@ -45,7 +45,7 @@ make -C doc html
 makeinfo --html      -o doc/html       doc/parted.texi 
 makeinfo --plaintext -o doc/parted.txt doc/parted.texi
 
-make install ;rc=$?;echo $package_name $rc >> /sources/blfssecurityrc.log
+make install ;rc=$?;echo $package_name $rc >> /sources/5rc.log
 install -v -m755 -d /usr/share/doc/parted-3.4/html 
 install -v -m644    doc/html/* \
                     /usr/share/doc/parted-3.4/html 
@@ -63,7 +63,7 @@ mkdir build &&
 cd    build &&
 meson --prefix=/usr --buildtype=release .. &&
 ninja
-ninja install
+ninja install;rc=$?;echo $package_name $rc >> /sources/5rc.log
 finish
 
 Requires inih-53
@@ -72,7 +72,7 @@ Requires inih-53
 begin xfsprogs-5.13.0 tar.xz
 make DEBUG=-DNDEBUG     \
      INSTALL_USER=root  \
-     INSTALL_GROUP=root
+     INSTALL_GROUP=root;rc=$?;echo $package_name $rc >> /sources/5rc.log
 make PKG_DOC_DIR=/usr/share/doc/xfsprogs-5.13.0 install     &&
 make PKG_DOC_DIR=/usr/share/doc/xfsprogs-5.13.0 install-dev &&
 rm -rfv /usr/lib/libhandle.{a,la}
@@ -85,6 +85,6 @@ finish
 #  Cleaning Up
 rm -rf /tmp/*a
 
-echo "blfs-security.sh"
-cat  /sources/blfssecurityrc.log
+echo "blfs-5.sh"
+cat  /sources/5rc.log
 

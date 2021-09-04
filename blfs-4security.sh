@@ -19,10 +19,6 @@ finish() {
 
 	cd /sources
 	rm -rf $package_name
-	#strip
-        find /usr/{bin,lib,sbin} \
-             -type f \( -name \*.so* -a ! -name \*dbg \) \
-             -exec strip --strip-unneeded {} \;
 }
 
 cd /sources
@@ -59,15 +55,6 @@ install -vdm755 /etc/ssl/local
 /usr/sbin/make-ca -g
 systemctl enable update-pki.timer
 finish
-#wget http://www.cacert.org/certs/root.crt 
-#wget http://www.cacert.org/certs/class3.crt 
-openssl x509 -in root.crt -text -fingerprint -setalias "CAcert Class 1 root" \
-        -addtrust serverAuth -addtrust emailProtection -addtrust codeSigning \
-        > /etc/ssl/local/CAcert_Class_1_root.pem &&
-openssl x509 -in class3.crt -text -fingerprint -setalias "CAcert Class 3 root" \
-        -addtrust serverAuth -addtrust emailProtection -addtrust codeSigning \
-        > /etc/ssl/local/CAcert_Class_3_root.pem &&
-/usr/sbin/make-ca -r -f
 
 
 #     openssh-8.7p1.tar.gz 
