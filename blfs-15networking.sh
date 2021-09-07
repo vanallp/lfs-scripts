@@ -9,7 +9,7 @@ begin() {
 	package_ext=$2
 	
 	echo "[lfs-scripts] Starting build of $package_name at $(date)"
-	
+	cd /sources
 	tar xf $package_name.$package_ext
 	cd $package_name
 }
@@ -19,6 +19,9 @@ finish() {
 
 	cd /sources
 	rm -rf $package_name
+	find /usr/{bin,lib,sbin} \
+    -type f \( -name \*.so* -a ! -name \*dbg \) \
+    -exec strip --strip-unneeded {} \;
 }
 
 cd /sources
