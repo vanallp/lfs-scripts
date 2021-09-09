@@ -9,7 +9,7 @@ begin() {
 	package_ext=$2
 	
 	echo "[lfs-scripts] Starting build of $package_name at $(date)"
-	
+        cd /sources	
 	tar xf $package_name.$package_ext
 	cd $package_name
 }
