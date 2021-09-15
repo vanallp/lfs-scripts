@@ -407,13 +407,132 @@ wget https://ftp.gnu.org/gnu/which/which-2.21.tar.gz
 begin which-2.21 tar.gz
 ./configure --prefix=/usr &&
 make
-make install
+make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+
+# https://github.com/harfbuzz/harfbuzz/releases/download/2.9.0/harfbuzz-2.9.0.tar.xz
+wget https://github.com/harfbuzz/harfbuzz/releases/download/2.9.0/harfbuzz-2.9.0.tar.xz
+begin harfbuzz-2.9.0 tar.xz
+mkdir build &&
+cd    build &&
+meson --prefix=/usr        \
+      --buildtype=release  \
+      -Dgraphite=enabled   \
+      -Dbenchmark=disabled &&
+ninja
+ninja install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
 # https://downloads.sourceforge.net/freetype/freetype-2.11.0.tar.xz
-wget https://downloads.sourceforge.net/freetype/freetype-2.11.0.tar.xz
+##wget https://downloads.sourceforge.net/freetype/freetype-2.11.0.tar.xz
 begin freetype-2.11.0 tar.xz
+sed -ri "s:.*(AUX_MODULES.*valid):\1:" modules.cfg &&
+sed -r "s:.*(#.*SUBPIXEL_RENDERING) .*:\1:" \
+    -i include/freetype/config/ftoption.h  &&
+./configure --prefix=/usr --enable-freetype-config --disable-static &&
+make
+make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+
+
+# https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.1.tar.bz2
+wget https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.1.tar.bz2
+begin fontconfig-2.13.1 tar.bz2
+./configure --prefix=/usr        \
+            --sysconfdir=/etc    \
+            --localstatedir=/var \
+            --disable-docs       \
+            --docdir=/usr/share/doc/fontconfig-2.13.1 &&
+make
+make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+
+
+# https://github.com/fribidi/fribidi/releases/download/v1.0.9/fribidi-1.0.9.tar.xz
+wget https://github.com/fribidi/fribidi/releases/download/v1.0.9/fribidi-1.0.9.tar.xz
+begin fribidi-1.0.9 tar.xz
+mkdir build &&
+cd    build &&
+meson --prefix=/usr --buildtype=release .. &&
+ninja
+ninja install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+
+
+# https://download.gnome.org/sources/pango/1.48/pango-1.48.9.tar.xz
+wget https://download.gnome.org/sources/pango/1.48/pango-1.48.9.tar.xz
+begin pango-1.48.9 tar.xz
+mkdir build &&
+cd    build &&
+meson --prefix=/usr --buildtype=release --wrap-mode=nofallback .. &&
+ninja
+ninja install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+
+
+# https://download.gnome.org/sources/gtk+/2.24/gtk+-2.24.33.tar.xz
+wget https://download.gnome.org/sources/gtk+/2.24/gtk+-2.24.33.tar.xz
+begin gtk+-2.24.33 tar.xz
+sed -e 's#l \(gtk-.*\).sgml#& -o \1#' \
+    -i docs/{faq,tutorial}/Makefile.in      &&
+./configure --prefix=/usr --sysconfdir=/etc &&
+make
+make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+
+cat > ~/.gtkrc-2.0 << "EOF"
+include "/usr/share/themes/Glider/gtk-2.0/gtkrc"
+gtk-icon-theme-name = "hicolor"
+EOF
+
+
+# https://downloads.sourceforge.net/pcmanfm/libfm-1.3.2.tar.xz
+wget https://downloads.sourceforge.net/pcmanfm/libfm-1.3.2.tar.xz
+begin libfm-1.3.2 tar.xz
+./configure --prefix=/usr     \
+            --sysconfdir=/etc \
+            --disable-static  &&
+make
+make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+
+
+
+# https://downloads.sourceforge.net/pcmanfm/pcmanfm-1.3.2.tar.xz
+wget https://downloads.sourceforge.net/pcmanfm/pcmanfm-1.3.2.tar.xz
+begin pcmanfm-1.3.2 tar.xz
+./configure --prefix=/usr     \
+            --sysconfdir=/etc &&
+make
+make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+
+
+# https://download.gnome.org/sources/libwnck/2.30/libwnck-2.30.7.tar.xz
+wget https://download.gnome.org/sources/libwnck/2.30/libwnck-2.30.7.tar.xz
+begin libwnck-2.30.7 tar.xz
+./configure --prefix=/usr \
+            --disable-static \
+            --program-suffix=-1 &&
+make GETTEXT_PACKAGE=libwnck-1
+make GETTEXT_PACKAGE=libwnck-1 install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+
+
+
+# https://download.gnome.org/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.6.tar.xz
+wget https://download.gnome.org/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.6.tar.xz
+begin gdk-pixbuf-2.42.6 tar.xz
+mkdir build &&
+cd build &&
+meson --prefix=/usr --buildtype=release --wrap-mode=nofallback .. &&
+ninja
+ninja install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+
+
+
 
 
 #  Cleaning Up
