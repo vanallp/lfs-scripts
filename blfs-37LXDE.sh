@@ -96,6 +96,15 @@ install -v -m644 nettle.html /usr/share/doc/nettle-3.7.3
 finish
 
 
+# https://github.com/libarchive/libarchive/releases/download/v3.5.2/libarchive-3.5.2.tar.xz
+wget --no-check-certificate  https://github.com/libarchive/libarchive/releases/download/v3.5.2/libarchive-3.5.2.tar.xz
+begin libarchive-3.5.2 tar.xz
+./configure --prefix=/usr --disable-static &&
+make
+make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+
+
 # https://curl.se/download/curl-7.78.0.tar.xz
 wget --no-check-certificate  https://curl.se/download/curl-7.78.0.tar.xz
 begin curl-7.78.0 tar.xz
