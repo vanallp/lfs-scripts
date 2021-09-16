@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 # BLFS 10.1 Build Script
 
 package_name=""
@@ -71,6 +71,31 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
+
+# https://www.oberhumer.com/opensource/lzo/download/lzo-2.10.tar.gz
+wget --no-check-certificate https://www.oberhumer.com/opensource/lzo/download/lzo-2.10.tar.gz
+begin lzo-2.10 tar.gz
+./configure --prefix=/usr                    \
+            --enable-shared                  \
+            --disable-static                 \
+            --docdir=/usr/share/doc/lzo-2.10 &&
+make
+make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+
+
+# https://ftp.gnu.org/gnu/nettle/nettle-3.7.3.tar.gz
+wget --no-check-certificate https://ftp.gnu.org/gnu/nettle/nettle-3.7.3.tar.gz
+begin nettle-3.7.3 tar.gz
+./configure --prefix=/usr --disable-static &&
+make
+make install && rc=$?;echo $package_name $rc >> /sources/37rc.log
+chmod   -v   755 /usr/lib/lib{hogweed,nettle}.so &&
+install -v -m755 -d /usr/share/doc/nettle-3.7.3 &&
+install -v -m644 nettle.html /usr/share/doc/nettle-3.7.3
+finish
+
+
 # https://curl.se/download/curl-7.78.0.tar.xz
 wget --no-check-certificate  https://curl.se/download/curl-7.78.0.tar.xz
 begin curl-7.78.0 tar.xz
@@ -81,7 +106,7 @@ grep -rl '#!.*python$' | xargs sed -i '1s/python/&3/'
             --enable-threaded-resolver              \
             --with-ca-path=/etc/ssl/certs &&
 make
-make install && ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+make install && rc=$?;echo $package_name $rc >> /sources/37rc.log
 rm -rf docs/examples/.deps &&
 find docs \( -name Makefile\* -o -name \*.1 -o -name \*.3 \) -exec rm {} \; &&
 install -v -d -m755 /usr/share/doc/curl-7.78.0 &&

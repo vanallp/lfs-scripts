@@ -71,6 +71,24 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
+# https://curl.se/download/curl-7.78.0.tar.xz
+wget --no-check-certificate  https://curl.se/download/curl-7.78.0.tar.xz
+begin curl-7.78.0 tar.xz
+grep -rl '#!.*python$' | xargs sed -i '1s/python/&3/'
+./configure --prefix=/usr                           \
+            --disable-static                        \
+            --with-openssl                          \
+            --enable-threaded-resolver              \
+            --with-ca-path=/etc/ssl/certs &&
+make
+make install && rc=$?;echo $package_name $rc >> /sources/37rc.log
+rm -rf docs/examples/.deps &&
+find docs \( -name Makefile\* -o -name \*.1 -o -name \*.3 \) -exec rm {} \; &&
+install -v -d -m755 /usr/share/doc/curl-7.78.0 &&
+cp -v -R docs/*     /usr/share/doc/curl-7.78.0
+finish
+
+
 
 # https://cmake.org/files/v3.21/cmake-3.21.2.tar.gz
 wget --no-check-certificate https://cmake.org/files/v3.21/cmake-3.21.2.tar.gz
