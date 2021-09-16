@@ -38,6 +38,7 @@ make
 make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
+
 # http://xmlsoft.org/sources/libxml2-2.9.12.tar.gz
 wget http://xmlsoft.org/sources/libxml2-2.9.12.tar.gz
 begin libxml2-2.9.12 tar.gz
@@ -49,6 +50,7 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
+
 # http://xmlsoft.org/sources/libxslt-1.1.34.tar.gz
 wget http://xmlsoft.org/sources/libxslt-1.1.34.tar.gz
 begin libxslt-1.1.34 tar.gz
@@ -58,62 +60,6 @@ sed -i -r '/max(Parser)?Depth/d' ./tests/fuzz/fuzz.c &&
 make
 make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
-
-
-
-
-
-# https://download.gnome.org/sources/glib/2.68/glib-2.68.4.tar.xz
-wget --no-check-certificate https://download.gnome.org/sources/glib/2.68/glib-2.68.4.tar.xz
-begin glib-2.68.4 tar.xz
-mkdir build &&
-cd    build &&
-
-meson --prefix=/usr       \
-      --buildtype=release \
-      -Dman=true          \
-      ..                  &&
-ninja
-ninja install &&
-mkdir -p /usr/share/doc/glib-2.68.4 &&
-cp -r ../docs/reference/{NEWS,gio,glib,gobject} /usr/share/doc/glib-2.68.4
-finish
-
-
-# https://downloads.sourceforge.net/pcmanfm/libfm-1.3.2.tar.xz
-wget --no-check-certificate https://downloads.sourceforge.net/pcmanfm/libfm-1.3.2.tar.xz
-begin libfm-1.3.2 tar.xz
-./configure --prefix=/usr     \
-            --sysconfdir=/etc \
-            --with-extra-only \
-            --with-gtk=no     \
-            --disable-static  &&
-make
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
-finish
-
-# https://downloads.sourceforge.net/lxde/menu-cache-1.1.0.tar.xz
-# https://www.linuxfromscratch.org/patches/blfs/11.0/menu-cache-1.1.0-consolidated_fixes-1.patch
-wget --no-check-certificate https://downloads.sourceforge.net/lxde/menu-cache-1.1.0.tar.xz
-wget --no-check-certificate https://www.linuxfromscratch.org/patches/blfs/11.0/menu-cache-1.1.0-consolidated_fixes-1.patch
-begin menu-cache-1.1.0 tar.xz
-patch -Np1 -i ../menu-cache-1.1.0-consolidated_fixes-1.patch
-./configure --prefix=/usr    \
-            --disable-static &&
-make
-make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
-finish
-
-
-# https://download.gnome.org/sources/atk/2.36/atk-2.36.0.tar.xz
-wget --no-check-certificate https://download.gnome.org/sources/atk/2.36/atk-2.36.0.tar.xz
-begin atk-2.36.0 tar.xz
-mkdir build &&
-cd    build &&
-meson --prefix=/usr --buildtype=release .. &&
-ninja
-ninja install;rc=$?;echo $package_name $rc >> /sources/37rc.log
-finish 
 
 
 # https://dist.libuv.org/dist/v1.42.0/libuv-v1.42.0.tar.gz
@@ -385,16 +331,6 @@ xmlcatalog --noout --add "rewriteURI" \
 finish
 
 
-# http://xmlsoft.org/sources/libxslt-1.1.34.tar.gz
-wget http://xmlsoft.org/sources/libxslt-1.1.34.tar.gz
-begin libxslt-1.1.34 tar.gz
-sed -i s/3000/5000/ libxslt/transform.c doc/xsltproc.{1,xml} &&
-sed -i -r '/max(Parser)?Depth/d' ./tests/fuzz/fuzz.c &&
-./configure --prefix=/usr --disable-static --without-python  &&
-make
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
-finish
-
 
 # https://releases.pagure.org/xmlto/xmlto-0.0.28.tar.bz2
 wget --no-check-certificate https://releases.pagure.org/xmlto/xmlto-0.0.28.tar.bz2
@@ -405,6 +341,60 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
+
+
+
+# https://download.gnome.org/sources/glib/2.68/glib-2.68.4.tar.xz
+wget --no-check-certificate https://download.gnome.org/sources/glib/2.68/glib-2.68.4.tar.xz
+begin glib-2.68.4 tar.xz
+mkdir build &&
+cd    build &&
+
+meson --prefix=/usr       \
+      --buildtype=release \
+      -Dman=true          \
+      ..                  &&
+ninja
+ninja install &&
+mkdir -p /usr/share/doc/glib-2.68.4 &&
+cp -r ../docs/reference/{NEWS,gio,glib,gobject} /usr/share/doc/glib-2.68.4
+finish
+
+
+# https://downloads.sourceforge.net/pcmanfm/libfm-1.3.2.tar.xz
+wget --no-check-certificate https://downloads.sourceforge.net/pcmanfm/libfm-1.3.2.tar.xz
+begin libfm-1.3.2 tar.xz
+./configure --prefix=/usr     \
+            --sysconfdir=/etc \
+            --with-extra-only \
+            --with-gtk=no     \
+            --disable-static  &&
+make
+make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+
+# https://downloads.sourceforge.net/lxde/menu-cache-1.1.0.tar.xz
+# https://www.linuxfromscratch.org/patches/blfs/11.0/menu-cache-1.1.0-consolidated_fixes-1.patch
+wget --no-check-certificate https://downloads.sourceforge.net/lxde/menu-cache-1.1.0.tar.xz
+wget --no-check-certificate https://www.linuxfromscratch.org/patches/blfs/11.0/menu-cache-1.1.0-consolidated_fixes-1.patch
+begin menu-cache-1.1.0 tar.xz
+patch -Np1 -i ../menu-cache-1.1.0-consolidated_fixes-1.patch
+./configure --prefix=/usr    \
+            --disable-static &&
+make
+make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+
+
+# https://download.gnome.org/sources/atk/2.36/atk-2.36.0.tar.xz
+wget --no-check-certificate https://download.gnome.org/sources/atk/2.36/atk-2.36.0.tar.xz
+begin atk-2.36.0 tar.xz
+mkdir build &&
+cd    build &&
+meson --prefix=/usr --buildtype=release .. &&
+ninja
+ninja install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish 
 
 # https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/2.1/shared-mime-info-2.1.tar.gz
 wget --no-check-certificate https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/2.1/shared-mime-info-2.1.tar.gz
