@@ -509,6 +509,29 @@ cp      -v -f    doc/{GTF,manual}.pdf \
 finish
 
 
+# https://www.cairographics.org/releases/pixman-0.40.0.tar.gz
+wget --no-check-certificate  https://www.cairographics.org/releases/pixman-0.40.0.tar.gz
+begin pixman-0.40.0 tar.gz
+mkdir build &&
+cd    build &&
+meson --prefix=/usr --buildtype=release &&
+ninja
+ninja install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+
+
+# https://www.cairographics.org/snapshots/cairo-1.17.4.tar.xz
+wget --no-check-certificate  https://www.cairographics.org/snapshots/cairo-1.17.4.tar.xz
+begin cairo-1.17.4 tar.xz
+./configure --prefix=/usr    \
+            --disable-static \
+            --enable-tee &&
+make
+make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+# There is a circular dependency between cairo and harfbuzz. If cairo is built before harfbuzz, it is necessary to rebuild cairo after harfbuzz in order to build pango.
+
+
 # https://github.com/harfbuzz/harfbuzz/releases/download/2.9.0/harfbuzz-2.9.0.tar.xz
 wget --no-check-certificate https://github.com/harfbuzz/harfbuzz/releases/download/2.9.0/harfbuzz-2.9.0.tar.xz
 begin harfbuzz-2.9.0 tar.xz
@@ -521,6 +544,18 @@ meson --prefix=/usr        \
 ninja
 ninja install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
+
+
+# https://www.cairographics.org/snapshots/cairo-1.17.4.tar.xz
+#wget --no-check-certificate  https://www.cairographics.org/snapshots/cairo-1.17.4.tar.xz
+begin cairo-1.17.4 tar.xz
+./configure --prefix=/usr    \
+            --disable-static \
+            --enable-tee &&
+make
+make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+# There is a circular dependency between cairo and harfbuzz. If cairo is built before harfbuzz, it is necessary to rebuild cairo after harfbuzz in order to build pango.
 
 
 # https://downloads.sourceforge.net/freetype/freetype-2.11.0.tar.xz
