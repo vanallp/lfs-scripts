@@ -439,7 +439,7 @@ finish
 
 
 # https://download.gnome.org/sources/gobject-introspection/1.68/gobject-introspection-1.68.0.tar.xz
-wget   https://download.gnome.org/sources/gobject-introspection/1.68/gobject-introspection-1.68.0.tar.xz
+wget --no-check-certificate  https://download.gnome.org/sources/gobject-introspection/1.68/gobject-introspection-1.68.0.tar.xz
 begin gobject-introspection-1.68.0 tar.xz
 mkdir build &&
 cd    build &&
