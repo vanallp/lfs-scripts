@@ -32,7 +32,7 @@ cat > /etc/systemd/network/10-eth-static.network << "EOF"
 Name=enp0s25
 
 [Network]
-Address=192.168.1.108/24
+Address=192.168.1.140/24
 Gateway=192.168.1.1
 EOF
 
@@ -161,6 +161,7 @@ cat > /etc/fstab << "EOF"
 
 /dev/sda1      /boot/efi    vfat     umask=0077,shortname=winnt  0 2
 /dev/sda3      /            ext4     defaults                    1 2
+#/dev/sda4      /home        ext4     defaults                    1 2
 proc           /proc        proc     nosuid,noexec,nodev         0 0
 sysfs          /sys         sysfs    nosuid,noexec,nodev         0 0
 devpts         /dev/pts     devpts   gid=5,mode=620              0 0

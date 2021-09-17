@@ -19,9 +19,6 @@ finish() {
 
 	cd /sources
 	rm -rf $package_name
-	find /usr/{bin,lib,sbin} \
-             -type f \( -name \*.so* -a ! -name \*dbg \) \
-             -exec strip --strip-unneeded {} \;
 }
 
 cd /sources

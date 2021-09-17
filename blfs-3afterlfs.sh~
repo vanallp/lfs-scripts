@@ -422,5 +422,5 @@ mv blfs-systemd-units-20210819 blfs-systemd-units
 rm -rf /tmp/*a
 
 echo "blfs-after.sh"
-cat  /sources/blfssystemrc.log
+#cat  /sources/blfssystemrc.log
 

@@ -21,43 +21,30 @@ finish() {
 	rm -rf $package_name
 }
 
-cd /sources
-
-
-#     https://github.com/htop-dev/htop/archive/refs/tags/3.0.5.tar.gz
-#wget https://github.com/htop-dev/htop/archive/refs/tags/3.0.5.tar.gz
-cd /sources
-mv 3.0.5.tar.gz htop-3.0.5.tar.gz
-begin htop-3.0.5 tar.gz
-./autogen.sh && ./configure --prefix=/usr && make
-make install ;rc=$?;echo $package_name $rc >> /sources/11rc.log
-finish
+#wget --no-check-certificate https://github.com/htop-dev/htop/archive/refs/tags/3.0.5.tar.gz
+#cd /sources
+#mv 3.0.5.tar.gz htop-3.0.5.tar.gz
+#begin htop-3.0.5 tar.gz
+#make install ;rc=$?;echo $package_name $rc >> /sources/24rc.log
+#finish
 #cd /sources/blfs-systemd-units
 #make install-rsyncd
 
-#     https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
-#wget https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
-begin  libevent-2.1.12-stable tar.gz
-sed -i 's/python/&3/' event_rpcgen.py
-./configure --prefix=/usr --disable-static &&
-make
-make install;rc=$?;echo $package_name $rc >> /sources/11rc.log
-finish
+export XORG_PREFIX="/usr"
+export XORG_CONFIG="--prefix=$XORG_PREFIX --sysconfdir=/etc \
+    --localstatedir=/var --disable-static"
+cat > /etc/profile.d/xorg.sh << EOF
+XORG_PREFIX="$XORG_PREFIX"
+XORG_CONFIG="--prefix=\$XORG_PREFIX --sysconfdir=/etc --localstatedir=/var --disable-static"
+export XORG_PREFIX XORG_CONFIG
+EOF
+chmod 644 /etc/profile.d/xorg.sh
 
-#     https://github.com/tmux/tmux/releases/download/3.2a/tmux-3.2a.tar.gz
-#wget https://github.com/tmux/tmux/releases/download/3.2a/tmux-3.2a.tar.gz
-#requires ncurses libevent-2
-begin tmux-3.2a tar.gz
-./configure --prefix=/usr 
-make
-make install;rc=$?;echo $package_name $rc >> /sources/11rc.log
-finish
 
 
 
 #  Cleaning Up
 rm -rf /tmp/*a
-
-echo "blfs-11.sh"
-cat  /sources/11rc.log
+echo "blfs-24.sh"
+cat  /sources/24.log
 

@@ -21,17 +21,14 @@ finish() {
 	rm -rf $package_name
 }
 
-#wget https://github.com/htop-dev/htop/archive/refs/tags/3.0.5.tar.gz
-#cd /sources
-#mv 3.0.5.tar.gz htop-3.0.5.tar.gz
-#begin htop-3.0.5 tar.gz
-#make install ;rc=$?;echo $package_name $rc >> /sources/24rc.log
-#finish
-#cd /sources/blfs-systemd-units
-#make install-rsyncd
+cd /sources
 
-
-
+# https://www.x.org/pub/individual/util/util-macros-1.19.3.tar.bz2
+wget --no-check-certificate  https://www.x.org/pub/individual/util/util-macros-1.19.3.tar.bz2
+begin util-macros-1.19.3 tar.bz2
+./configure $XORG_CONFIG
+make install 
+finish
 
 #  Cleaning Up
 rm -rf /tmp/*a
