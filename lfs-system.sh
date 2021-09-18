@@ -201,8 +201,8 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.13. Bc-5.0.0
-begin bc-5.0.0 tar.xz
+# 8.13. Bc-5.0.2
+begin bc-5.0.2 tar.xz
 CC=gcc ./configure --prefix=/usr -G -O3
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
@@ -347,12 +347,12 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.24. Libcap-2.53
-begin libcap-2.53 tar.xz
+# 8.24. Libcap-2.57
+begin libcap-2.57 tar.xz
 sed -i '/install -m.*STA/d' libcap/Makefile
 make prefix=/usr lib=lib
 make prefix=/usr lib=lib install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-chmod -v 755 /usr/lib/lib{cap,psx}.so.2.53
+chmod -v 755 /usr/lib/lib{cap,psx}.so.2.57
 finish
 
 # 8.25. Shadow-4.9
@@ -482,9 +482,9 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 chmod -v 0755 /usr/lib/preloadable_libintl.so
 finish
 
-# 8.32. Bison-3.7.6
-begin bison-3.7.6 tar.xz
-./configure --prefix=/usr --docdir=/usr/share/doc/bison-3.7.6
+# 8.32. Bison-3.8.1
+begin bison-3.8.1 tar.xz
+./configure --prefix=/usr --docdir=/usr/share/doc/bison-3.8.1
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish

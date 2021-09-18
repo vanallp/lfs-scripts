@@ -79,6 +79,8 @@ cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
   `dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/install-tools/include/limits.h
 finish
 
+[ -z "$kernel" ] && return
+
 # 5.4. Linux-"$kernel" API Headers 
 begin linux-"$kernel" tar.xz
 make mrproper

@@ -46,8 +46,8 @@ make ;rc=$?;echo $package_name $rc >> /sources/rc.log
 cp -v gettext-tools/src/{msgfmt,msgmerge,xgettext} /usr/bin
 finish
 
-# 7.9. Bison-3.7.6
-begin bison-3.7.6 tar.xz
+# 7.9. Bison-3.8.1
+begin bison-3.8.1 tar.xz
 ./configure --prefix=/usr \
             --docdir=/usr/share/doc/bison-3.7.6
 make
@@ -69,8 +69,8 @@ make
 make install ;rc=$?;echo $package_name $rc >> /sources/rc.log
 finish
 
-# 7.11. Python-3.9.6 (upper case P)
-begin Python-3.9.6 tar.xz
+# 7.11. Python-3.9.7 (upper case P)
+begin Python-3.9.7 tar.xz
 ./configure --prefix=/usr   \
             --enable-shared \
             --without-ensurepip

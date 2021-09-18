@@ -258,8 +258,8 @@ make
 make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
-# 6.11. Gzip-1.10
-begin gzip-1.10 tar.xz
+# 6.11. Gzip-1.11
+begin gzip-1.11 tar.xz
 ./configure --prefix=/usr --host=$LFS_TGT
 make
 make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log

@@ -112,6 +112,8 @@ find /usr/{lib,libexec} -name \*.la -delete
 rm -rf /usr/share/{info,man,doc}/*
 rm -rf /tools
 
+cd /
+
 echo "lfs-chroot"
 cat /sources/rc.log
 

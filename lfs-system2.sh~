@@ -35,8 +35,8 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 rm -fv /usr/lib/libltdl.a
 finish
 
-# 8.36. GDBM-1.20
-begin gdbm-1.20 tar.gz
+# 8.36. GDBM-1.21
+begin gdbm-1.21 tar.gz
 ./configure --prefix=/usr    \
             --disable-static \
             --enable-libgdbm-compat

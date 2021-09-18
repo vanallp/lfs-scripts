@@ -35,8 +35,8 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 rm -fv /usr/lib/libltdl.a
 finish
 
-# 8.36. GDBM-1.20
-begin gdbm-1.20 tar.gz
+# 8.36. GDBM-1.21
+begin gdbm-1.21 tar.gz
 ./configure --prefix=/usr    \
             --disable-static \
             --enable-libgdbm-compat
@@ -61,8 +61,8 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 install -v -m644 doc/*.{html,png,css} /usr/share/doc/expat-2.4.1
 finish
 
-# 8.39. Inetutils-2.1
-begin inetutils-2.1 tar.xz
+# 8.39. Inetutils-2.2
+begin inetutils-2.2 tar.xz
 ./configure --prefix=/usr        \
             --localstatedir=/var \
             --disable-logger     \
@@ -185,8 +185,8 @@ mv -v /usr/share/doc/openssl /usr/share/doc/openssl-1.1.1l
 cp -vfr doc/* /usr/share/doc/openssl-1.1.1l
 finish
 
-# 8.50. Python-3.9.6
-begin Python-3.9.6 tar.xz
+# 8.50. Python-3.9.7
+begin Python-3.9.7 tar.xz
 ./configure --prefix=/usr       \
             --enable-shared     \
             --with-system-expat \
@@ -199,8 +199,8 @@ install -v -dm755 /usr/share/doc/python-3.9.6/html
 tar --strip-components=1  \
     --no-same-owner       \
     --no-same-permissions \
-    -C /usr/share/doc/python-3.9.6/html \
-    -xvf ../python-3.9.6-docs-html.tar.bz2
+    -C /usr/share/doc/python-3.9.7/html \
+    -xvf ../python-3.9.7-docs-html.tar.bz2
 finish
 
 # 8.51. Ninja-1.10.2
@@ -342,15 +342,15 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.61. IPRoute2-5.13.0
-begin iproute2-5.13.0 tar.xz
+# 8.61. IPRoute2-5.14.0
+begin iproute2-5.14.0 tar.xz
 sed -i /ARPD/d Makefile
 rm -fv man/man8/arpd.8
 sed -i 's/.m_ipt.o//' tc/Makefile
 make
 make SBINDIR=/usr/sbin install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mkdir -v              /usr/share/doc/iproute2-5.13.0
-cp -v COPYING README* /usr/share/doc/iproute2-5.13.0
+mkdir -v              /usr/share/doc/iproute2-5.14.0
+cp -v COPYING README* /usr/share/doc/iproute2-5.14.0
 finish
 
 # 8.62. Kbd-2.4.0
