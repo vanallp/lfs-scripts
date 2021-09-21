@@ -176,6 +176,7 @@ finish
 
 # 8.10. File-5.40
 begin file-5.40 tar.gz
+patch -Np1 -i ../file-5.40-upstream_fixes-1.patch
 ./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log

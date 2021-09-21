@@ -21,21 +21,13 @@ finish() {
 	rm -rf $package_name
 }
 cd /sources
-#wget --no-check-certificate https://github.com/htop-dev/htop/archive/refs/tags/3.0.5.tar.gz
-#cd /sources
-#mv 3.0.5.tar.gz htop-3.0.5.tar.gz
-#begin htop-3.0.5 tar.gz
-#make install ;rc=$?;echo $package_name $rc >> /sources/24rc.log
-#finish
-#cd /sources/blfs-systemd-units
-#make install-rsyncd
 
 # https://downloads.sourceforge.net/lxde/lxmenu-data-0.1.5.tar.xz
 wget --no-check-certificate https://downloads.sourceforge.net/lxde/lxmenu-data-0.1.5.tar.xz
 begin lxmenu-data-0.1.5 tar.xz
 ./configure --prefix=/usr --sysconfdir=/etc &&
 make
-make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -47,7 +39,7 @@ begin libxml2-2.9.12 tar.gz
             --with-history   \
             --with-python=/usr/bin/python3 &&
 make
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -58,7 +50,7 @@ sed -i s/3000/5000/ libxslt/transform.c doc/xsltproc.{1,xml} &&
 sed -i -r '/max(Parser)?Depth/d' ./tests/fuzz/fuzz.c &&
 ./configure --prefix=/usr --disable-static --without-python  &&
 make
-make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -68,7 +60,7 @@ begin libuv-v1.42.0 tar.gz
 sh autogen.sh                              &&
 ./configure --prefix=/usr --disable-static &&
 make 
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -80,7 +72,7 @@ begin lzo-2.10 tar.gz
             --disable-static                 \
             --docdir=/usr/share/doc/lzo-2.10 &&
 make
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -89,10 +81,10 @@ wget --no-check-certificate https://ftp.gnu.org/gnu/nettle/nettle-3.7.3.tar.gz
 begin nettle-3.7.3 tar.gz
 ./configure --prefix=/usr --disable-static &&
 make
-make install && rc=$?;echo $package_name $rc >> /sources/37rc.log
-chmod   -v   755 /usr/lib/lib{hogweed,nettle}.so &&
-install -v -m755 -d /usr/share/doc/nettle-3.7.3 &&
-install -v -m644 nettle.html /usr/share/doc/nettle-3.7.3
+sudo make install && rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo chmod   -v   755 /usr/lib/lib{hogweed,nettle}.so &&
+sudo install -v -m755 -d /usr/share/doc/nettle-3.7.3 &&
+sudo install -v -m644 nettle.html /usr/share/doc/nettle-3.7.3
 finish
 
 
@@ -101,7 +93,7 @@ wget --no-check-certificate  https://github.com/libarchive/libarchive/releases/d
 begin libarchive-3.5.2 tar.xz
 ./configure --prefix=/usr --disable-static &&
 make
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -115,11 +107,11 @@ grep -rl '#!.*python$' | xargs sed -i '1s/python/&3/'
             --enable-threaded-resolver              \
             --with-ca-path=/etc/ssl/certs &&
 make
-make install && rc=$?;echo $package_name $rc >> /sources/37rc.log
-rm -rf docs/examples/.deps &&
-find docs \( -name Makefile\* -o -name \*.1 -o -name \*.3 \) -exec rm {} \; &&
-install -v -d -m755 /usr/share/doc/curl-7.78.0 &&
-cp -v -R docs/*     /usr/share/doc/curl-7.78.0
+sudo make install && rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo rm -rf docs/examples/.deps &&
+sudo find docs \( -name Makefile\* -o -name \*.1 -o -name \*.3 \) -exec rm {} \; &&
+sudo install -v -d -m755 /usr/share/doc/curl-7.78.0 &&
+sudo cp -v -R docs/*     /usr/share/doc/curl-7.78.0
 finish
 
 
@@ -136,7 +128,7 @@ sed -i '/"lib64"/s/64//' Modules/GNUInstallDirs.cmake &&
             --no-system-librhash \
             --docdir=/share/doc/cmake-3.21.2 &&
 make
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -145,7 +137,7 @@ wget --no-check-certificate https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/n
 begin nasm-2.15.05 tar.xz
 ./configure --prefix=/usr &&
 make
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -162,7 +154,7 @@ cmake -DCMAKE_INSTALL_PREFIX=/usr \
       -DCMAKE_INSTALL_DEFAULT_LIBDIR=lib  \
       .. &&
 make
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -173,9 +165,9 @@ begin libpng-1.6.37 tar.xz
 gzip -cd ../libpng-1.6.37-apng.patch.gz | patch -p1
 ./configure --prefix=/usr --disable-static &&
 make
-make install && rc=$?;echo $package_name $rc >> /sources/37rc.log
-mkdir -v /usr/share/doc/libpng-1.6.37 &&
-cp -v README libpng-manual.txt /usr/share/doc/libpng-1.6.37
+sudo make install && rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo mkdir -v /usr/share/doc/libpng-1.6.37 &&
+sudo cp -v README libpng-manual.txt /usr/share/doc/libpng-1.6.37
 finish
 
 # http://xmlsoft.org/sources/libxml2-2.9.12.tar.gz
@@ -186,7 +178,7 @@ begin libxml2-2.9.12 tar.gz
             --with-history   \
             --with-python=/usr/bin/python3 &&
 make
-make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -198,10 +190,10 @@ patch -Np1 -i ../sgml-common-0.6.3-manpage-1.patch &&
 autoreconf -f -i
 ./configure --prefix=/usr --sysconfdir=/etc &&
 make
-make docdir=/usr/share/doc install && rc=$?;echo $package_name $rc >> /sources/37rc.log
-install-catalog --add /etc/sgml/sgml-ent.cat \
+sudo make docdir=/usr/share/doc install && rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo install-catalog --add /etc/sgml/sgml-ent.cat \
     /usr/share/sgml/sgml-iso-entities-8879.1986/catalog &&
-install-catalog --add /etc/sgml/sgml-docbook.cat \
+sudo install-catalog --add /etc/sgml/sgml-docbook.cat \
     /etc/sgml/sgml-ent.cat
 finish
 
@@ -212,7 +204,7 @@ wget --no-check-certificate https://www.linuxfromscratch.org/patches/blfs/11.0/u
 begin unzip60 tar.gz
 patch -Np1 -i ../unzip-6.0-consolidated_fixes-1.patch
 make -f unix/Makefile generic
-make prefix=/usr MANDIR=/usr/share/man/man1 \
+sudo make prefix=/usr MANDIR=/usr/share/man/man1 \
  -f unix/Makefile install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
   
@@ -222,97 +214,97 @@ wget --no-check-certificate https://www.docbook.org/xml/4.5/docbook-xml-4.5.zip
 mkdir /sources/docbook-xml-4.5
 cd    /sources/docbook-xml-4.5
 unzip ../docbook-xml-4.5.zip
-install -v -d -m755 /usr/share/xml/docbook/xml-dtd-4.5 &&
-install -v -d -m755 /etc/xml &&
-chown -R root:root . &&
-cp -v -af docbook.cat *.dtd ent/ *.mod \
+sudo install -v -d -m755 /usr/share/xml/docbook/xml-dtd-4.5 &&
+sudo install -v -d -m755 /etc/xml &&
+sudo chown -R root:root . &&
+sudo cp -v -af docbook.cat *.dtd ent/ *.mod \
     /usr/share/xml/docbook/xml-dtd-4.5
 if [ ! -e /etc/xml/docbook ]; then
-    xmlcatalog --noout --create /etc/xml/docbook
+    sudo xmlcatalog --noout --create /etc/xml/docbook
 fi &&
-xmlcatalog --noout --add "public" \
+sudo xmlcatalog --noout --add "public" \
     "-//OASIS//DTD DocBook XML V4.5//EN" \
     "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" \
     /etc/xml/docbook &&
-xmlcatalog --noout --add "public" \
+sudo xmlcatalog --noout --add "public" \
     "-//OASIS//DTD DocBook XML CALS Table Model V4.5//EN" \
     "file:///usr/share/xml/docbook/xml-dtd-4.5/calstblx.dtd" \
     /etc/xml/docbook &&
-xmlcatalog --noout --add "public" \
+sudo xmlcatalog --noout --add "public" \
     "-//OASIS//DTD XML Exchange Table Model 19990315//EN" \
     "file:///usr/share/xml/docbook/xml-dtd-4.5/soextblx.dtd" \
     /etc/xml/docbook &&
-xmlcatalog --noout --add "public" \
+sudo xmlcatalog --noout --add "public" \
     "-//OASIS//ELEMENTS DocBook XML Information Pool V4.5//EN" \
     "file:///usr/share/xml/docbook/xml-dtd-4.5/dbpoolx.mod" \
     /etc/xml/docbook &&
-xmlcatalog --noout --add "public" \
+sudo xmlcatalog --noout --add "public" \
     "-//OASIS//ELEMENTS DocBook XML Document Hierarchy V4.5//EN" \
     "file:///usr/share/xml/docbook/xml-dtd-4.5/dbhierx.mod" \
     /etc/xml/docbook &&
-xmlcatalog --noout --add "public" \
+sudo xmlcatalog --noout --add "public" \
     "-//OASIS//ELEMENTS DocBook XML HTML Tables V4.5//EN" \
     "file:///usr/share/xml/docbook/xml-dtd-4.5/htmltblx.mod" \
     /etc/xml/docbook &&
-xmlcatalog --noout --add "public" \
+sudo xmlcatalog --noout --add "public" \
     "-//OASIS//ENTITIES DocBook XML Notations V4.5//EN" \
     "file:///usr/share/xml/docbook/xml-dtd-4.5/dbnotnx.mod" \
     /etc/xml/docbook &&
-xmlcatalog --noout --add "public" \
+sudo xmlcatalog --noout --add "public" \
     "-//OASIS//ENTITIES DocBook XML Character Entities V4.5//EN" \
     "file:///usr/share/xml/docbook/xml-dtd-4.5/dbcentx.mod" \
     /etc/xml/docbook &&
-xmlcatalog --noout --add "public" \
+sudo xmlcatalog --noout --add "public" \
     "-//OASIS//ENTITIES DocBook XML Additional General Entities V4.5//EN" \
     "file:///usr/share/xml/docbook/xml-dtd-4.5/dbgenent.mod" \
     /etc/xml/docbook &&
-xmlcatalog --noout --add "rewriteSystem" \
+sudo xmlcatalog --noout --add "rewriteSystem" \
     "http://www.oasis-open.org/docbook/xml/4.5" \
     "file:///usr/share/xml/docbook/xml-dtd-4.5" \
     /etc/xml/docbook &&
-xmlcatalog --noout --add "rewriteURI" \
+sudo xmlcatalog --noout --add "rewriteURI" \
     "http://www.oasis-open.org/docbook/xml/4.5" \
     "file:///usr/share/xml/docbook/xml-dtd-4.5" \
     /etc/xml/docbook
 if [ ! -e /etc/xml/catalog ]; then
-    xmlcatalog --noout --create /etc/xml/catalog
+    sudo xmlcatalog --noout --create /etc/xml/catalog
 fi &&
-xmlcatalog --noout --add "delegatePublic" \
+sudo xmlcatalog --noout --add "delegatePublic" \
     "-//OASIS//ENTITIES DocBook XML" \
     "file:///etc/xml/docbook" \
     /etc/xml/catalog &&
-xmlcatalog --noout --add "delegatePublic" \
+sudo xmlcatalog --noout --add "delegatePublic" \
     "-//OASIS//DTD DocBook XML" \
     "file:///etc/xml/docbook" \
     /etc/xml/catalog &&
-xmlcatalog --noout --add "delegateSystem" \
+sudo xmlcatalog --noout --add "delegateSystem" \
     "http://www.oasis-open.org/docbook/" \
     "file:///etc/xml/docbook" \
     /etc/xml/catalog &&
-xmlcatalog --noout --add "delegateURI" \
+sudo xmlcatalog --noout --add "delegateURI" \
     "http://www.oasis-open.org/docbook/" \
     "file:///etc/xml/docbook" \
     /etc/xml/catalog
 
 for DTDVERSION in 4.1.2 4.2 4.3 4.4
 do
-  xmlcatalog --noout --add "public" \
+  sudo xmlcatalog --noout --add "public" \
     "-//OASIS//DTD DocBook XML V$DTDVERSION//EN" \
     "http://www.oasis-open.org/docbook/xml/$DTDVERSION/docbookx.dtd" \
     /etc/xml/docbook
-  xmlcatalog --noout --add "rewriteSystem" \
+  sudo xmlcatalog --noout --add "rewriteSystem" \
     "http://www.oasis-open.org/docbook/xml/$DTDVERSION" \
     "file:///usr/share/xml/docbook/xml-dtd-4.5" \
     /etc/xml/docbook
-  xmlcatalog --noout --add "rewriteURI" \
+  sudo xmlcatalog --noout --add "rewriteURI" \
     "http://www.oasis-open.org/docbook/xml/$DTDVERSION" \
     "file:///usr/share/xml/docbook/xml-dtd-4.5" \
     /etc/xml/docbook
-  xmlcatalog --noout --add "delegateSystem" \
+  sudo xmlcatalog --noout --add "delegateSystem" \
     "http://www.oasis-open.org/docbook/xml/$DTDVERSION/" \
     "file:///etc/xml/docbook" \
     /etc/xml/catalog
-  xmlcatalog --noout --add "delegateURI" \
+  sudo xmlcatalog --noout --add "delegateURI" \
     "http://www.oasis-open.org/docbook/xml/$DTDVERSION/" \
     "file:///etc/xml/docbook" \
     /etc/xml/catalog
@@ -326,7 +318,7 @@ wget http://files.itstool.org/itstool/itstool-2.0.6.tar.bz2
 begin itstool-2.0.6 tar.bz2
 PYTHON=/usr/bin/python3 ./configure --prefix=/usr &&
 make
-make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -335,48 +327,48 @@ wget --no-check-certificate https://github.com/docbook/xslt10-stylesheets/releas
 wget --no-check-certificate https://www.linuxfromscratch.org/patches/blfs/11.0/docbook-xsl-nons-1.79.2-stack_fix-1.patch
 begin docbook-xsl-nons-1.79.2 tar.bz2
 patch -Np1 -i ../docbook-xsl-nons-1.79.2-stack_fix-1.patch
-install -v -m755 -d /usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2 &&
-cp -v -R VERSION assembly common eclipse epub epub3 extensions fo        \
+sudo install -v -m755 -d /usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2 &&
+sudo cp -v -R VERSION assembly common eclipse epub epub3 extensions fo        \
          highlighting html htmlhelp images javahelp lib manpages params  \
          profiling roundtrip slides template tests tools webhelp website \
          xhtml xhtml-1_1 xhtml5                                          \
     /usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2 &&
-ln -s VERSION /usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2/VERSION.xsl &&
-install -v -m644 -D README \
+sudo ln -s VERSION /usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2/VERSION.xsl &&
+sudo install -v -m644 -D README \
                     /usr/share/doc/docbook-xsl-nons-1.79.2/README.txt &&
-install -v -m644    RELEASE-NOTES* NEWS* \
+sudo install -v -m644    RELEASE-NOTES* NEWS* \
                     /usr/share/doc/docbook-xsl-nons-1.79.2
-if [ ! -d /etc/xml ]; then install -v -m755 -d /etc/xml; fi &&
+if [ ! -d /etc/xml ]; then sudo install -v -m755 -d /etc/xml; fi &&
 if [ ! -f /etc/xml/catalog ]; then
-    xmlcatalog --noout --create /etc/xml/catalog
+    sudo xmlcatalog --noout --create /etc/xml/catalog
 fi &&
 
-xmlcatalog --noout --add "rewriteSystem" \
+sudo xmlcatalog --noout --add "rewriteSystem" \
            "https://cdn.docbook.org/release/xsl-nons/1.79.2" \
            "/usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2" \
     /etc/xml/catalog &&
 
-xmlcatalog --noout --add "rewriteURI" \
+sudo xmlcatalog --noout --add "rewriteURI" \
            "https://cdn.docbook.org/release/xsl-nons/1.79.2" \
            "/usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2" \
     /etc/xml/catalog &&
 
-xmlcatalog --noout --add "rewriteSystem" \
+sudo xmlcatalog --noout --add "rewriteSystem" \
            "https://cdn.docbook.org/release/xsl-nons/current" \
            "/usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2" \
     /etc/xml/catalog &&
 
-xmlcatalog --noout --add "rewriteURI" \
+sudo xmlcatalog --noout --add "rewriteURI" \
            "https://cdn.docbook.org/release/xsl-nons/current" \
            "/usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2" \
     /etc/xml/catalog &&
 
-xmlcatalog --noout --add "rewriteSystem" \
+sudo xmlcatalog --noout --add "rewriteSystem" \
            "http://docbook.sourceforge.net/release/xsl/current" \
            "/usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2" \
     /etc/xml/catalog &&
 
-xmlcatalog --noout --add "rewriteURI" \
+sudo xmlcatalog --noout --add "rewriteURI" \
            "http://docbook.sourceforge.net/release/xsl/current" \
            "/usr/share/xml/docbook/xsl-stylesheets-nons-1.79.2" \
     /etc/xml/catalog
@@ -390,7 +382,7 @@ begin xmlto-0.0.28 tar.bz2
 LINKS="/usr/bin/links" \
 ./configure --prefix=/usr &&
 make
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -407,9 +399,9 @@ meson --prefix=/usr       \
       -Dman=true          \
       ..                  &&
 ninja
-ninja install &&
-mkdir -p /usr/share/doc/glib-2.68.4 &&
-cp -r ../docs/reference/{NEWS,gio,glib,gobject} /usr/share/doc/glib-2.68.4
+sudo ninja install &&
+sudo mkdir -p /usr/share/doc/glib-2.68.4 &&
+sudo cp -r ../docs/reference/{NEWS,gio,glib,gobject} /usr/share/doc/glib-2.68.4
 finish
 
 
@@ -422,7 +414,7 @@ begin libfm-1.3.2 tar.xz
             --with-gtk=no     \
             --disable-static  &&
 make
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 # https://downloads.sourceforge.net/lxde/menu-cache-1.1.0.tar.xz
@@ -434,7 +426,7 @@ patch -Np1 -i ../menu-cache-1.1.0-consolidated_fixes-1.patch
 ./configure --prefix=/usr    \
             --disable-static &&
 make
-make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -445,7 +437,7 @@ mkdir build &&
 cd    build &&
 meson --prefix=/usr --buildtype=release .. &&
 ninja
-ninja install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo ninja install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -457,7 +449,7 @@ mkdir build &&
 cd    build &&
 meson --prefix=/usr --buildtype=release .. &&
 ninja
-ninja install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo ninja install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish 
 
 # https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/2.1/shared-mime-info-2.1.tar.gz
@@ -467,7 +459,7 @@ mkdir build &&
 cd    build &&
 meson --prefix=/usr --buildtype=release -Dupdate-mimedb=true .. &&
 ninja
-ninja install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo ninja install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -478,7 +470,7 @@ mkdir build &&
 cd build &&
 meson --prefix=/usr --buildtype=release --wrap-mode=nofallback .. &&
 ninja
-ninja install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo ninja install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -487,7 +479,7 @@ wget --no-check-certificate https://ftp.gnu.org/gnu/which/which-2.21.tar.gz
 begin which-2.21 tar.gz
 ./configure --prefix=/usr &&
 make
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -500,11 +492,11 @@ cd    build &&
 cmake -DCMAKE_INSTALL_PREFIX=/usr .. &&
 make
 make docs
-make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
-install -v -d -m755 /usr/share/doc/graphite2-1.3.14 &&
-cp      -v -f    doc/{GTF,manual}.html \
+sudo make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo install -v -d -m755 /usr/share/doc/graphite2-1.3.14 &&
+sudo cp      -v -f    doc/{GTF,manual}.html \
                     /usr/share/doc/graphite2-1.3.14 &&
-cp      -v -f    doc/{GTF,manual}.pdf \
+sudo cp      -v -f    doc/{GTF,manual}.pdf \
                     /usr/share/doc/graphite2-1.3.14
 finish
 
@@ -516,7 +508,7 @@ mkdir build &&
 cd    build &&
 meson --prefix=/usr --buildtype=release &&
 ninja
-ninja install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo ninja install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -527,7 +519,7 @@ begin cairo-1.17.4 tar.xz
             --disable-static \
             --enable-tee &&
 make
-make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 # There is a circular dependency between cairo and harfbuzz. If cairo is built before harfbuzz, it is necessary to rebuild cairo after harfbuzz in order to build pango.
 
@@ -542,7 +534,7 @@ meson --prefix=/usr        \
       -Dgraphite=enabled   \
       -Dbenchmark=disabled &&
 ninja
-ninja install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo ninja install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -553,7 +545,7 @@ begin cairo-1.17.4 tar.xz
             --disable-static \
             --enable-tee &&
 make
-make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 # There is a circular dependency between cairo and harfbuzz. If cairo is built before harfbuzz, it is necessary to rebuild cairo after harfbuzz in order to build pango.
 
@@ -566,7 +558,7 @@ sed -r "s:.*(#.*SUBPIXEL_RENDERING) .*:\1:" \
     -i include/freetype/config/ftoption.h  &&
 ./configure --prefix=/usr --enable-freetype-config --disable-static &&
 make
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -579,7 +571,7 @@ begin fontconfig-2.13.1 tar.bz2
             --disable-docs       \
             --docdir=/usr/share/doc/fontconfig-2.13.1 &&
 make
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -590,7 +582,7 @@ mkdir build &&
 cd    build &&
 meson --prefix=/usr --buildtype=release .. &&
 ninja
-ninja install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo ninja install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -601,7 +593,7 @@ mkdir build &&
 cd    build &&
 meson --prefix=/usr --buildtype=release --wrap-mode=nofallback .. &&
 ninja
-ninja install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo ninja install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -612,7 +604,7 @@ sed -e 's#l \(gtk-.*\).sgml#& -o \1#' \
     -i docs/{faq,tutorial}/Makefile.in      &&
 ./configure --prefix=/usr --sysconfdir=/etc &&
 make
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 cat > ~/.gtkrc-2.0 << "EOF"
@@ -628,7 +620,7 @@ begin libfm-1.3.2 tar.xz
             --sysconfdir=/etc \
             --disable-static  &&
 make
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -639,7 +631,7 @@ begin pcmanfm-1.3.2 tar.xz
 ./configure --prefix=/usr     \
             --sysconfdir=/etc &&
 make
-make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
@@ -650,9 +642,8 @@ begin libwnck-2.30.7 tar.xz
             --disable-static \
             --program-suffix=-1 &&
 make GETTEXT_PACKAGE=libwnck-1
-make GETTEXT_PACKAGE=libwnck-1 install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo make GETTEXT_PACKAGE=libwnck-1 install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
-
 
 
 # https://download.gnome.org/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.6.tar.xz
@@ -662,8 +653,84 @@ mkdir build &&
 cd build &&
 meson --prefix=/usr --buildtype=release --wrap-mode=nofallback .. &&
 ninja
-ninja install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+sudo ninja install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
+
+
+# https://download.gnome.org/sources/gdk-pixbuf-xlib/2.40/gdk-pixbuf-xlib-2.40.2.tar.xz
+wget --no-check-certificate  https://download.gnome.org/sources/gdk-pixbuf-xlib/2.40/gdk-pixbuf-xlib-2.40.2.tar.xz
+begin gdk-pixbuf-xlib-2.40.2 tar.xz
+mkdir build &&
+cd    build &&
+meson --prefix=/usr .. &&
+ninja
+sudo ninja install
+finish
+
+
+# https://github.com/kupferlauncher/keybinder/releases/download/v0.3.1/keybinder-0.3.1.tar.gz
+wget --no-check-certificate  https://github.com/kupferlauncher/keybinder/releases/download/v0.3.1/keybinder-0.3.1.tar.gz
+begin keybinder-0.3.1 tar.gz
+./configure --prefix=/usr --disable-lua &&
+make
+sudo make install
+finish
+
+
+# https://downloads.sourceforge.net/lxde/lxpanel-0.10.1.tar.xz
+wget --no-check-certificate  https://downloads.sourceforge.net/lxde/lxpanel-0.10.1.tar.xz
+begin lxpanel-0.10.1 tar.xz
+./configure --prefix=/usr &&
+make
+sudo make install
+finish
+
+
+# https://downloads.sourceforge.net/lxde/lxappearance-0.6.3.tar.xz
+wget --no-check-certificate  https://downloads.sourceforge.net/lxde/lxappearance-0.6.3.tar.xz
+begin lxappearance-0.6.3 tar.xz
+./configure --prefix=/usr     \
+            --sysconfdir=/etc \
+            --enable-dbus     &&
+make
+sudo make install
+finish
+
+
+# https://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-0.112.tar.gz
+wget --no-check-certificate  https://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-0.112.tar.gz
+begin dbus-glib-0.112 tar.gz
+./configure --prefix=/usr     \
+            --sysconfdir=/etc \
+            --disable-static &&
+make
+sudo make install
+finish
+
+
+# https://download.gnome.org/sources/gtk-doc/1.33/gtk-doc-1.33.2.tar.xz
+wget --no-check-certificate  https://download.gnome.org/sources/gtk-doc/1.33/gtk-doc-1.33.2.tar.xz
+begin gtk-doc-1.33.2 tar.xz
+autoreconf -fiv           &&
+./configure --prefix=/usr &&
+make
+sudo make install
+
+
+# https://download.gnome.org/sources/libunique/1.1/libunique-1.1.6.tar.bz2
+wget --no-check-certificate  https://download.gnome.org/sources/libunique/1.1/libunique-1.1.6.tar.bz2
+wget --no-check-certificate https://www.linuxfromscratch.org/patches/blfs/svn/libunique-1.1.6-upstream_fixes-1.patch
+begin libunique-1.1.6 tar.bz2
+patch -Np1 -i ../libunique-1.1.6-upstream_fixes-1.patch &&
+autoreconf -fi &&
+./configure --prefix=/usr  \
+            --disable-dbus \
+            --disable-static &&
+make
+sudo make install
+finish
+
+
 
 
 

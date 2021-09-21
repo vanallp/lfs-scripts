@@ -104,6 +104,11 @@ else
   PS1="$GREEN\u [ $NORMAL\w$GREEN ]\$ $NORMAL"
 fi
 
+## Xorg Environment
+export XORG_PREFIX="/usr"
+export XORG_CONFIG="--prefix=$XORG_PREFIX --sysconfdir=/etc \
+    --localstatedir=/var --disable-static"
+
 for script in /etc/profile.d/*.sh ; do
         if [ -r $script ] ; then
                 . $script
@@ -116,6 +121,14 @@ unset script RED GREEN NORMAL
 EOF
 
 install --directory --mode=0755 --owner=root --group=root /etc/profile.d
+
+cat > /etc/profile.d/xorg.sh << EOF
+XORG_PREFIX="$XORG_PREFIX"
+XORG_CONFIG="--prefix=\$XORG_PREFIX --sysconfdir=/etc --localstatedir=/var --disable-static"
+export XORG_PREFIX XORG_CONFIG
+EOF
+chmod 644 /etc/profile.d/xorg.sh
+
 
 cat > /etc/profile.d/dircolors.sh << "EOF"
 # Setup for /bin/ls and /bin/grep to support color, the alias is in /etc/bashrc.
