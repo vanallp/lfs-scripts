@@ -58,16 +58,15 @@ finish
 cd /sources/blfs-systemd-units
 make install-rsyncd
 
-#     https://ftp.gnu.org/gnu/wget/wget-1.21.1.tar.gz
-#wget https://ftp.gnu.org/gnu/wget/wget-1.21.1.tar.gz
-begin wget-1.21.1 tar.gz
+#     https://ftp.gnu.org/gnu/wget/wget-1.21.2.tar.gz
+#wget https://ftp.gnu.org/gnu/wget/wget-1.21.2.tar.gz
+begin wget-1.21.2 tar.gz
 ./configure --prefix=/usr      \
             --sysconfdir=/etc  \
             --with-ssl=openssl 
 make
 make install ;rc=$?;echo $package_name $rc >> /sources/15rc.log
 finish
-#make-ca-1.7 
 
 
 

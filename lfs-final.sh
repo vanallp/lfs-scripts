@@ -222,7 +222,7 @@ if loadfont /boot/grub/fonts/unicode.pf2; then
   terminal_output gfxterm
 fi
 
-menuentry "GNU/Linux, Linux $kernel-lfs-10.1"  {
+menuentry "GNU/Linux, Linux $kernel-lfs-11"  {
   linux   /boot/vmlinuz-$kernel-lfs-10.1 root=/dev/sda3 ro
 }
 
@@ -234,15 +234,15 @@ EOF
 echo 10.1 > /etc/lfs-release
 cat > /etc/lsb-release << "EOF"
 DISTRIB_ID="Linux From Scratch"
-DISTRIB_RELEASE="10.1"
+DISTRIB_RELEASE="11"
 DISTRIB_CODENAME="Linux From Scratch"
 DISTRIB_DESCRIPTION="Linux From Scratch"
 EOF
 cat > /etc/os-release << "EOF"
 NAME="Linux From Scratch"
-VERSION="10.1"
+VERSION="11"
 ID=lfs
-PRETTY_NAME="Linux From Scratch 10.1"
+PRETTY_NAME="Linux From Scratch 11"
 VERSION_CODENAME="Linux From Scratch"
 EOF
 

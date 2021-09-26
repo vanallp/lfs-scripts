@@ -1,10 +1,10 @@
 # lfs-scripts :penguin:
-Instructions and scripts to build [LFS](https://linuxfromscratch.org) (Linux From Scratch), the dev version of 10.1. I'm performing the build on a Fedora 34 Workstation.
+Instructions and scripts to build [LFS](https://linuxfromscratch.org) (Linux From Scratch), the dev version of 11.0. I'm performing the build on a Fedora 34 Workstation.
 This script is still under construction...  !!!!
 
 # Foreword
 
-First, this guide does not replace reading the whole LFS book(v10.1 is current). [Read it!](https://www.linuxfromscratch.org/lfs/view/stable/)
+First, this guide does not replace reading the whole LFS book(v11.0 is current). [Read it!](https://www.linuxfromscratch.org/lfs/view/stable/)
 This build will be accomplished inside a Fedora release 34 machine formatted with:
 
 ```
@@ -261,8 +261,9 @@ Run the lfs-chroot.sh script, which will build additional temporary tools:
 kernel="5.14.5"
 . sources/lfs-scripts/lfs-chroot.sh 
 ```
-
+If you wish to make a backup at this step you can.
 Leave the chroot environment and unmount the kernel virtual file systems
+Otherwise jump to the final build phase.
 
 ```
 exit
