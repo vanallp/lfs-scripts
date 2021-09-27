@@ -46,8 +46,8 @@ ln -sfv ./pkcs11/p11-kit-trust.so /usr/lib/libnssckbi.so
 finish
 
 
-#     https://github.com/djlucas/make-ca/releases/download/v1.7/make-ca-1.9.tar.xz
-#wget https://github.com/djlucas/make-ca/releases/download/v1.7/make-ca-1.9.tar.xz
+#     https://github.com/lfs-book/make-ca/releases/download/v1.9/make-ca-1.9.tar.xz
+#wget https://github.com/lfs-book/make-ca/releases/download/v1.9/make-ca-1.9.tar.xz
 begin make-ca-1.9 tar.xz
 #required p11-kit
 make install ;rc=$?;echo $package_name $rc >> /sources/4rc.log
