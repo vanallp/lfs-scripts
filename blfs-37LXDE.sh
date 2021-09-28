@@ -385,6 +385,35 @@ make
 sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
+# Run-time dependency libpcre found: NO 
+# https://sourceware.org/ftp/valgrind/valgrind-3.17.0.tar.bz2
+wget --no-check-certificate  https://www.linuxfromscratch.org/patches/blfs/svn/valgrind-3.17.0-upstream_fixes-1.patch
+wget --no-check-certificate  https://sourceware.org/ftp/valgrind/valgrind-3.17.0.tar.bz2
+begin valgrind-3.17.0 tar.bz2
+patch -Np1 -i ../valgrind-3.17.0-upstream_fixes-1.patch
+autoreconf -fiv &&
+sed -i 's|/doc/valgrind||' docs/Makefile.in &&
+./configure --prefix=/usr \
+            --datadir=/usr/share/doc/valgrind-3.17.0 &&
+make
+sudo make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
+
+# https://ftp.pcre.org/pub/pcre/pcre-8.45.tar.bz2
+wget --no-check-certificate  https://ftp.pcre.org/pub/pcre/pcre-8.45.tar.bz2
+begin pcre-8.45 tar.bz2
+./configure --prefix=/usr                     \
+            --docdir=/usr/share/doc/pcre-8.45 \
+            --enable-unicode-properties       \
+            --enable-pcre16                   \
+            --enable-pcre32                   \
+            --enable-pcregrep-libz            \
+            --enable-pcregrep-libbz2          \
+            --enable-pcretest-libreadline     \
+            --disable-static                 &&
+make
+sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
+finish
 
 
 
@@ -399,7 +428,7 @@ meson --prefix=/usr       \
       -Dman=true          \
       ..                  &&
 ninja
-sudo ninja install &&
+sudo ninja install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 sudo mkdir -p /usr/share/doc/glib-2.70.0 &&
 sudo cp -r ../docs/reference/{NEWS,gio,glib,gobject} /usr/share/doc/glib-2.70.0
 finish

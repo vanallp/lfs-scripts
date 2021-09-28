@@ -46,8 +46,8 @@ ln -sfv ./pkcs11/p11-kit-trust.so /usr/lib/libnssckbi.so
 finish
 
 
-#     https://github.com/djlucas/make-ca/releases/download/v1.7/make-ca-1.9.tar.xz
-#wget https://github.com/djlucas/make-ca/releases/download/v1.7/make-ca-1.9.tar.xz
+#     https://github.com/lfs-book/make-ca/releases/download/v1.9/make-ca-1.9.tar.xz
+#wget https://github.com/lfs-book/make-ca/releases/download/v1.9/make-ca-1.9.tar.xz
 begin make-ca-1.9 tar.xz
 #required p11-kit
 make install ;rc=$?;echo $package_name $rc >> /sources/4rc.log
@@ -84,6 +84,7 @@ install -v -m755 -d /usr/share/doc/openssh-8.7p1
 install -v -m644    INSTALL LICENCE OVERVIEW README* \
                     /usr/share/doc/openssh-8.7p1
 finish
+
 cd /sources/blfs-systemd-units
 make install-sshd
 
@@ -126,6 +127,8 @@ install -v -m755 -d /etc/pam.d &&
 make install &&
 chmod -v 4755 /usr/sbin/unix_chkpwd
 install -vdm755 /etc/pam.d &&
+finish
+
 cat > /etc/pam.d/system-account << "EOF" &&
 # Begin /etc/pam.d/system-account
 

@@ -23,6 +23,23 @@ finish() {
 
 cd /sources
 
+# https://ftp.gnu.org/gnu/nettle/nettle-3.7.3.tar.gz
+#wget https://ftp.gnu.org/gnu/nettle/nettle-3.7.3.tar.gz
+begin nettle-3.7.3 tar.gz
+./configure --prefix=/usr --disable-static &&
+make
+make install &&
+chmod   -v   755 /usr/lib/lib{hogweed,nettle}.so &&
+install -v -m755 -d /usr/share/doc/nettle-3.7.3 &&
+install -v -m644 nettle.html /usr/share/doc/nettle-3.7.3
+finish
+
+
+
+
+
+
+
 #     https://github.com/p11-glue/p11-kit/releases/download/0.24.0/p11-kit-0.24.0.tar.xz
 #wget https://github.com/p11-glue/p11-kit/releases/download/0.24.0/p11-kit-0.24.0.tar.xz
 begin p11-kit-0.24.0 tar.xz
@@ -84,6 +101,7 @@ install -v -m755 -d /usr/share/doc/openssh-8.7p1
 install -v -m644    INSTALL LICENCE OVERVIEW README* \
                     /usr/share/doc/openssh-8.7p1
 finish
+
 cd /sources/blfs-systemd-units
 make install-sshd
 
@@ -126,6 +144,8 @@ install -v -m755 -d /etc/pam.d &&
 make install &&
 chmod -v 4755 /usr/sbin/unix_chkpwd
 install -vdm755 /etc/pam.d &&
+finish
+
 cat > /etc/pam.d/system-account << "EOF" &&
 # Begin /etc/pam.d/system-account
 
