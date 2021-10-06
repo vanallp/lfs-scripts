@@ -217,8 +217,8 @@ install -vDm644 misc/bash-completion /usr/share/bash-completion/completions/ninj
 install -vDm644 misc/zsh-completion  /usr/share/zsh/site-functions/_ninja
 finish
 
-# 8.52. Meson-0.59.1
-begin meson-0.59.1 tar.gz
+# 8.52. Meson-0.59.2
+begin meson-0.59.2 tar.gz
 python3 setup.py build
 python3 setup.py install --root=dest;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 cp -rv dest/* /
@@ -226,9 +226,9 @@ install -vDm644 data/shell-completions/bash/meson /usr/share/bash-completion/com
 install -vDm644 data/shell-completions/zsh/_meson /usr/share/zsh/site-functions/_meson
 finish
 
-# 8.53. Coreutils-8.32
-begin coreutils-8.32 tar.xz
-patch -Np1 -i ../coreutils-8.32-i18n-1.patch
+# 8.53. Coreutils-9.0
+begin coreutils-9.0 tar.xz
+patch -Np1 -i ../coreutils-9.0-i18n-1.patch
 #sed -i '/test.lock/s/^/#/' gnulib-tests/gnulib.mk
 autoreconf -fiv 
 FORCE_UNSAFE_CONFIGURE=1 ./configure \
@@ -411,8 +411,8 @@ pushd /usr/share/info
 popd
 finish
 
-# 8.68. Vim-8.2.3337
-begin vim-8.2.3337 tar.gz
+# 8.68. Vim-8.2.3458
+begin vim-8.2.3458 tar.gz
 echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 ./configure --prefix=/usr
 make
@@ -421,7 +421,7 @@ ln -sv vim /usr/bin/vi
 for L in  /usr/share/man/{,*/}man1/vim.1; do
     ln -sv vim.1 $(dirname $L)/vi.1
 done
-ln -sv ../vim/vim82/doc /usr/share/doc/vim-8.2.3337
+ln -sv ../vim/vim82/doc /usr/share/doc/vim-8.2.3458
 cat > /etc/vimrc << "EOF"
 " Begin /etc/vimrc
 

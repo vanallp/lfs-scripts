@@ -313,9 +313,9 @@ cd /sources
 rm -rf docbook-xml-4.5
 
 
-# http://files.itstool.org/itstool/itstool-2.0.6.tar.bz2
-wget http://files.itstool.org/itstool/itstool-2.0.6.tar.bz2
-begin itstool-2.0.6 tar.bz2
+# http://files.itstool.org/itstool/itstool-2.0.7.tar.bz2
+wget --no-check-certificate http://files.itstool.org/itstool/itstool-2.0.7.tar.bz2
+begin itstool-2.0.7 tar.bz2
 PYTHON=/usr/bin/python3 ./configure --prefix=/usr &&
 make
 sudo make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
@@ -769,24 +769,20 @@ make
 sudo make install
 finish
 
+# https://hewlettpackard.github.io/wireless-tools/wireless_tools.29.tar.gz
+wget --no-check-certificate https://hewlettpackard.github.io/wireless-tools/wireless_tools.29.tar.gz
+wget --no-check-certificate https://www.linuxfromscratch.org/patches/blfs/svn/wireless_tools-29-fix_iwlist_scanning-1.patch
+begin wireless_tools.29 tar.gz
+patch -Np1 -i ../wireless_tools-29-fix_iwlist_scanning-1.patch
+make
+sudo make PREFIX=/usr INSTALL_MAN=/usr/share/man install
+finish
+
 
 # https://downloads.sourceforge.net/lxde/lxpanel-0.10.1.tar.xz
 wget --no-check-certificate  https://downloads.sourceforge.net/lxde/lxpanel-0.10.1.tar.xz
 begin lxpanel-0.10.1 tar.xz
 ./configure --prefix=/usr &&
-make
-sudo make install
-finish
-
-#---------------------------------------------------------------------------------------------
-
-
-# https://downloads.sourceforge.net/lxde/lxappearance-0.6.3.tar.xz
-wget --no-check-certificate  https://downloads.sourceforge.net/lxde/lxappearance-0.6.3.tar.xz
-begin lxappearance-0.6.3 tar.xz
-./configure --prefix=/usr     \
-            --sysconfdir=/etc \
-            --enable-dbus     &&
 make
 sudo make install
 finish
@@ -803,6 +799,19 @@ begin dbus-glib-0.112 tar.gz
 make
 sudo make install
 finish
+
+
+# https://downloads.sourceforge.net/lxde/lxappearance-0.6.3.tar.xz
+wget --no-check-certificate  https://downloads.sourceforge.net/lxde/lxappearance-0.6.3.tar.xz
+begin lxappearance-0.6.3 tar.xz
+./configure --prefix=/usr     \
+            --sysconfdir=/etc \
+            --enable-dbus     &&
+make
+sudo make install
+finish
+
+#---------------------------------------------------------------------------------------------
 
 
 # https://download.gnome.org/sources/gtk-doc/1.33/gtk-doc-1.33.2.tar.xz
@@ -830,13 +839,89 @@ sudo make install
 finish
 
 # https://ftp.gnu.org/gnu/autoconf/autoconf-2.13.tar.gz
+wget --no-check-certificate  https://ftp.gnu.org/gnu/autoconf/autoconf-2.13.tar.gz
+wget --no-check-certificate https://www.linuxfromscratch.org/patches/blfs/svn/autoconf-2.13-consolidated_fixes-1.patch
+begin autoconf-2.13 tar.gz
+patch -Np1 -i ../autoconf-2.13-consolidated_fixes-1.patch &&
+mv -v autoconf.texi autoconf213.texi                      &&
+rm -v autoconf.info                                       &&
+./configure --prefix=/usr --program-suffix=2.13           &&
+make
+sudo make install                                      &&
+sudo install -v -m644 autoconf213.info /usr/share/info &&
+sudo install-info --info-dir=/usr/share/info autoconf213.info
+finish
 
 
 # https://github.com/unicode-org/icu/releases/download/release-69-1/icu4c-69_1-src.tgz
+wget --no-check-certificate  https://github.com/unicode-org/icu/releases/download/release-69-1/icu4c-69_1-src.tgz
+tar xf icu4c-69_1-sr.tgz
+cd icu/source
+./configure --prefix=/usr                    &&
+make
+sudo make install
+cd source
+rm -rf icu
+
 
 # https://www.linuxfromscratch.org/blfs/view/systemd/general/libssh2.html
+wget --no-check-certificate  https://www.libssh2.org/download/libssh2-1.10.0.tar.gz
+begin libssh2-1.10.0 tar.gz
+./configure --prefix=/usr --disable-static &&
+make
+sudo make install
+finish
 
-# 
+# https://static.rust-lang.org/dist/rustc-1.52.0-src.tar.gz
+wget --no-check-certificate  https://static.rust-lang.org/dist/rustc-1.52.0-src.tar.gz
+begin rustc-1.52.0-src tar.gz
+sudo mkdir /opt/rustc-1.52.0             &&
+sudo ln -svfin rustc-1.52.0 /opt/rustc
+
+cat << EOF > config.toml
+# see config.toml.example for more possible options
+# See the 8.4 book for an example using shipped LLVM
+# e.g. if not installing clang, or using a version before 10.0
+[llvm]
+# by default, rust will build for a myriad of architectures
+targets = "X86"
+
+# When using system llvm prefer shared libraries
+link-shared = true
+
+[build]
+# omit docs to save time and space (default is to build them)
+docs = false
+
+# install cargo as well as rust
+extended = true
+
+[install]
+prefix = "/opt/rustc-1.52.0"
+docdir = "share/doc/rustc-1.52.0"
+
+[rust]
+channel = "stable"
+rpath = false
+
+# BLFS does not install the FileCheck executable from llvm,
+# so disable codegen tests
+codegen-tests = false
+
+[target.x86_64-unknown-linux-gnu]
+# NB the output of llvm-config (i.e. help options) may be
+# dumped to the screen when config.toml is parsed.
+llvm-config = "/usr/bin/llvm-config"
+
+[target.i686-unknown-linux-gnu]
+# NB the output of llvm-config (i.e. help options) may be
+# dumped to the screen when config.toml is parsed.
+llvm-config = "/usr/bin/llvm-config"
+
+
+EOF
+
+
 
 
 # need js78

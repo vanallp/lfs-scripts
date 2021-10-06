@@ -23,6 +23,83 @@ finish() {
 
 cd /sources
 
+# https://downloads.sourceforge.net/libpng/libpng-1.6.37.tar.xz
+#wget https://downloads.sourceforge.net/libpng/libpng-1.6.37.tar.xz
+#wget https://downloads.sourceforge.net/sourceforge/libpng-apng/libpng-1.6.37-apng.patch.gz
+begin libpng-1.6.37 tar.xz
+gzip -cd ../libpng-1.6.37-apng.patch.gz | patch -p1
+./configure --prefix=/usr --disable-static &&
+make
+make install && rc=$?;echo $package_name $rc >> /sources/37rc.log
+mkdir -v /usr/share/doc/libpng-1.6.37 &&
+cp -v README libpng-manual.txt /usr/share/doc/libpng-1.6.37
+finish
+
+# https://sqlite.org/2021/sqlite-autoconf-3360000.tar.gz
+#wget https://sqlite.org/2021/sqlite-autoconf-3360000.tar.gz
+begin sqlite-autoconf-3360000 tar.gz
+./configure --prefix=/usr     \
+            --disable-static  \
+            --enable-fts5     \
+            CPPFLAGS="-DSQLITE_ENABLE_FTS3=1            \
+                      -DSQLITE_ENABLE_FTS4=1            \
+                      -DSQLITE_ENABLE_COLUMN_METADATA=1 \
+                      -DSQLITE_ENABLE_UNLOCK_NOTIFY=1   \
+                      -DSQLITE_ENABLE_DBSTAT_VTAB=1     \
+                      -DSQLITE_SECURE_DELETE=1          \
+                      -DSQLITE_ENABLE_FTS3_TOKENIZER=1" &&
+make
+make install
+finish
+
+
+# https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.42.tar.bz2
+#wget https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.42.tar.bz2
+begin libgpg-error-1.42 tar.bz2
+./configure --prefix=/usr &&
+make
+make install &&
+install -v -m644 -D README /usr/share/doc/libgpg-error-1.42/README
+finish
+
+# https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.4.tar.bz2
+#wget https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.4.tar.bz2
+begin libgcrypt-1.9.4 tar.bz2
+./configure --prefix=/usr &&
+make                      &&
+make -C doc html                                                       &&
+makeinfo --html --no-split -o doc/gcrypt_nochunks.html doc/gcrypt.texi &&
+makeinfo --plaintext       -o doc/gcrypt.txt           doc/gcrypt.texi
+make install &&
+install -v -dm755   /usr/share/doc/libgcrypt-1.9.4 &&
+install -v -m644    README doc/{README.apichanges,fips*,libgcrypt*} \
+                    /usr/share/doc/libgcrypt-1.9.4 &&
+
+install -v -dm755   /usr/share/doc/libgcrypt-1.9.4/html &&
+install -v -m644 doc/gcrypt.html/* \
+                    /usr/share/doc/libgcrypt-1.9.4/html &&
+install -v -m644 doc/gcrypt_nochunks.html \
+                    /usr/share/doc/libgcrypt-1.9.4      &&
+install -v -m644 doc/gcrypt.{txt,texi} \
+                    /usr/share/doc/libgcrypt-1.9.4
+finish
+
+
+# https://archive.mozilla.org/pub/nspr/releases/v4.32/src/nspr-4.32.tar.gz
+#wget https://archive.mozilla.org/pub/nspr/releases/v4.32/src/nspr-4.32.tar.gz
+begin nspr-4.32 tar.gz
+cd nspr                                                     &&
+sed -ri '/^RELEASE/s/^/#/' pr/src/misc/Makefile.in &&
+sed -i 's#$(LIBRARY) ##'   config/rules.mk         &&
+./configure --prefix=/usr \
+            --with-mozilla \
+            --with-pthreads \
+            $([ $(uname -m) = x86_64 ] && echo --enable-64bit) &&
+make
+make install
+finish
+
+
 # https://ftp.gnu.org/gnu/nettle/nettle-3.7.3.tar.gz
 #wget https://ftp.gnu.org/gnu/nettle/nettle-3.7.3.tar.gz
 begin nettle-3.7.3 tar.gz
@@ -35,7 +112,28 @@ install -v -m644 nettle.html /usr/share/doc/nettle-3.7.3
 finish
 
 
-
+# https://archive.mozilla.org/pub/security/nss/releases/NSS_3_70_RTM/src/nss-3.70.tar.gz
+#wget https://archive.mozilla.org/pub/security/nss/releases/NSS_3_70_RTM/src/nss-3.70.tar.gz
+#wget https://www.linuxfromscratch.org/patches/blfs/svn/nss-3.70-standalone-1.patch
+begin nss-3.70 tar.gz
+patch -Np1 -i ../nss-3.70-standalone-1.patch &&
+cd nss &&
+make BUILD_OPT=1                  \
+  NSPR_INCLUDE_DIR=/usr/include/nspr  \
+  USE_SYSTEM_ZLIB=1                   \
+  ZLIB_LIBS=-lz                       \
+  NSS_ENABLE_WERROR=0                 \
+  $([ $(uname -m) = x86_64 ] && echo USE_64=1) \
+  $([ -f /usr/include/sqlite3.h ] && echo NSS_USE_SYSTEM_SQLITE=1)
+cd ../dist                                                          &&
+install -v -m755 Linux*/lib/*.so              /usr/lib              &&
+install -v -m644 Linux*/lib/{*.chk,libcrmf.a} /usr/lib              &&
+install -v -m755 -d                           /usr/include/nss      &&
+cp -v -RL {public,private}/nss/*              /usr/include/nss      &&
+chmod -v 644                                  /usr/include/nss/*    &&
+install -v -m755 Linux*/bin/{certutil,nss-config,pk12util} /usr/bin &&
+install -v -m644 Linux*/lib/pkgconfig/nss.pc  /usr/lib/pkgconfig
+finish
 
 
 
@@ -63,8 +161,23 @@ ln -sfv ./pkcs11/p11-kit-trust.so /usr/lib/libnssckbi.so
 finish
 
 
+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.2.tar.xz
+#wget https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.2.tar.xz
+begin gnutls-3.7.2 tar.xz
+./configure --prefix=/usr \
+            --docdir=/usr/share/doc/gnutls-3.7.2 \
+            --disable-guile \
+            --disable-rpath \
+            --with-default-trust-store-pkcs11="pkcs11:" &&
+make
+make install
+finish
+
+
 #     https://github.com/lfs-book/make-ca/releases/download/v1.9/make-ca-1.9.tar.xz
 #wget https://github.com/lfs-book/make-ca/releases/download/v1.9/make-ca-1.9.tar.xz
+#wget http://www.cacert.org/certs/root.crt 
+#wget http://www.cacert.org/certs/class3.crt
 begin make-ca-1.9 tar.xz
 #required p11-kit
 make install ;rc=$?;echo $package_name $rc >> /sources/4rc.log
@@ -382,6 +495,8 @@ meson --prefix=/usr                 \
       ..                            &&
 ninja
 ninja install
+finish
+
 cat >> /etc/pam.d/system-session << "EOF"
 # Begin Systemd addition
 

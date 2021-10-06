@@ -31,8 +31,8 @@ begin man-pages-5.13 tar.xz
 make prefix=/usr install ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.4. Iana-Etc-20210611
-begin iana-etc-20210611 tar.gz
+# 8.4. Iana-Etc-20210924
+begin iana-etc-20210924 tar.gz
 cp services protocols /etc ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
@@ -105,7 +105,7 @@ rpc: files
 
 # End /etc/nsswitch.conf
 EOF
-tar -xf ../../tzdata2021a.tar.gz
+tar -xf ../../tzdata2021b.tar.gz
 ZONEINFO=/usr/share/zoneinfo
 mkdir -pv $ZONEINFO/{posix,right}
 for tz in etcetera southamerica northamerica europe africa antarctica  \
@@ -348,12 +348,12 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.24. Libcap-2.57
-begin libcap-2.57 tar.xz
+# 8.24. Libcap-2.59
+begin libcap-2.59 tar.xz
 sed -i '/install -m.*STA/d' libcap/Makefile
 make prefix=/usr lib=lib
 make prefix=/usr lib=lib install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-chmod -v 755 /usr/lib/lib{cap,psx}.so.2.57
+chmod -v 755 /usr/lib/lib{cap,psx}.so.2.59
 finish
 
 # 8.25. Shadow-4.9
@@ -483,9 +483,9 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 chmod -v 0755 /usr/lib/preloadable_libintl.so
 finish
 
-# 8.32. Bison-3.8.1
-begin bison-3.8.1 tar.xz
-./configure --prefix=/usr --docdir=/usr/share/doc/bison-3.8.1
+# 8.32. Bison-3.8.2
+begin bison-3.8.2 tar.xz
+./configure --prefix=/usr --docdir=/usr/share/doc/bison-3.8.2
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish

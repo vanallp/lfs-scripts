@@ -46,10 +46,10 @@ make ;rc=$?;echo $package_name $rc >> /sources/rc.log
 cp -v gettext-tools/src/{msgfmt,msgmerge,xgettext} /usr/bin
 finish
 
-# 7.9. Bison-3.8.1
-begin bison-3.8.1 tar.xz
+# 7.9. Bison-3.8.2
+begin bison-3.8.2 tar.xz
 ./configure --prefix=/usr \
-            --docdir=/usr/share/doc/bison-3.7.6
+            --docdir=/usr/share/doc/bison-3.8.2
 make
 make install ;rc=$?;echo $package_name $rc >> /sources/rc.log
 finish
