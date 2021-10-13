@@ -23,6 +23,16 @@ finish() {
 
 cd /sources
 
+# https://ftp.gnu.org/gnu/which/which-2.21.tar.gz
+#wget --no-check-certificate https://ftp.gnu.org/gnu/which/which-2.21.tar.gz
+begin which-2.21 tar.gz
+./configure --prefix=/usr &&
+make
+make install;rc=$?;echo $package_name $rc >> /sources/4rc.log
+finish
+
+
+
 # https://downloads.sourceforge.net/libpng/libpng-1.6.37.tar.xz
 #wget https://downloads.sourceforge.net/libpng/libpng-1.6.37.tar.xz
 #wget https://downloads.sourceforge.net/sourceforge/libpng-apng/libpng-1.6.37-apng.patch.gz
@@ -30,7 +40,7 @@ begin libpng-1.6.37 tar.xz
 gzip -cd ../libpng-1.6.37-apng.patch.gz | patch -p1
 ./configure --prefix=/usr --disable-static &&
 make
-make install && rc=$?;echo $package_name $rc >> /sources/37rc.log
+make install && rc=$?;echo $package_name $rc >> /sources/4rc.log
 mkdir -v /usr/share/doc/libpng-1.6.37 &&
 cp -v README libpng-manual.txt /usr/share/doc/libpng-1.6.37
 finish
@@ -160,6 +170,25 @@ ln -sfv /usr/libexec/p11-kit/trust-extract-compat \
 ln -sfv ./pkcs11/p11-kit-trust.so /usr/lib/libnssckbi.so
 finish
 
+# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.17.0.tar.gz
+#wget https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.17.0.tar.gz
+begin libtasn1-4.17.0 tar.gz
+./configure --prefix=/usr --disable-static &&
+make
+make install
+finish
+
+# https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz
+#wget https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz
+begin libunistring-0.9.10 tar.xz
+./configure --prefix=/usr    \
+            --disable-static \
+            --docdir=/usr/share/doc/libunistring-0.9.10 &&
+make
+make install
+finish
+
+
 
 # https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.2.tar.xz
 #wget https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.2.tar.xz
@@ -169,6 +198,8 @@ begin gnutls-3.7.2 tar.xz
             --disable-guile \
             --disable-rpath \
             --with-default-trust-store-pkcs11="pkcs11:" &&
+#	    --with-included-libtasn1 \
+#	    --with-included-unistring  &&
 make
 make install
 finish

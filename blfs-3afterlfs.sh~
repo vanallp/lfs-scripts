@@ -122,6 +122,8 @@ EOF
 
 install --directory --mode=0755 --owner=root --group=root /etc/profile.d
 
+XORG_PREFIX="/usr"
+
 cat > /etc/profile.d/xorg.sh << EOF
 XORG_PREFIX="$XORG_PREFIX"
 XORG_CONFIG="--prefix=\$XORG_PREFIX --sysconfdir=/etc --localstatedir=/var --disable-static"

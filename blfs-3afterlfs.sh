@@ -144,6 +144,9 @@ fi
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
+alias ll 'ls -l --color=auto'
+alias l. 'ls -d .* --color=auto'
+
 EOF
 
 cat > /etc/profile.d/extrapaths.sh << "EOF"

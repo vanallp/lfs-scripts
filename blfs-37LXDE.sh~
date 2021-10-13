@@ -76,17 +76,6 @@ sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
-# https://ftp.gnu.org/gnu/nettle/nettle-3.7.3.tar.gz
-wget --no-check-certificate https://ftp.gnu.org/gnu/nettle/nettle-3.7.3.tar.gz
-begin nettle-3.7.3 tar.gz
-./configure --prefix=/usr --disable-static &&
-make
-sudo make install && rc=$?;echo $package_name $rc >> /sources/37rc.log
-sudo chmod   -v   755 /usr/lib/lib{hogweed,nettle}.so &&
-sudo install -v -m755 -d /usr/share/doc/nettle-3.7.3 &&
-sudo install -v -m644 nettle.html /usr/share/doc/nettle-3.7.3
-finish
-
 
 # https://github.com/libarchive/libarchive/releases/download/v3.5.2/libarchive-3.5.2.tar.xz
 wget --no-check-certificate  https://github.com/libarchive/libarchive/releases/download/v3.5.2/libarchive-3.5.2.tar.xz
@@ -157,18 +146,6 @@ make
 sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
-
-# https://downloads.sourceforge.net/libpng/libpng-1.6.37.tar.xz
-wget --no-check-certificate https://downloads.sourceforge.net/libpng/libpng-1.6.37.tar.xz
-wget --no-check-certificate https://downloads.sourceforge.net/sourceforge/libpng-apng/libpng-1.6.37-apng.patch.gz
-begin libpng-1.6.37 tar.xz
-gzip -cd ../libpng-1.6.37-apng.patch.gz | patch -p1
-./configure --prefix=/usr --disable-static &&
-make
-sudo make install && rc=$?;echo $package_name $rc >> /sources/37rc.log
-sudo mkdir -v /usr/share/doc/libpng-1.6.37 &&
-sudo cp -v README libpng-manual.txt /usr/share/doc/libpng-1.6.37
-finish
 
 # http://xmlsoft.org/sources/libxml2-2.9.12.tar.gz
 wget http://xmlsoft.org/sources/libxml2-2.9.12.tar.gz
@@ -503,15 +480,6 @@ sudo ninja install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
-# https://ftp.gnu.org/gnu/which/which-2.21.tar.gz
-wget --no-check-certificate https://ftp.gnu.org/gnu/which/which-2.21.tar.gz
-begin which-2.21 tar.gz
-./configure --prefix=/usr &&
-make
-sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
-finish
-
-
 # https://github.com/silnrsi/graphite/releases/download/1.3.14/graphite2-1.3.14.tgz
 wget --no-check-certificate  https://github.com/silnrsi/graphite/releases/download/1.3.14/graphite2-1.3.14.tgz
 begin graphite2-1.3.14 tgz
@@ -613,6 +581,8 @@ make
 sudo make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 # There is a circular dependency between cairo and harfbuzz. If cairo is built before harfbuzz, it is necessary to rebuild cairo after harfbuzz in order to build pango.
+
+# https://github.com/lopesivan/libXft-2.3.3.git
 
 
 # https://download.gnome.org/sources/pango/1.48/pango-1.48.10.tar.xz
@@ -853,17 +823,6 @@ sudo install-info --info-dir=/usr/share/info autoconf213.info
 finish
 
 
-# https://github.com/unicode-org/icu/releases/download/release-69-1/icu4c-69_1-src.tgz
-wget --no-check-certificate  https://github.com/unicode-org/icu/releases/download/release-69-1/icu4c-69_1-src.tgz
-tar xf icu4c-69_1-sr.tgz
-cd icu/source
-./configure --prefix=/usr                    &&
-make
-sudo make install
-cd source
-rm -rf icu
-
-
 # https://www.linuxfromscratch.org/blfs/view/systemd/general/libssh2.html
 wget --no-check-certificate  https://www.libssh2.org/download/libssh2-1.10.0.tar.gz
 begin libssh2-1.10.0 tar.gz
@@ -871,6 +830,46 @@ begin libssh2-1.10.0 tar.gz
 make
 sudo make install
 finish
+
+# https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/llvm-12.0.1.src.tar.xz
+wget  https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/llvm-12.0.1.src.tar.xz
+wget https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/clang-12.0.1.src.tar.xz
+wget https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/compiler-rt-12.0.1.src.tar.xz
+begin llvm-12.0.1.src tar.xz
+
+tar -xf ../clang-12.0.1.src.tar.xz -C tools &&
+mv tools/clang-12.0.1.src tools/clang
+tar -xf ../compiler-rt-12.0.1.src.tar.xz -C projects &&
+mv projects/compiler-rt-12.0.1.src projects/compiler-rt
+grep -rl '#!.*python' | xargs sed -i '1s/python$/python3/'
+mkdir -v build &&
+cd       build &&
+
+CC=gcc CXX=g++                                  \
+cmake -DCMAKE_INSTALL_PREFIX=/usr               \
+      -DLLVM_ENABLE_FFI=ON                      \
+      -DCMAKE_BUILD_TYPE=Release                \
+      -DLLVM_BUILD_LLVM_DYLIB=ON                \
+      -DLLVM_LINK_LLVM_DYLIB=ON                 \
+      -DLLVM_ENABLE_RTTI=ON                     \
+      -DLLVM_TARGETS_TO_BUILD="host;AMDGPU;BPF" \
+      -DLLVM_BUILD_TESTS=ON                     \
+      -DLLVM_BINUTILS_INCDIR=/usr/include       \
+      -Wno-dev -G Ninja ..                      &&
+ninja -j6
+sudo ninja install
+finish
+
+# https://github.com/unicode-org/icu/releases/download/release-69-1/icu4c-69_1-src.tgz
+wget --no-check-certificate  https://github.com/unicode-org/icu/releases/download/release-69-1/icu4c-69_1-src.tgz
+tar xf icu4c-69_1-src.tgz
+cd icu/source
+./configure --prefix=/usr                    &&
+make
+sudo make install
+cd /sources
+rm -rf icu
+
 
 # https://static.rust-lang.org/dist/rustc-1.52.0-src.tar.gz
 wget --no-check-certificate  https://static.rust-lang.org/dist/rustc-1.52.0-src.tar.gz
@@ -921,10 +920,161 @@ llvm-config = "/usr/bin/llvm-config"
 
 EOF
 
+export RUSTFLAGS="$RUSTFLAGS -C link-args=-lffi" &&
+python3 ./x.py build --exclude src/tools/miri
 
+#run tests
+#python3 ./x.py test --verbose --no-fail-fast | tee rustc-testlog
+#grep '^test result:' rustc-testlog | awk  '{ sum += $6 } END { print sum }'
+
+export LIBSSH2_SYS_USE_PKG_CONFIG=1 &&
+DESTDIR=${PWD}/install python3 ./x.py install &&
+unset LIBSSH2_SYS_USE_PKG_CONFIG
+
+sudo chown -R root:root install &&
+sudo cp -a install/* /
+
+cat >> /tmp/ld.so.conf << EOF
+# Begin rustc addition
+
+/opt/rustc/lib
+
+# End rustc addition
+EOF
+sudo mv /tmp/ld.so.conf /etc/ld.so.conf
+sudo chown root:root /etc/ld.so.conf
+sudo ldconfig
+cat > /tmp/rustc.sh << EOF
+# Begin /etc/profile.d/rustc.sh
+
+pathprepend /opt/rustc/bin           PATH
+
+# End /etc/profile.d/rustc.sh
+EOF
+sudo mv /tmp/rustc.sh /etc/profile.d/rustc.sh
+sudo chown root:root /etc/profile.d/rustc.sh
+#finish 
+sudo rm -rf /sources/rustc-1.52.0-src
 
 
 # need js78
+# https://archive.mozilla.org/pub/firefox/releases/78.15.0esr/source/firefox-78.15.0esr.source.tar.xz
+wget https://archive.mozilla.org/pub/firefox/releases/78.15.0esr/source/firefox-78.15.0esr.source.tar.xz
+tar xf firefox-78.15.0esr.source.tar.xz
+cd firefox-78.15.0
+mkdir obj &&
+cd    obj &&
+
+CC=gcc CXX=g++ \
+../js/src/configure --prefix=/usr            \
+                    --with-intl-api          \
+                    --with-system-zlib       \
+                    --with-system-icu        \
+                    --disable-jemalloc       \
+                    --disable-debug-symbols  \
+                    --enable-readline        &&
+make
+sudo make install
+sudo rm -v /usr/lib/libjs_static.ajs 
+sudo sed -i '/@NSPR_CFLAGS@/d' /usr/bin/js78-config
+cd /sources
+rm -rf /sources/firefox-78.15.0
+
+
+# https://www.freedesktop.org/software/polkit/releases/polkit-0.119.tar.gz
+wget https://www.freedesktop.org/software/polkit/releases/polkit-0.119.tar.gz
+begin polkit-0.119 tar.gz
+sudo groupadd -fg 27 polkitd 
+sudo useradd -c "PolicyKit Daemon Owner" -d /etc/polkit-1 -u 27 \
+        -g polkitd -s /bin/false polkitd
+./configure --prefix=/usr        \
+            --sysconfdir=/etc    \
+            --localstatedir=/var \
+            --disable-static     \
+            --with-os-type=LFS   &&
+make
+sudo make install
+cat > /tmp/polkit-1 << EOF
+# Begin /etc/pam.d/polkit-1
+
+auth     include        system-auth
+account  include        system-account
+password include        system-password
+session  include        system-session
+
+# End /etc/pam.d/polkit-1
+EOF
+sudo mv /tmp/polkit-1 /etc/pam.d/polkit-1
+sudo chown root:root /etc/pam.d/polkit-1
+finish
+
+# https://gitlab.com/graphviz/graphviz/-/archive/2.49.1/graphviz-2.49.1.tar.gz
+wget https://gitlab.com/graphviz/graphviz/-/archive/2.49.1/graphviz-2.49.1.tar.gz
+begin graphviz-2.49.1 tar.gz
+sed -i '/LIBPOSTFIX="64"/s/64//' configure.ac &&
+
+./autogen.sh              &&
+./configure --prefix=/usr \
+            --disable-php &&
+make
+sudo make install
+sudo ln -svr /usr/share/graphviz/doc /usr/share/doc/graphviz-2.49.1
+finish
+
+# https://download.gnome.org/sources/vala/0.54/vala-0.54.1.tar.xz
+wget https://download.gnome.org/sources/vala/0.54/vala-0.54.1.tar.xz
+begin vala-0.54.1 tar.xz
+./configure --prefix=/usr &&
+make
+sudo make install
+finish
+
+# https://github.com/lfs-book/LSB-Tools/releases/download/v0.9/LSB-Tools-0.9.tar.gz
+wget https://github.com/lfs-book/LSB-Tools/releases/download/v0.9/LSB-Tools-0.9.tar.gz
+begin LSB-Tools-0.9 tar.gz
+python3 setup.py build
+sudo python3 setup.py install --optimize=1
+finish
+
+
+# https://downloads.sourceforge.net/lxde/lxsession-0.5.5.tar.xz
+wget https://downloads.sourceforge.net/lxde/lxsession-0.5.5.tar.xz
+begin lxsession-0.5.5 tar.xz
+./configure --prefix=/usr --disable-man &&
+make
+sudo make install
+finish
+
+# https://downloads.sourceforge.net/lxde/lxde-icon-theme-0.5.1.tar.xz
+wget https://downloads.sourceforge.net/lxde/lxde-icon-theme-0.5.1.tar.xz
+begin lxde-icon-theme-0.5.1 tar.xz
+./configure --prefix=/usr  &&
+make
+sudo make install
+sudo gtk-update-icon-cache -qf /usr/share/icons/nuoveXT2
+finish
+
+# http://openbox.org/dist/openbox/openbox-3.6.1.tar.gz
+wget http://openbox.org/dist/openbox/openbox-3.6.1.tar.gz
+begin openbox-3.6.1 tar.gz
+./configure --prefix=/usr     \
+            --sysconfdir=/etc \
+            --disable-static  \
+            --docdir=/usr/share/doc/openbox-3.6.1 &&
+make
+sudo make install
+finish
+
+
+# https://downloads.sourceforge.net/pcmanfm/pcmanfm-1.3.2.tar.xz
+wget https://downloads.sourceforge.net/pcmanfm/pcmanfm-1.3.2.tar.xz
+begin pcmanfm-1.3.2 tar.xz
+./configure --prefix=/usr     \
+            --sysconfdir=/etc &&
+make
+sudo make install
+finish
+
 
 
 

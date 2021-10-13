@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash  -e
 # BLFS 10.1 Build Script
 
 package_name=""
@@ -24,14 +24,14 @@ finish() {
 cd /sources
 
 # https://www.x.org/pub/individual/util/util-macros-1.19.3.tar.bz2
-wget --no-check-certificate  https://www.x.org/pub/individual/util/util-macros-1.19.3.tar.bz2
+wget   https://www.x.org/pub/individual/util/util-macros-1.19.3.tar.bz2
 begin util-macros-1.19.3 tar.bz2
 ./configure $XORG_CONFIG
 make install 
 finish
 
 # https://xorg.freedesktop.org/archive/individual/proto/xorgproto-2021.5.tar.bz2
-wget --no-check-certificate  https://xorg.freedesktop.org/archive/individual/proto/xorgproto-2021.5.tar.bz2
+wget   https://xorg.freedesktop.org/archive/individual/proto/xorgproto-2021.5.tar.bz2
 begin xorgproto-2021.5 tar.bz2
 mkdir build &&
 cd    build &&
@@ -43,7 +43,7 @@ sudo install -vm 644 ../[^m]*.txt ../PM_spec $XORG_PREFIX/share/doc/xorgproto-20
 finish
 
 # https://www.x.org/pub/individual/lib/libXau-1.0.9.tar.bz2
-wget --no-check-certificate  https://www.x.org/pub/individual/lib/libXau-1.0.9.tar.bz2
+wget   https://www.x.org/pub/individual/lib/libXau-1.0.9.tar.bz2
 begin libXau-1.0.9 tar.bz2
 ./configure $XORG_CONFIG &&
 make
@@ -51,7 +51,7 @@ sudo make install
 finish
 
 # https://www.x.org/pub/individual/lib/libXdmcp-1.1.3.tar.bz2
-wget --no-check-certificate  https://www.x.org/pub/individual/lib/libXdmcp-1.1.3.tar.bz2
+wget   https://www.x.org/pub/individual/lib/libXdmcp-1.1.3.tar.bz2
 begin libXdmcp-1.1.3 tar.bz2
 ./configure $XORG_CONFIG --docdir=/usr/share/doc/libXdmcp-1.1.3 &&
 make
@@ -59,14 +59,14 @@ sudo make install
 finish
 
 # https://xorg.freedesktop.org/archive/individual/proto/xcb-proto-1.14.1.tar.xz
-wget --no-check-certificate  https://xorg.freedesktop.org/archive/individual/proto/xcb-proto-1.14.1.tar.xz
+wget   https://xorg.freedesktop.org/archive/individual/proto/xcb-proto-1.14.1.tar.xz
 begin xcb-proto-1.14.1 tar.xz
 PYTHON=python3 ./configure $XORG_CONFIG
 sudo make install
 finish
 
 # https://xorg.freedesktop.org/archive/individual/lib/libxcb-1.14.tar.xz
-wget --no-check-certificate  https://xorg.freedesktop.org/archive/individual/lib/libxcb-1.14.tar.xz
+wget  https://xorg.freedesktop.org/archive/individual/lib/libxcb-1.14.tar.xz
 begin libxcb-1.14 tar.xz
 CFLAGS="${CFLAGS:--O2 -g} -Wno-error=format-extra-args" \
 PYTHON=python3                \
@@ -78,7 +78,7 @@ sudo make install
 finish
 
 cd /sources
-cat > lib-7.md5 << "EOF"
+cat > lib-7.md5 << EOF
 ce2fb8100c6647ee81451ebe388b17ad  xtrans-1.4.0.tar.bz2
 a9a24be62503d5e34df6b28204956a7b  libX11-1.7.2.tar.bz2
 f5b48bb76ba327cd2a8dc7a383532a95  libXext-1.3.4.tar.bz2
@@ -115,9 +115,19 @@ EOF
 
 mkdir lib &&
 cd lib &&
-grep -v '^#' ../lib-7.md5 | awk '{print $2}' | wget --no-check-certificate -i- -c \
+grep -v '^#' ../lib-7.md5 | awk '{print $2}' | wget -i- -c \
     -B https://www.x.org/pub/individual/lib/ &&
 md5sum -c ../lib-7.md5
+
+as_root()
+{
+  if   [ $EUID = 0 ];        then $*
+  elif [ -x /usr/bin/sudo ]; then sudo $*
+  else                            su -c \\"$*\\"
+  fi
+}
+
+export -f as_root
 
 for package in $(grep -v '^#' ../lib-7.md5 | awk '{print $2}')
 do
@@ -141,11 +151,60 @@ do
     ;;
   esac
   make
-  sudo make install
+  as_root make install
   popd
   rm -rf $packagedir
-  sudo /sbin/ldconfig
+  as_root /sbin/ldconfig
 done
+
+# https://xcb.freedesktop.org/dist/xcb-util-0.4.0.tar.bz2
+wget https://xcb.freedesktop.org/dist/xcb-util-0.4.0.tar.bz2
+begin xcb-util-0.4.0 tar.bz2
+./configure $XORG_CONFIG &&
+make
+sudo make install
+finish
+
+# https://xcb.freedesktop.org/dist/xcb-util-image-0.4.0.tar.bz2
+wget https://xcb.freedesktop.org/dist/xcb-util-image-0.4.0.tar.bz2
+begin xcb-util-image-0.4.0 tar.bz2
+./configure $XORG_CONFIG &&
+make
+sudo make install
+finish
+
+# https://xcb.freedesktop.org/dist/xcb-util-keysyms-0.4.0.tar.bz2
+wget https://xcb.freedesktop.org/dist/xcb-util-keysyms-0.4.0.tar.bz2
+begin xcb-util-keysyms-0.4.0 tar.bz2
+./configure $XORG_CONFIG &&
+make
+sudo make install
+finish
+
+# https://xcb.freedesktop.org/dist/xcb-util-renderutil-0.3.9.tar.bz2
+wget https://xcb.freedesktop.org/dist/xcb-util-renderutil-0.3.9.tar.bz2
+begin xcb-util-renderutil-0.3.9 tar.bz2
+./configure $XORG_CONFIG &&
+make
+sudo make install
+finish
+
+# https://xcb.freedesktop.org/dist/xcb-util-wm-0.4.1.tar.bz2
+wget https://xcb.freedesktop.org/dist/xcb-util-wm-0.4.1.tar.bz2
+begin xcb-util-wm-0.4.1 tar.bz2
+./configure $XORG_CONFIG &&
+make
+sudo make install
+finish
+
+# https://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.3.tar.bz2
+wget https://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.3.tar.bz2
+begin xcb-util-cursor-0.1.3 tar.bz2
+./configure $XORG_CONFIG &&
+make
+sudo make install
+finish
+
 
 
 

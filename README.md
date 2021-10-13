@@ -354,6 +354,15 @@ Device Drivers --->
         [*] EFI-based Framebuffer support                      [CONFIG_FB_EFI]
     Console display driver support --->
       [*] Framebuffer Console support                          [CONFIG_FRAMEBUFFER_CONSOLE]
+  Input device support --->
+    <*> Generic input layer (needed for keyboard, mouse, ...) [CONFIG_INPUT]
+    <*>   Event interface                   [CONFIG_INPUT_EVDEV]
+    [*]   Miscellaneous devices  --->       [CONFIG_INPUT_MISC]
+      <*>    User level driver support      [CONFIG_INPUT_UINPUT]
+  Graphics support --->
+   <*> Direct Rendering Manager (XFree86 ... support) ---> [CONFIG_DRM]
+   <*> Intel 8xx/9xx/G3x/G4x/HD Graphics                   [CONFIG_DRM_I915]
+
 File systems --->
   Pseudo filesystems --->
     <*/M> EFI Variable filesystem                              [CONFIG_EFIVAR_FS]
