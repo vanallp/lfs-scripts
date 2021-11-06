@@ -35,8 +35,8 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 rm -fv /usr/lib/libltdl.a
 finish
 
-# 8.36. GDBM-1.21
-begin gdbm-1.21 tar.gz
+# 8.36. GDBM-1.22
+begin gdbm-1.22 tar.gz
 ./configure --prefix=/usr    \
             --disable-static \
             --enable-libgdbm-compat
@@ -131,9 +131,9 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.45. Automake-1.16.4
-begin automake-1.16.4 tar.xz
-./configure --prefix=/usr --docdir=/usr/share/doc/automake-1.16.4
+# 8.45. Automake-1.16.5
+begin automake-1.16.5 tar.xz
+./configure --prefix=/usr --docdir=/usr/share/doc/automake-1.16.5
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
@@ -185,8 +185,8 @@ mv -v /usr/share/doc/openssl /usr/share/doc/openssl-1.1.1l
 cp -vfr doc/* /usr/share/doc/openssl-1.1.1l
 finish
 
-# 8.50. Python-3.9.7
-begin Python-3.9.7 tar.xz
+# 8.50. Python-3.10.0
+begin Python-3.10.0 tar.xz
 ./configure --prefix=/usr       \
             --enable-shared     \
             --with-system-expat \
@@ -195,12 +195,12 @@ begin Python-3.9.7 tar.xz
 	    --enable-optimizations
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-install -v -dm755 /usr/share/doc/python-3.9.6/html 
+install -v -dm755 /usr/share/doc/python-3.10.0/html 
 tar --strip-components=1  \
     --no-same-owner       \
     --no-same-permissions \
-    -C /usr/share/doc/python-3.9.7/html \
-    -xvf ../python-3.9.7-docs-html.tar.bz2
+    -C /usr/share/doc/python-3.10.0/html \
+    -xvf ../python-3.10.0-docs-html.tar.bz2
 finish
 
 # 8.51. Ninja-1.10.2
@@ -217,8 +217,8 @@ install -vDm644 misc/bash-completion /usr/share/bash-completion/completions/ninj
 install -vDm644 misc/zsh-completion  /usr/share/zsh/site-functions/_ninja
 finish
 
-# 8.52. Meson-0.59.2
-begin meson-0.59.2 tar.gz
+# 8.52. Meson-0.60.0
+begin meson-0.60.0 tar.gz
 python3 setup.py build
 python3 setup.py install --root=dest;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 cp -rv dest/* /
@@ -255,14 +255,14 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.55. Gawk-5.1.0
-begin gawk-5.1.0 tar.xz
+# 8.55. Gawk-5.1.1
+begin gawk-5.1.1 tar.xz
 sed -i 's/extras//' Makefile.in
 ./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mkdir -v /usr/share/doc/gawk-5.1.0
-cp    -v doc/{awkforai.txt,*.{eps,pdf,jpg}} /usr/share/doc/gawk-5.1.0
+mkdir -v /usr/share/doc/gawk-5.1.1
+cp    -v doc/{awkforai.txt,*.{eps,pdf,jpg}} /usr/share/doc/gawk-5.1.1
 finish
 
 # 8.57. Findutils-4.8.0
@@ -411,8 +411,8 @@ pushd /usr/share/info
 popd
 finish
 
-# 8.68. Vim-8.2.3458
-begin vim-8.2.3458 tar.gz
+# 8.68. Vim-8.2.3508
+begin vim-8.2.3508 tar.gz
 echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 ./configure --prefix=/usr
 make
@@ -421,7 +421,7 @@ ln -sv vim /usr/bin/vi
 for L in  /usr/share/man/{,*/}man1/vim.1; do
     ln -sv vim.1 $(dirname $L)/vi.1
 done
-ln -sv ../vim/vim82/doc /usr/share/doc/vim-8.2.3458
+ln -sv ../vim/vim82/doc /usr/share/doc/vim-8.2.3508
 cat > /etc/vimrc << "EOF"
 " Begin /etc/vimrc
 
@@ -447,8 +447,8 @@ python3 setup.py build
 python3 setup.py install --optimize=1;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.70. Jinja2-3.0.1
-begin Jinja2-3.0.1 tar.gz
+# 8.70. Jinja2-3.0.2
+begin Jinja2-3.0.2 tar.gz
 python3 setup.py install --optimize=1;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 

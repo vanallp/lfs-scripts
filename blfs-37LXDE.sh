@@ -363,15 +363,15 @@ sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 # Run-time dependency libpcre found: NO 
-# https://sourceware.org/ftp/valgrind/valgrind-3.17.0.tar.bz2
-wget --no-check-certificate  https://www.linuxfromscratch.org/patches/blfs/svn/valgrind-3.17.0-upstream_fixes-1.patch
-wget --no-check-certificate  https://sourceware.org/ftp/valgrind/valgrind-3.17.0.tar.bz2
-begin valgrind-3.17.0 tar.bz2
-patch -Np1 -i ../valgrind-3.17.0-upstream_fixes-1.patch
+# https://sourceware.org/ftp/valgrind/valgrind-3.18.1.tar.bz2
+wget --no-check-certificate  https://www.linuxfromscratch.org/patches/blfs/svn/valgrind-3.18.1-upstream_fixes-1.patch
+wget --no-check-certificate  https://sourceware.org/ftp/valgrind/valgrind-3.18.1.tar.bz2
+begin valgrind-3.18.1 tar.bz2
+patch -Np1 -i ../valgrind-3.18.1-upstream_fixes-1.patch
 autoreconf -fiv &&
 sed -i 's|/doc/valgrind||' docs/Makefile.in &&
 ./configure --prefix=/usr \
-            --datadir=/usr/share/doc/valgrind-3.17.0 &&
+            --datadir=/usr/share/doc/valgrind-3.18.1 &&
 make
 sudo make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
@@ -831,16 +831,16 @@ make
 sudo make install
 finish
 
-# https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/llvm-12.0.1.src.tar.xz
-wget  https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/llvm-12.0.1.src.tar.xz
-wget https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/clang-12.0.1.src.tar.xz
-wget https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/compiler-rt-12.0.1.src.tar.xz
-begin llvm-12.0.1.src tar.xz
+# https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.0/llvm-13.0.0.src.tar.xz
+wget  https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.0/llvm-13.0.0.src.tar.xz
+wget https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.0/clang-13.0.0.src.tar.xz
+wget https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.0/compiler-rt-13.0.0.src.tar.xz
+begin llvm-13.0.0.src tar.xz
 
-tar -xf ../clang-12.0.1.src.tar.xz -C tools &&
-mv tools/clang-12.0.1.src tools/clang
-tar -xf ../compiler-rt-12.0.1.src.tar.xz -C projects &&
-mv projects/compiler-rt-12.0.1.src projects/compiler-rt
+tar -xf ../clang-13.0.0.src.tar.xz -C tools &&
+mv tools/clang-13.0.0.src tools/clang
+tar -xf ../compiler-rt-13.0.0.src.tar.xz -C projects &&
+mv projects/compiler-rt-13.0.0.src projects/compiler-rt
 grep -rl '#!.*python' | xargs sed -i '1s/python$/python3/'
 mkdir -v build &&
 cd       build &&
@@ -871,11 +871,11 @@ cd /sources
 rm -rf icu
 
 
-# https://static.rust-lang.org/dist/rustc-1.52.0-src.tar.gz
-wget --no-check-certificate  https://static.rust-lang.org/dist/rustc-1.52.0-src.tar.gz
-begin rustc-1.52.0-src tar.gz
-sudo mkdir /opt/rustc-1.52.0             &&
-sudo ln -svfin rustc-1.52.0 /opt/rustc
+# https://static.rust-lang.org/dist/rustc-1.56.0-src.tar.gz
+wget --no-check-certificate  https://static.rust-lang.org/dist/rustc-1.56.0-src.tar.gz
+begin rustc-1.56.0-src tar.gz
+sudo mkdir /opt/rustc-1.56.0             &&
+sudo ln -svfin rustc-1.56.0 /opt/rustc
 
 cat << EOF > config.toml
 # see config.toml.example for more possible options
@@ -896,8 +896,8 @@ docs = false
 extended = true
 
 [install]
-prefix = "/opt/rustc-1.52.0"
-docdir = "share/doc/rustc-1.52.0"
+prefix = "/opt/rustc-1.56.0"
+docdir = "share/doc/rustc-1.56.0"
 
 [rust]
 channel = "stable"
@@ -954,7 +954,7 @@ EOF
 sudo mv /tmp/rustc.sh /etc/profile.d/rustc.sh
 sudo chown root:root /etc/profile.d/rustc.sh
 #finish 
-sudo rm -rf /sources/rustc-1.52.0-src
+sudo rm -rf /sources/rustc-1.56.0-src
 
 
 # need js78
@@ -981,9 +981,9 @@ cd /sources
 rm -rf /sources/firefox-78.15.0
 
 
-# https://www.freedesktop.org/software/polkit/releases/polkit-0.119.tar.gz
-wget https://www.freedesktop.org/software/polkit/releases/polkit-0.119.tar.gz
-begin polkit-0.119 tar.gz
+# https://www.freedesktop.org/software/polkit/releases/polkit-0.120.tar.gz
+wget https://www.freedesktop.org/software/polkit/releases/polkit-0.120.tar.gz
+begin polkit-0.120 tar.gz
 sudo groupadd -fg 27 polkitd 
 sudo useradd -c "PolicyKit Daemon Owner" -d /etc/polkit-1 -u 27 \
         -g polkitd -s /bin/false polkitd
@@ -1008,9 +1008,9 @@ sudo mv /tmp/polkit-1 /etc/pam.d/polkit-1
 sudo chown root:root /etc/pam.d/polkit-1
 finish
 
-# https://gitlab.com/graphviz/graphviz/-/archive/2.49.1/graphviz-2.49.1.tar.gz
-wget https://gitlab.com/graphviz/graphviz/-/archive/2.49.1/graphviz-2.49.1.tar.gz
-begin graphviz-2.49.1 tar.gz
+# https://gitlab.com/graphviz/graphviz/-/archive/2.49.3/graphviz-2.49.3.tar.gz
+wget https://gitlab.com/graphviz/graphviz/-/archive/2.49.3/graphviz-2.49.3.tar.gz
+begin graphviz-2.49.3 tar.gz
 sed -i '/LIBPOSTFIX="64"/s/64//' configure.ac &&
 
 ./autogen.sh              &&
@@ -1018,7 +1018,7 @@ sed -i '/LIBPOSTFIX="64"/s/64//' configure.ac &&
             --disable-php &&
 make
 sudo make install
-sudo ln -svr /usr/share/graphviz/doc /usr/share/doc/graphviz-2.49.1
+sudo ln -svr /usr/share/graphviz/doc /usr/share/doc/graphviz-2.49.3
 finish
 
 # https://download.gnome.org/sources/vala/0.54/vala-0.54.1.tar.xz
@@ -1125,6 +1125,484 @@ make
 sudo make install
 sudo ldconfig
 finish
+
+## 
+tar xf firefox-78.15.0esr.source.tar.xz
+
+#dependencies
+
+# https://github.com/eqrion/cbindgen/archive/v0.20.0/cbindgen-0.20.0.tar.gz
+wget https://github.com/eqrion/cbindgen/archive/v0.20.0/cbindgen-0.20.0.tar.gz
+begin cbindgen-0.20.0 tar.gz
+cargo build --release
+sudo install -Dm755 target/release/cbindgen /usr/bin/
+finish
+
+# https://download.gnome.org/sources/at-spi2-core/2.40/at-spi2-core-2.40.3.tar.xz
+wget https://download.gnome.org/sources/at-spi2-core/2.40/at-spi2-core-2.40.3.tar.xz
+begin at-spi2-core-2.40.3 tar.xz
+mkdir build &&
+cd    build &&
+meson --prefix=/usr --buildtype=release .. &&
+ninja
+sudo ninja install
+finish
+
+# https://download.gnome.org/sources/at-spi2-atk/2.38/at-spi2-atk-2.38.0.tar.xz
+wget https://download.gnome.org/sources/at-spi2-atk/2.38/at-spi2-atk-2.38.0.tar.xz
+begin at-spi2-atk-2.38.0 tar.xz
+mkdir build &&
+cd    build &&
+meson --prefix=/usr --buildtype=release .. &&
+ninja
+sudo ninja install
+finish
+
+# https://xkbcommon.org/download/libxkbcommon-1.3.1.tar.xz
+wget https://xkbcommon.org/download/libxkbcommon-1.3.1.tar.xz
+begin libxkbcommon-1.3.1 tar.xz
+mkdir build &&
+cd    build &&
+meson --prefix=/usr --buildtype=release -Denable-docs=false .. &&
+ninja
+sudo ninja install
+finish
+
+
+
+# https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.30.tar.xz
+wget https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.30.tar.xz
+begin gtk+-3.24.30 tar.xz
+./configure --prefix=/usr              \
+            --sysconfdir=/etc          \
+            --enable-broadway-backend  \
+            --enable-x11-backend       \
+            --enable-wayland-backend   &&
+make
+sudo make install
+finish
+
+
+# https://c-ares.haxx.se/download/c-ares-1.18.1.tar.gz
+wget https://c-ares.haxx.se/download/c-ares-1.18.1.tar.gz
+begin c-ares-1.18.1 tar.gz
+mkdir build &&
+cd    build &&
+cmake  -DCMAKE_INSTALL_PREFIX=/usr .. &&
+make
+sudo make install
+finish
+
+# https://github.com/nghttp2/nghttp2/releases/download/v1.45.1/nghttp2-1.45.1.tar.xz
+wget https://github.com/nghttp2/nghttp2/releases/download/v1.45.1/nghttp2-1.45.1.tar.xz
+begin nghttp2-1.45.1 tar.xz
+./configure --prefix=/usr     \
+            --disable-static  \
+            --enable-lib-only \
+            --docdir=/usr/share/doc/nghttp2-1.45.1 &&
+make
+sudo make install
+finish
+
+# https://nodejs.org/dist/v14.18.1/node-v14.18.1.tar.xz
+wget https://nodejs.org/dist/v14.18.1/node-v14.18.1.tar.xz
+begin node-v14.18.1 tar.xz
+sed -i 's|ares_nameser.h|arpa/nameser.h|' src/cares_wrap.h &&
+./configure --prefix=/usr                  \
+            --shared-cares                 \
+            --shared-libuv                 \
+            --shared-openssl               \
+            --shared-nghttp2               \
+            --shared-zlib                  \
+            --with-intl=system-icu         &&
+make
+sudo make install &&
+sudo ln -sf node /usr/share/doc/node-14.18.1
+finish
+
+# https://github.com/libsndfile/libsndfile/releases/download/1.0.31/libsndfile-1.0.31.tar.bz2
+wget https://github.com/libsndfile/libsndfile/releases/download/1.0.31/libsndfile-1.0.31.tar.bz2
+begin libsndfile-1.0.31 tar.bz2
+./configure --prefix=/usr    \
+            --disable-static \
+            --docdir=/usr/share/doc/libsndfile-1.0.31 &&
+make
+sudo make install
+finish
+
+# https://www.freedesktop.org/software/pulseaudio/releases/pulseaudio-15.0.tar.xz
+wget https://www.freedesktop.org/software/pulseaudio/releases/pulseaudio-15.0.tar.xz
+begin pulseaudio-15.0 tar.xz
+mkdir build &&
+cd    build &&
+
+meson --prefix=/usr       \
+      --buildtype=release \
+      -Ddatabase=gdbm     \
+      -Ddoxygen=false     \
+      -Dbluez5=disabled   &&
+ninja
+sudo ninja install
+sudo rm -fv /etc/dbus-1/system.d/pulseaudio-system.conf
+finish
+
+# https://www.freedesktop.org/software/startup-notification/releases/startup-notification-0.12.tar.gz
+wget https://www.freedesktop.org/software/startup-notification/releases/startup-notification-0.12.tar.gz
+begin startup-notification-0.12 tar.gz
+./configure --prefix=/usr --disable-static &&
+make
+sudo make install &&
+sudo install -v -m644 -D doc/startup-notification.txt \
+    /usr/share/doc/startup-notification-0.12/startup-notification.txt
+finish
+
+# https://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
+wget https://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
+begin yasm-1.3.0 tar.gz
+sed -i 's#) ytasm.*#)#' Makefile.in &&
+./configure --prefix=/usr &&
+make
+sudo make install
+finish
+
+# https://downloads.sourceforge.net/infozip/zip30.tar.gz
+wget https://downloads.sourceforge.net/infozip/zip30.tar.gz
+begin zip30 tar.gz
+make -f unix/Makefile generic_gcc
+sudo make prefix=/usr MANDIR=/usr/share/man/man1 -f unix/Makefile install
+finish
+
+# https://download.gnome.org/sources/libnotify/0.7/libnotify-0.7.9.tar.xz
+wget https://download.gnome.org/sources/libnotify/0.7/libnotify-0.7.9.tar.xz
+begin libnotify-0.7.9 tar.xz
+mkdir build &&
+cd    build &&
+meson --prefix=/usr       \
+      --buildtype=release \
+      -Dgtk_doc=false     \
+      -Dman=false .. &&
+ninja
+sudo ninja install
+finish
+
+
+
+# http://downloads.webmproject.org/releases/webp/libwebp-1.2.1.tar.gz
+wget http://downloads.webmproject.org/releases/webp/libwebp-1.2.1.tar.gz
+begin libwebp-1.2.1 tar.gz
+./configure --prefix=/usr           \
+            --enable-libwebpmux     \
+            --enable-libwebpdemux   \
+            --enable-libwebpdecoder \
+            --enable-libwebpextras  \
+            --enable-swap-16bit-csp \
+            --disable-static        &&
+make
+sudo make install
+finish
+
+# https://github.com/webmproject/libvpx/archive/v1.11.0/libvpx-1.11.0.tar.gz
+wget https://github.com/webmproject/libvpx/archive/v1.11.0/libvpx-1.11.0.tar.gz
+begin libvpx-1.11.0 tar.gz
+sed -i 's/cp -p/cp/' build/make/Makefile &&
+mkdir libvpx-build            &&
+cd    libvpx-build            &&
+../configure --prefix=/usr    \
+             --enable-shared  \
+             --disable-static &&
+make
+sudo make install
+finish
+
+
+
+#
+begin firefox-78.15.0esr.source tar.xz
+cat > mozconfig << EOF
+# If you have a multicore machine, all cores will be used by default.
+
+# If you have installed (or will install) wireless-tools, and you wish
+# to use geolocation web services, comment out this line
+ac_add_options --disable-necko-wifi
+
+# API Keys for geolocation APIs - necko-wifi (above) is required for MLS
+# Uncomment the following line if you wish to use Mozilla Location Service
+#ac_add_options --with-mozilla-api-keyfile=$PWD/mozilla-key
+
+# Uncomment the following line if you wish to use Google's geolocaton API
+# (needed for use with saved maps with Google Maps)
+#ac_add_options --with-google-location-service-api-keyfile=$PWD/google-key
+
+# startup-notification is required since firefox-78
+
+# Uncomment the following option if you have not installed PulseAudio
+#ac_add_options --disable-pulseaudio
+# or uncomment this if you installed alsa-lib instead of PulseAudio
+#ac_add_options --enable-alsa
+
+# Comment out following options if you have not installed
+# recommended dependencies:
+ac_add_options --with-system-libevent
+ac_add_options --with-system-webp
+ac_add_options --with-system-nspr
+ac_add_options --with-system-nss
+ac_add_options --with-system-icu
+
+# Do not specify the gold linker which is not the default. It will take
+# longer and use more disk space when debug symbols are disabled.
+
+# libdavid (av1 decoder) requires nasm. Uncomment this if nasm
+# has not been installed.
+#ac_add_options --disable-av1
+
+# You cannot distribute the binary if you do this
+ac_add_options --enable-official-branding
+
+# Stripping is now enabled by default.
+# Uncomment these lines if you need to run a debugger:
+#ac_add_options --disable-strip
+#ac_add_options --disable-install-strip
+
+# Disabling debug symbols makes the build much smaller and a little
+# faster. Comment this if you need to run a debugger. Note: This is
+# required for compilation on i686.
+ac_add_options --disable-debug-symbols
+
+# The elf-hack is reported to cause failed installs (after successful builds)
+# on some machines. It is supposed to improve startup time and it shrinks
+# libxul.so by a few MB - comment this if you know your machine is not affected.
+ac_add_options --disable-elf-hack
+
+# The BLFS editors recommend not changing anything below this line:
+ac_add_options --prefix=/usr
+ac_add_options --enable-application=browser
+ac_add_options --disable-crashreporter
+ac_add_options --disable-updater
+# enabling the tests will use a lot more space and significantly
+# increase the build time, for no obvious benefit.
+ac_add_options --disable-tests
+
+# The default level of optimization again produces a working build with gcc.
+ac_add_options --enable-optimize
+
+ac_add_options --enable-system-ffi
+ac_add_options --enable-system-pixman
+
+# --with-system-bz2 was removed in firefox-78
+ac_add_options --with-system-jpeg
+ac_add_options --with-system-png
+ac_add_options --with-system-zlib
+
+# The following option unsets Telemetry Reporting. With the Addons Fiasco,
+# Mozilla was found to be collecting user's data, including saved passwords and
+# web form data, without users consent. Mozilla was also found shipping updates
+# to systems without the user's knowledge or permission.
+# As a result of this, use the following command to permanently disable
+# telemetry reporting in Firefox.
+unset MOZ_TELEMETRY_REPORTING
+
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/firefox-build-dir
+EOF
+
+sed -e 's/Disable/Enable/'            \
+    -e '/^MOZ_REQUIRE_SIGNING/s/0/1/' \
+    -i build/mozconfig.common
+
+export CC=gcc CXX=g++ &&
+export MOZBUILD_STATE_PATH=${PWD}/mozbuild &&
+./mach configure  | tee buildlog.log                         &&
+./mach build -j6
+
+sudo ./mach install
+unset CC CXX MOZBUILD_STATE_PATH
+
+
+# https://archive.mozilla.org/pub/seamonkey/releases/2.53.9.1/source/seamonkey-2.53.9.1.source.tar.xz
+wget https://archive.mozilla.org/pub/seamonkey/releases/2.53.9.1/source/seamonkey-2.53.9.1.source.tar.xz
+begin seamonkey-2.53.9.1.source tar.xz
+
+cat > mozconfig << EOF
+# If you have a multicore machine, all cores will be used
+# unless you pass -jN to ./mach build
+
+# If you have installed DBus-Glib comment out this line:
+ac_add_options --disable-dbus
+
+# If you have installed dbus-glib, and you have installed (or will install)
+# wireless-tools, and you wish to use geolocation web services, comment out
+# this line
+ac_add_options --disable-necko-wifi
+
+# Uncomment these lines if you have installed optional dependencies:
+#ac_add_options --enable-system-hunspell
+#ac_add_options --enable-startup-notification
+
+# Uncomment the following option if you have not installed PulseAudio
+#ac_add_options --disable-pulseaudio
+# and uncomment this if you installed alsa-lib instead of PulseAudio
+#ac_add_options --enable-alsa
+
+# Comment out following option if you have gconf installed
+ac_add_options --disable-gconf
+
+# Comment out following options if you have not installed
+# recommended dependencies:
+ac_add_options --with-system-icu
+ac_add_options --with-system-libevent
+ac_add_options --with-system-nspr
+ac_add_options --with-system-nss
+ac_add_options --with-system-webp
+
+# The elf-hack is reported to cause failed installs (after successful builds)
+# on some machines. It is supposed to improve startup time and it shrinks
+# libxul.so by a few MB - comment this if you know your machine is not affected.
+ac_add_options --disable-elf-hack
+
+# Seamonkey has some additional features that are not turned on by default,
+# such as an IRC client, calendar, and DOM Inspector. The DOM Inspector
+# aids with designing web pages. Comment these options if you do not
+# desire these features.
+ac_add_options --enable-calendar
+ac_add_options --enable-dominspector
+ac_add_options --enable-irc
+
+# The BLFS editors recommend not changing anything below this line:
+ac_add_options --prefix=/usr
+ac_add_options --enable-application=comm/suite
+
+ac_add_options --disable-crashreporter
+ac_add_options --disable-updater
+ac_add_options --disable-tests
+
+# rust-simd does not compile with recent versions of rust.
+# It is disabled in recent versions of firefox
+ac_add_options --disable-rust-simd
+
+ac_add_options --enable-optimize="-O2"
+ac_add_options --enable-strip
+ac_add_options --enable-install-strip
+ac_add_options --enable-official-branding
+
+# The option to use system cairo was removed in 2.53.9.
+ac_add_options --enable-system-ffi
+ac_add_options --enable-system-pixman
+
+ac_add_options --with-system-bz2
+ac_add_options --with-system-jpeg
+ac_add_options --with-system-png
+ac_add_options --with-system-zlib
+EOF
+
+export CC=gcc CXX=g++ &&
+./mach configure      &&
+./mach build -j6
+sudo ./mach install                  &&
+sudo chown -R 0:0 /usr/lib/seamonkey &&
+sudo cp -v $(find -name seamonkey.1 | head -n1) /usr/share/man/man1
+
+
+
+# https://archive.mozilla.org/pub/firefox/releases/91.2.0esr/source/firefox-91.3.0esr.source.tar.xz
+wget https://archive.mozilla.org/pub/firefox/releases/91.2.0esr/source/firefox-91.3.0esr.source.tar.xz
+wget https://www.linuxfromscratch.org/patches/blfs/svn/firefox-91.3.0esr-disable_rust_test-1.patch
+begin firefox-91.3.0esr.source tar.xz
+cd firefox-91.3.0
+patch -Np1 -i ../firefox-91.3.0esr-disable_rust_test-1.patch
+cat > mozconfig << "EOF"
+# If you have a multicore machine, all cores will be used by default.
+
+# If you have installed (or will install) wireless-tools, and you wish
+# to use geolocation web services, comment out this line
+ac_add_options --disable-necko-wifi
+
+# API Keys for geolocation APIs - necko-wifi (above) is required for MLS
+# Uncomment the following line if you wish to use Mozilla Location Service
+#ac_add_options --with-mozilla-api-keyfile=$PWD/mozilla-key
+
+# Uncomment the following line if you wish to use Google's geolocaton API
+# (needed for use with saved maps with Google Maps)
+#ac_add_options --with-google-location-service-api-keyfile=$PWD/google-key
+
+# startup-notification is required since firefox-78
+
+# Uncomment the following option if you have not installed PulseAudio
+#ac_add_options --disable-pulseaudio
+# or uncomment this if you installed alsa-lib instead of PulseAudio
+#ac_add_options --enable-alsa
+
+# Comment out following options if you have not installed
+# recommended dependencies:
+ac_add_options --with-system-icu
+ac_add_options --with-system-libevent
+ac_add_options --with-system-libvpx
+ac_add_options --with-system-nspr
+ac_add_options --with-system-nss
+ac_add_options --with-system-webp
+
+# Do not specify the gold linker which is not the default. It will take
+# longer and use more disk space when debug symbols are disabled.
+
+# libdavid (av1 decoder) requires nasm. Uncomment this if nasm
+# has not been installed.
+#ac_add_options --disable-av1
+
+# You cannot distribute the binary if you do this
+ac_add_options --enable-official-branding
+
+# Stripping is now enabled by default.
+# Uncomment these lines if you need to run a debugger:
+#ac_add_options --disable-strip
+#ac_add_options --disable-install-strip
+
+# Disabling debug symbols makes the build much smaller and a little
+# faster. Comment this if you need to run a debugger. Note: This is
+# required for compilation on i686.
+ac_add_options --disable-debug-symbols
+
+# The elf-hack is reported to cause failed installs (after successful builds)
+# on some machines. It is supposed to improve startup time and it shrinks
+# libxul.so by a few MB - comment this if you know your machine is not affected.
+ac_add_options --disable-elf-hack
+
+# The BLFS editors recommend not changing anything below this line:
+ac_add_options --prefix=/usr
+ac_add_options --enable-application=browser
+ac_add_options --disable-crashreporter
+ac_add_options --disable-updater
+# enabling the tests will use a lot more space and significantly
+# increase the build time, for no obvious benefit.
+ac_add_options --disable-tests
+
+# The default level of optimization again produces a working build with gcc.
+ac_add_options --enable-optimize
+
+ac_add_options --enable-system-ffi
+ac_add_options --enable-system-pixman
+
+ac_add_options --with-system-jpeg
+ac_add_options --with-system-png
+ac_add_options --with-system-zlib
+
+# The following option unsets Telemetry Reporting. With the Addons Fiasco,
+# Mozilla was found to be collecting user's data, including saved passwords and
+# web form data, without users consent. Mozilla was also found shipping updates
+# to systems without the user's knowledge or permission.
+# As a result of this, use the following command to permanently disable
+# telemetry reporting in Firefox.
+unset MOZ_TELEMETRY_REPORTING
+
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/firefox-build-dir
+EOF
+
+export CC=gcc CXX=g++ &&
+export MACH_USE_SYSTEM_PYTHON=1            &&
+export MOZBUILD_STATE_PATH=${PWD}/mozbuild &&
+./mach configure                           &&
+./mach build -j4
+sudo MACH_USE_SYSTEM_PYTHON=1 ./mach install
+unset CC CXX MACH_USE_SYSTEM_PYTHON MOZBUILD_STATE_PATH
+
+
 
 
 

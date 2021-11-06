@@ -332,14 +332,30 @@ kernel="5.14.9"
 ```
 
 ```
+General setup -->
+   [ ] Auditing Support [CONFIG_AUDIT]
+   [*] Control Group support [CONFIG_CGROUPS]
+   [ ] Enable deprecated sysfs features to support old userspace tools [CONFIG_SYSFS_DEPRECATED]
+   [*] Configure standard kernel features (expert users) [CONFIG_EXPERT] --->
+      [*] open by fhandle syscalls [CONFIG_FHANDLE]
+
 Processor type and features --->  ( all defaults )                                         ***=edit
   [*] EFI runtime service support                              [CONFIG_EFI]
   [*]   EFI stub support                                       [CONFIG_EFI_STUB]
   [*]     EFI mixed-mode support
+
 Firmware Drivers --->             ( all defaults ) 
   EFI (Extensible Firmware Interface) Support --->
     < > EFI Variable Support via sysfs                         [CONFIG_EFI_VARS]           *** off!
     [*] Export efi runtime maps to sysfs                       [CONFIG_EFI_RUNTIME_MAP]
+
+    [*] Export DMI identification via sysfs to userspace [CONFIG_DMIID]
+General architecture-dependent options  --->
+    [*] Enable seccomp to safely compute untrusted bytecode [CONFIG_SECCOMP]
+Networking support  --->
+   Networking options  --->
+    <*> The IPv6 protocol [CONFIG_IPV6]
+
 Enable the block layer --->       ( all defaults )
   Partition Types --->
     [*] Advanced partition selection                           [CONFIG_PARTITION_ADVANCED] ***
@@ -348,6 +364,8 @@ Device Drivers --->
   Generic Driver Options  --->
     [ ] Support for uevent helper                               [CONFIG_UEVENT_HELPER]
     [*] Maintain a devtmpfs filesystem to mount at /dev         [CONFIG_DEVTMPFS]
+    Firmware Loader --->
+      [ ] Enable the firmware sysfs fallback mechanism [CONFIG_FW_LOADER_USER_HELPER]
   Graphics support --->
     Frame buffer Devices --->
       Support for frame buffer devices --->                    [CONFIG_FB]
@@ -364,6 +382,7 @@ Device Drivers --->
    <*> Intel 8xx/9xx/G3x/G4x/HD Graphics                   [CONFIG_DRM_I915]
 
 File systems --->
+    [*] Inotify support for userspace [CONFIG_INOTIFY_USER]
   Pseudo filesystems --->
     <*/M> EFI Variable filesystem                              [CONFIG_EFIVAR_FS]
 

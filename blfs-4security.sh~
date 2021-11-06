@@ -145,6 +145,13 @@ install -v -m755 Linux*/bin/{certutil,nss-config,pk12util} /usr/bin &&
 install -v -m644 Linux*/lib/pkgconfig/nss.pc  /usr/lib/pkgconfig
 finish
 
+# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.17.0.tar.gz
+#wget https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.17.0.tar.gz
+begin libtasn1-4.17.0 tar.gz
+./configure --prefix=/usr --disable-static &&
+make
+make install
+finish
 
 
 
@@ -170,13 +177,6 @@ ln -sfv /usr/libexec/p11-kit/trust-extract-compat \
 ln -sfv ./pkcs11/p11-kit-trust.so /usr/lib/libnssckbi.so
 finish
 
-# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.17.0.tar.gz
-#wget https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.17.0.tar.gz
-begin libtasn1-4.17.0 tar.gz
-./configure --prefix=/usr --disable-static &&
-make
-make install
-finish
 
 # https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz
 #wget https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz
@@ -218,9 +218,9 @@ systemctl enable update-pki.timer
 finish
 
 
-#     openssh-8.7p1.tar.gz 
-#wget https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.7p1.tar.gz
-begin openssh-8.7p1 tar.gz
+#     openssh-8.8p1.tar.gz 
+#wget https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.8p1.tar.gz
+begin openssh-8.8p1 tar.gz
 install  -v -m700 -d /var/lib/sshd &&
 chown    -v root:sys /var/lib/sshd &&
 groupadd -g 50 sshd        &&
@@ -241,9 +241,9 @@ make install ;rc=$?;echo $package_name $rc >> /sources/4rc.log
 install -v -m755    contrib/ssh-copy-id /usr/bin     
 install -v -m644    contrib/ssh-copy-id.1 \
                     /usr/share/man/man1              
-install -v -m755 -d /usr/share/doc/openssh-8.7p1     
+install -v -m755 -d /usr/share/doc/openssh-8.8p1     
 install -v -m644    INSTALL LICENCE OVERVIEW README* \
-                    /usr/share/doc/openssh-8.7p1
+                    /usr/share/doc/openssh-8.8p1
 finish
 
 cd /sources/blfs-systemd-units

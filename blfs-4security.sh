@@ -122,11 +122,11 @@ install -v -m644 nettle.html /usr/share/doc/nettle-3.7.3
 finish
 
 
-# https://archive.mozilla.org/pub/security/nss/releases/NSS_3_70_RTM/src/nss-3.70.tar.gz
-#wget https://archive.mozilla.org/pub/security/nss/releases/NSS_3_70_RTM/src/nss-3.70.tar.gz
-#wget https://www.linuxfromscratch.org/patches/blfs/svn/nss-3.70-standalone-1.patch
-begin nss-3.70 tar.gz
-patch -Np1 -i ../nss-3.70-standalone-1.patch &&
+# https://archive.mozilla.org/pub/security/nss/releases/NSS_3_71_RTM/src/nss-3.71.tar.gz
+#wget https://archive.mozilla.org/pub/security/nss/releases/NSS_3_71_RTM/src/nss-3.71.tar.gz
+#wget https://www.linuxfromscratch.org/patches/blfs/svn/nss-3.71-standalone-1.patch
+begin nss-3.71 tar.gz
+patch -Np1 -i ../nss-3.71-standalone-1.patch &&
 cd nss &&
 make BUILD_OPT=1                  \
   NSPR_INCLUDE_DIR=/usr/include/nspr  \
@@ -218,9 +218,9 @@ systemctl enable update-pki.timer
 finish
 
 
-#     openssh-8.7p1.tar.gz 
-#wget https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.7p1.tar.gz
-begin openssh-8.7p1 tar.gz
+#     openssh-8.8p1.tar.gz 
+#wget https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.8p1.tar.gz
+begin openssh-8.8p1 tar.gz
 install  -v -m700 -d /var/lib/sshd &&
 chown    -v root:sys /var/lib/sshd &&
 groupadd -g 50 sshd        &&
@@ -241,9 +241,9 @@ make install ;rc=$?;echo $package_name $rc >> /sources/4rc.log
 install -v -m755    contrib/ssh-copy-id /usr/bin     
 install -v -m644    contrib/ssh-copy-id.1 \
                     /usr/share/man/man1              
-install -v -m755 -d /usr/share/doc/openssh-8.7p1     
+install -v -m755 -d /usr/share/doc/openssh-8.8p1     
 install -v -m644    INSTALL LICENCE OVERVIEW README* \
-                    /usr/share/doc/openssh-8.7p1
+                    /usr/share/doc/openssh-8.8p1
 finish
 
 cd /sources/blfs-systemd-units
