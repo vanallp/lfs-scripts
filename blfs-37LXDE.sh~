@@ -1502,12 +1502,12 @@ sudo cp -v $(find -name seamonkey.1 | head -n1) /usr/share/man/man1
 
 
 
-# https://archive.mozilla.org/pub/firefox/releases/91.2.0esr/source/firefox-91.2.0esr.source.tar.xz
-wget https://archive.mozilla.org/pub/firefox/releases/91.2.0esr/source/firefox-91.2.0esr.source.tar.xz
-wget https://www.linuxfromscratch.org/patches/blfs/svn/firefox-91.2.0esr-disable_rust_test-1.patch
-begin firefox-91.2.0esr.source tar.xz
-cd firefox-91.2.0
-patch -Np1 -i ../firefox-91.2.0esr-disable_rust_test-1.patch
+# https://archive.mozilla.org/pub/firefox/releases/91.2.0esr/source/firefox-91.3.0esr.source.tar.xz
+wget https://archive.mozilla.org/pub/firefox/releases/91.2.0esr/source/firefox-91.3.0esr.source.tar.xz
+wget https://www.linuxfromscratch.org/patches/blfs/svn/firefox-91.3.0esr-disable_rust_test-1.patch
+begin firefox-91.3.0esr.source tar.xz
+cd firefox-91.3.0
+patch -Np1 -i ../firefox-91.3.0esr-disable_rust_test-1.patch
 cat > mozconfig << "EOF"
 # If you have a multicore machine, all cores will be used by default.
 

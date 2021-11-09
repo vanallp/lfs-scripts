@@ -122,11 +122,11 @@ install -v -m644 nettle.html /usr/share/doc/nettle-3.7.3
 finish
 
 
-# https://archive.mozilla.org/pub/security/nss/releases/NSS_3_71_RTM/src/nss-3.71.tar.gz
-#wget https://archive.mozilla.org/pub/security/nss/releases/NSS_3_71_RTM/src/nss-3.71.tar.gz
-#wget https://www.linuxfromscratch.org/patches/blfs/svn/nss-3.71-standalone-1.patch
-begin nss-3.71 tar.gz
-patch -Np1 -i ../nss-3.71-standalone-1.patch &&
+# https://archive.mozilla.org/pub/security/nss/releases/NSS_3_72_RTM/src/nss-3.72.tar.gz
+#wget https://archive.mozilla.org/pub/security/nss/releases/NSS_3_72_RTM/src/nss-3.72.tar.gz
+#wget https://www.linuxfromscratch.org/patches/blfs/svn/nss-3.72-standalone-1.patch
+begin nss-3.72 tar.gz
+patch -Np1 -i ../nss-3.72-standalone-1.patch &&
 cd nss &&
 make BUILD_OPT=1                  \
   NSPR_INCLUDE_DIR=/usr/include/nspr  \
