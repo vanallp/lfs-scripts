@@ -860,9 +860,9 @@ ninja -j6
 sudo ninja install
 finish
 
-# https://github.com/unicode-org/icu/releases/download/release-69-1/icu4c-69_1-src.tgz
-wget --no-check-certificate  https://github.com/unicode-org/icu/releases/download/release-69-1/icu4c-69_1-src.tgz
-tar xf icu4c-69_1-src.tgz
+# https://github.com/unicode-org/icu/releases/download/release-70-0/icu4c-70_0-src.tgz
+wget --no-check-certificate  https://github.com/unicode-org/icu/releases/download/release-70-0/icu4c-70_0-src.tgz
+tar xf icu4c-70_0-src.tgz
 cd icu/source
 ./configure --prefix=/usr                    &&
 make

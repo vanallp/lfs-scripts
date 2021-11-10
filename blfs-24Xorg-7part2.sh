@@ -297,9 +297,9 @@ make
 sudo make install
 finish
 
-# https://www.freedesktop.org/software/libinput/libinput-1.19.1.tar.xz
-wget https://www.freedesktop.org/software/libinput/libinput-1.19.1.tar.xz
-begin libinput-1.19.1 tar.xz
+# https://www.freedesktop.org/software/libinput/libinput-1.19.2.tar.xz
+wget https://www.freedesktop.org/software/libinput/libinput-1.19.2.tar.xz
+begin libinput-1.19.2 tar.xz
 mkdir build &&
 cd    build &&
 
