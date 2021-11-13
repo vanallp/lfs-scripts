@@ -521,9 +521,9 @@ finish
 # There is a circular dependency between cairo and harfbuzz. If cairo is built before harfbuzz, it is necessary to rebuild cairo after harfbuzz in order to build pango.
 
 
-# https://github.com/harfbuzz/harfbuzz/releases/download/3.0.0/harfbuzz-3.0.0.tar.xz
-wget --no-check-certificate https://github.com/harfbuzz/harfbuzz/releases/download/3.0.0/harfbuzz-3.0.0.tar.xz
-begin harfbuzz-3.0.0 tar.xz
+# https://github.com/harfbuzz/harfbuzz/releases/download/3.1.1/harfbuzz-3.1.1.tar.xz
+wget --no-check-certificate https://github.com/harfbuzz/harfbuzz/releases/download/3.1.1/harfbuzz-3.1.1.tar.xz
+begin harfbuzz-3.1.1 tar.xz
 mkdir build &&
 cd    build &&
 meson --prefix=/usr        \

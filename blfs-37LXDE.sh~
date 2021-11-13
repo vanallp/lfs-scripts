@@ -1193,13 +1193,13 @@ make
 sudo make install
 finish
 
-# https://github.com/nghttp2/nghttp2/releases/download/v1.45.1/nghttp2-1.45.1.tar.xz
-wget https://github.com/nghttp2/nghttp2/releases/download/v1.45.1/nghttp2-1.45.1.tar.xz
-begin nghttp2-1.45.1 tar.xz
+# https://github.com/nghttp2/nghttp2/releases/download/v1.46.0/nghttp2-1.46.0.tar.xz
+wget https://github.com/nghttp2/nghttp2/releases/download/v1.46.0/nghttp2-1.46.0.tar.xz
+begin nghttp2-1.46.0 tar.xz
 ./configure --prefix=/usr     \
             --disable-static  \
             --enable-lib-only \
-            --docdir=/usr/share/doc/nghttp2-1.45.1 &&
+            --docdir=/usr/share/doc/nghttp2-1.46.0 &&
 make
 sudo make install
 finish
