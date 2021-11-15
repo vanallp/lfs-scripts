@@ -457,6 +457,7 @@ begin systemd-249 tar.gz
 patch -Np1 -i ../systemd-249-upstream_fixes-1.patch
 sed -i -e 's/GROUP="render"/GROUP="video"/' \
         -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
+sed -i 's/+ want_libfuzzer.*$/and want_libfuzzer/' meson.build
 mkdir -p build
 cd       build
 

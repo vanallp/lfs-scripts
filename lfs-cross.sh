@@ -209,8 +209,8 @@ make
 make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
-# 6.7. File-5.40
-begin file-5.40 tar.gz
+# 6.7. File-5.41
+begin file-5.41 tar.gz
 mkdir build
 pushd build
   ../configure --disable-bzlib      \
@@ -235,8 +235,8 @@ make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 #sed -i 's|find:=${BINDIR}|find:=/bin|' $LFS/usr/bin/updatedb
 finish
 
-# 6.9. Gawk-5.1.0
-begin gawk-5.1.0 tar.xz
+# 6.9. Gawk-5.1.1
+begin gawk-5.1.1 tar.xz
 sed -i 's/extras//' Makefile.in
 ./configure --prefix=/usr   \
             --host=$LFS_TGT \
