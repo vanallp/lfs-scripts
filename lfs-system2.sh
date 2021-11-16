@@ -153,8 +153,8 @@ done
 ln -sfv kmod /bin/lsmod
 finish
 
-# 8.47. Libelf from Elfutils-0.185
-begin elfutils-0.185 tar.bz2
+# 8.47. Libelf from Elfutils-0.186
+begin elfutils-0.186 tar.bz2
 ./configure --prefix=/usr                \
             --disable-debuginfod         \
             --enable-libdebuginfod=dummy 
@@ -217,8 +217,8 @@ install -vDm644 misc/bash-completion /usr/share/bash-completion/completions/ninj
 install -vDm644 misc/zsh-completion  /usr/share/zsh/site-functions/_ninja
 finish
 
-# 8.52. Meson-0.60.0
-begin meson-0.60.0 tar.gz
+# 8.52. Meson-0.60.1
+begin meson-0.60.1 tar.gz
 python3 setup.py build
 python3 setup.py install --root=dest;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 cp -rv dest/* /
@@ -342,15 +342,15 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.61. IPRoute2-5.14.0
-begin iproute2-5.14.0 tar.xz
+# 8.61. IPRoute2-5.15.0
+begin iproute2-5.15.0 tar.xz
 sed -i /ARPD/d Makefile
 rm -fv man/man8/arpd.8
 sed -i 's/.m_ipt.o//' tc/Makefile
 make
 make SBINDIR=/usr/sbin install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mkdir -v              /usr/share/doc/iproute2-5.14.0
-cp -v COPYING README* /usr/share/doc/iproute2-5.14.0
+mkdir -v              /usr/share/doc/iproute2-5.15.0
+cp -v COPYING README* /usr/share/doc/iproute2-5.15.0
 finish
 
 # 8.62. Kbd-2.4.0
@@ -365,8 +365,8 @@ mkdir -v            /usr/share/doc/kbd-2.4.0
 cp -R -v docs/doc/* /usr/share/doc/kbd-2.4.0
 finish
 
-# 8.63. Libpipeline-1.5.3
-begin libpipeline-1.5.3 tar.gz
+# 8.63. Libpipeline-1.5.4
+begin libpipeline-1.5.4 tar.gz
 ./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
@@ -447,8 +447,8 @@ python3 setup.py build
 python3 setup.py install --optimize=1;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.70. Jinja2-3.0.2
-begin Jinja2-3.0.2 tar.gz
+# 8.70. Jinja2-3.0.3
+begin Jinja2-3.0.3 tar.gz
 python3 setup.py install --optimize=1;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
@@ -600,7 +600,7 @@ done
 online_usrbin="bash find strip"
 online_usrlib="libbfd-2.37.so
                libhistory.so.8.1
-               libncursesw.so.6.2
+               libncursesw.so.6.3
                libm.so.6
                libreadline.so.8.1
                libz.so.1.2.11

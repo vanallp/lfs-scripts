@@ -36,9 +36,9 @@ make
 sudo make install
 finish
 
-# https://dri.freedesktop.org/libdrm/libdrm-2.4.107.tar.xz
-wget https://dri.freedesktop.org/libdrm/libdrm-2.4.107.tar.xz
-begin libdrm-2.4.107 tar.xz
+# https://dri.freedesktop.org/libdrm/libdrm-2.4.108.tar.xz
+wget https://dri.freedesktop.org/libdrm/libdrm-2.4.108.tar.xz
+begin libdrm-2.4.108 tar.xz
 mkdir build &&
 cd    build &&
 
@@ -85,11 +85,11 @@ finish
 
 
 
-# https://mesa.freedesktop.org/archive/mesa-21.2.4.tar.xz
-wget https://mesa.freedesktop.org/archive/mesa-21.2.4.tar.xz
-wget https://www.linuxfromscratch.org/patches/blfs/svn/mesa-21.2.4-add_xdemos-1.patch
-begin mesa-21.2.4 tar.xz
-patch -Np1 -i ../mesa-21.2.4-add_xdemos-1.patch
+# https://mesa.freedesktop.org/archive/mesa-21.2.5.tar.xz
+wget https://mesa.freedesktop.org/archive/mesa-21.2.5.tar.xz
+wget https://www.linuxfromscratch.org/patches/blfs/svn/mesa-21.2.5-add_xdemos-1.patch
+begin mesa-21.2.5 tar.xz
+patch -Np1 -i ../mesa-21.2.5-add_xdemos-1.patch
 sed '1s/python/&3/' -i bin/symbols-check.py
 GALLIUM_DRV="crocus,i915,iris,nouveau,r600,radeonsi,svga,swrast,virgl"
 DRI_DRIVERS="i965,nouveau"
@@ -110,8 +110,8 @@ unset GALLIUM_DRV DRI_DRIVERS &&
 
 ninja
 sudo ninja install
-sudo install -v -dm755 /usr/share/doc/mesa-21.2.4 &&
-sudo cp -rfv ../docs/* /usr/share/doc/mesa-21.2.4
+sudo install -v -dm755 /usr/share/doc/mesa-21.2.5 &&
+sudo cp -rfv ../docs/* /usr/share/doc/mesa-21.2.5
 finish
 
 # https://www.x.org/pub/individual/data/xbitmaps-1.1.2.tar.bz2
@@ -273,9 +273,9 @@ sudo make install &&
 sudo mkdir -pv /etc/X11/xorg.conf.d
 finish
 
-# https://www.freedesktop.org/software/libevdev/libevdev-1.11.0.tar.xz
-wget https://www.freedesktop.org/software/libevdev/libevdev-1.11.0.tar.xz
-begin libevdev-1.11.0 tar.xz
+# https://www.freedesktop.org/software/libevdev/libevdev-1.12.0.tar.xz
+wget https://www.freedesktop.org/software/libevdev/libevdev-1.12.0.tar.xz
+begin libevdev-1.12.0 tar.xz
 ./configure $XORG_CONFIG  &&
 make
 sudo make install

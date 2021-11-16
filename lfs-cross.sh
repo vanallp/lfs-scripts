@@ -149,8 +149,8 @@ make
 make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
-# 6.3. Ncurses-6.2
-begin ncurses-6.2 tar.gz
+# 6.3. Ncurses-6.3
+begin ncurses-6.3 tar.gz
 sed -i s/mawk// configure
 mkdir build
 pushd build

@@ -202,8 +202,8 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.13. Bc-5.1.1
-begin bc-5.1.1 tar.xz
+# 8.13. Bc-5.2.0
+begin bc-5.2.0 tar.xz
 CC=gcc ./configure --prefix=/usr -G -O3
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
@@ -348,12 +348,12 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.24. Libcap-2.59
-begin libcap-2.59 tar.xz
+# 8.24. Libcap-2.60
+begin libcap-2.60 tar.xz
 sed -i '/install -m.*STA/d' libcap/Makefile
 make prefix=/usr lib=lib
 make prefix=/usr lib=lib install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-chmod -v 755 /usr/lib/lib{cap,psx}.so.2.59
+chmod -v 755 /usr/lib/lib{cap,psx}.so.2.60
 finish
 
 # 8.25. Shadow-4.9
@@ -431,8 +431,8 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.28. Ncurses-6.2
-begin ncurses-6.2 tar.gz
+# 8.28. Ncurses-6.3
+begin ncurses-6.3 tar.gz
 ./configure --prefix=/usr           \
             --mandir=/usr/share/man \
             --with-shared           \
@@ -451,8 +451,8 @@ rm -vf                     /usr/lib/libcursesw.so
 echo "INPUT(-lncursesw)" > /usr/lib/libcursesw.so
 ln -sfv libncurses.so      /usr/lib/libcurses.so
 rm -fv /usr/lib/libncurses++w.a
-mkdir -v       /usr/share/doc/ncurses-6.2
-cp -v -R doc/* /usr/share/doc/ncurses-6.2
+mkdir -v       /usr/share/doc/ncurses-6.3
+cp -v -R doc/* /usr/share/doc/ncurses-6.3
 
 finish
 

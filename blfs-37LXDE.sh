@@ -105,9 +105,9 @@ finish
 
 
 
-# https://cmake.org/files/v3.21/cmake-3.21.3.tar.gz
-wget --no-check-certificate https://cmake.org/files/v3.21/cmake-3.21.3.tar.gz
-begin cmake-3.21.3 tar.gz
+# https://cmake.org/files/v3.21/cmake-3.21.4.tar.gz
+wget --no-check-certificate https://cmake.org/files/v3.21/cmake-3.21.4.tar.gz
+begin cmake-3.21.4 tar.gz
 sed -i '/"lib64"/s/64//' Modules/GNUInstallDirs.cmake &&
 
 ./bootstrap --prefix=/usr        \
@@ -115,7 +115,7 @@ sed -i '/"lib64"/s/64//' Modules/GNUInstallDirs.cmake &&
             --mandir=/share/man  \
             --no-system-jsoncpp  \
             --no-system-librhash \
-            --docdir=/share/doc/cmake-3.21.3 &&
+            --docdir=/share/doc/cmake-3.21.4 &&
 make
 sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
@@ -394,9 +394,9 @@ finish
 
 
 
-# https://download.gnome.org/sources/glib/2.70/glib-2.70.0.tar.xz
-wget --no-check-certificate https://download.gnome.org/sources/glib/2.70/glib-2.70.0.tar.xz
-begin glib-2.70.0 tar.xz
+# https://download.gnome.org/sources/glib/2.70/glib-2.70.1.tar.xz
+wget --no-check-certificate https://download.gnome.org/sources/glib/2.70/glib-2.70.1.tar.xz
+begin glib-2.70.1 tar.xz
 mkdir build &&
 cd    build &&
 
@@ -406,8 +406,8 @@ meson --prefix=/usr       \
       ..                  &&
 ninja
 sudo ninja install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
-sudo mkdir -p /usr/share/doc/glib-2.70.0 &&
-sudo cp -r ../docs/reference/{NEWS,gio,glib,gobject} /usr/share/doc/glib-2.70.0
+sudo mkdir -p /usr/share/doc/glib-2.70.1 &&
+sudo cp -r ../docs/reference/{NEWS,gio,glib,gobject} /usr/share/doc/glib-2.70.1
 finish
 
 
@@ -460,7 +460,9 @@ finish
 
 # https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/2.1/shared-mime-info-2.1.tar.gz
 wget --no-check-certificate https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/2.1/shared-mime-info-2.1.tar.gz
+wget --no-check-certificate https://www.linuxfromscratch.org/patches/blfs/svn/shared-mime-info-2.1-shared-mime-info_meson_0.60_fix-1.patch
 begin shared-mime-info-2.1 tar.gz
+patch -p1 -i ../shared-mime-info-2.1-shared-mime-info_meson_0.60_fix-1.patch
 mkdir build &&
 cd    build &&
 meson --prefix=/usr --buildtype=release -Dupdate-mimedb=true .. &&
