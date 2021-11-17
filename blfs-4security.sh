@@ -63,13 +63,13 @@ make install
 finish
 
 
-# https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.42.tar.bz2
-#wget https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.42.tar.bz2
-begin libgpg-error-1.42 tar.bz2
+# https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.43.tar.bz2
+#wget https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.43.tar.bz2
+begin libgpg-error-1.43 tar.bz2
 ./configure --prefix=/usr &&
 make
 make install &&
-install -v -m644 -D README /usr/share/doc/libgpg-error-1.42/README
+install -v -m644 -D README /usr/share/doc/libgpg-error-1.43/README
 finish
 
 # https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.4.tar.bz2
@@ -145,9 +145,9 @@ install -v -m755 Linux*/bin/{certutil,nss-config,pk12util} /usr/bin &&
 install -v -m644 Linux*/lib/pkgconfig/nss.pc  /usr/lib/pkgconfig
 finish
 
-# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.17.0.tar.gz
-#wget https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.17.0.tar.gz
-begin libtasn1-4.17.0 tar.gz
+# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.18.0.tar.gz
+#wget https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.18.0.tar.gz
+begin libtasn1-4.18.0 tar.gz
 ./configure --prefix=/usr --disable-static &&
 make
 make install

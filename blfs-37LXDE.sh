@@ -86,9 +86,9 @@ sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
-# https://curl.se/download/curl-7.79.1.tar.xz
-wget --no-check-certificate  https://curl.se/download/curl-7.79.1.tar.xz
-begin curl-7.79.1 tar.xz
+# https://curl.se/download/curl-7.80.0.tar.xz
+wget --no-check-certificate  https://curl.se/download/curl-7.80.0.tar.xz
+begin curl-7.80.0 tar.xz
 grep -rl '#!.*python$' | xargs sed -i '1s/python/&3/'
 ./configure --prefix=/usr                           \
             --disable-static                        \
@@ -99,8 +99,8 @@ make
 sudo make install && rc=$?;echo $package_name $rc >> /sources/37rc.log
 sudo rm -rf docs/examples/.deps &&
 sudo find docs \( -name Makefile\* -o -name \*.1 -o -name \*.3 \) -exec rm {} \; &&
-sudo install -v -d -m755 /usr/share/doc/curl-7.79.1 &&
-sudo cp -v -R docs/*     /usr/share/doc/curl-7.79.1
+sudo install -v -d -m755 /usr/share/doc/curl-7.80.0 &&
+sudo cp -v -R docs/*     /usr/share/doc/curl-7.80.0
 finish
 
 
@@ -562,9 +562,9 @@ sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
-# https://github.com/fribidi/fribidi/releases/download/v1.0.9/fribidi-1.0.9.tar.xz
-wget --no-check-certificate https://github.com/fribidi/fribidi/releases/download/v1.0.9/fribidi-1.0.9.tar.xz
-begin fribidi-1.0.9 tar.xz
+# https://github.com/fribidi/fribidi/releases/download/v1.0.11/fribidi-1.0.11.tar.xz
+wget --no-check-certificate https://github.com/fribidi/fribidi/releases/download/v1.0.11/fribidi-1.0.11.tar.xz
+begin fribidi-1.0.11 tar.xz
 mkdir build &&
 cd    build &&
 meson --prefix=/usr --buildtype=release .. &&
@@ -1092,9 +1092,9 @@ cat > ~/.xinitrc << EOF
 startlxde
 EOF
 
-# https://invisible-mirror.net/archives/xterm/xterm-369.tgz
-wget https://invisible-mirror.net/archives/xterm/xterm-369.tgz
-begin xterm-369 tgz
+# https://invisible-mirror.net/archives/xterm/xterm-370.tgz
+wget https://invisible-mirror.net/archives/xterm/xterm-370.tgz
+begin xterm-370 tgz
 sed -i '/v0/{n;s/new:/new:kb=^?:/}' termcap &&
 printf '\tkbs=\\177,\n' >> terminfo &&
 

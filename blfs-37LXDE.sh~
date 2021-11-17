@@ -460,7 +460,9 @@ finish
 
 # https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/2.1/shared-mime-info-2.1.tar.gz
 wget --no-check-certificate https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/2.1/shared-mime-info-2.1.tar.gz
+wget --no-check-certificate https://www.linuxfromscratch.org/patches/blfs/svn/shared-mime-info-2.1-shared-mime-info_meson_0.60_fix-1.patch
 begin shared-mime-info-2.1 tar.gz
+patch -p1 -i ../shared-mime-info-2.1-shared-mime-info_meson_0.60_fix-1.patch
 mkdir build &&
 cd    build &&
 meson --prefix=/usr --buildtype=release -Dupdate-mimedb=true .. &&
@@ -560,9 +562,9 @@ sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
-# https://github.com/fribidi/fribidi/releases/download/v1.0.9/fribidi-1.0.9.tar.xz
-wget --no-check-certificate https://github.com/fribidi/fribidi/releases/download/v1.0.9/fribidi-1.0.9.tar.xz
-begin fribidi-1.0.9 tar.xz
+# https://github.com/fribidi/fribidi/releases/download/v1.0.11/fribidi-1.0.11.tar.xz
+wget --no-check-certificate https://github.com/fribidi/fribidi/releases/download/v1.0.11/fribidi-1.0.11.tar.xz
+begin fribidi-1.0.11 tar.xz
 mkdir build &&
 cd    build &&
 meson --prefix=/usr --buildtype=release .. &&
@@ -1090,9 +1092,9 @@ cat > ~/.xinitrc << EOF
 startlxde
 EOF
 
-# https://invisible-mirror.net/archives/xterm/xterm-369.tgz
-wget https://invisible-mirror.net/archives/xterm/xterm-369.tgz
-begin xterm-369 tgz
+# https://invisible-mirror.net/archives/xterm/xterm-370.tgz
+wget https://invisible-mirror.net/archives/xterm/xterm-370.tgz
+begin xterm-370 tgz
 sed -i '/v0/{n;s/new:/new:kb=^?:/}' termcap &&
 printf '\tkbs=\\177,\n' >> terminfo &&
 
