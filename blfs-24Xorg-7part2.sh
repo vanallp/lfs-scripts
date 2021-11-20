@@ -50,11 +50,11 @@ ninja
 sudo ninja install
 finish
 
-# https://files.pythonhosted.org/packages/source/M/Mako/Mako-1.1.5.tar.gz
-wget https://files.pythonhosted.org/packages/source/M/Mako/Mako-1.1.5.tar.gz
-begin Mako-1.1.5 tar.gz
+# https://files.pythonhosted.org/packages/source/M/Mako/Mako-1.1.6.tar.gz
+wget https://files.pythonhosted.org/packages/source/M/Mako/Mako-1.1.6.tar.gz
+begin Mako-1.1.6 tar.gz
 sudo python3 setup.py install --optimize=1
-sudo rm -rf /sources/Mako-1.1.5/*
+sudo rm -rf /sources/Mako-1.1.6/*
 finish
 
 # https://wayland.freedesktop.org/releases/wayland-1.19.0.tar.xz
