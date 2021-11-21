@@ -873,11 +873,11 @@ cd /sources
 rm -rf icu
 
 
-# https://static.rust-lang.org/dist/rustc-1.56.0-src.tar.gz
-wget --no-check-certificate  https://static.rust-lang.org/dist/rustc-1.56.0-src.tar.gz
-begin rustc-1.56.0-src tar.gz
-sudo mkdir /opt/rustc-1.56.0             &&
-sudo ln -svfin rustc-1.56.0 /opt/rustc
+# https://static.rust-lang.org/dist/rustc-1.56.1-src.tar.gz
+wget --no-check-certificate  https://static.rust-lang.org/dist/rustc-1.56.1-src.tar.gz
+begin rustc-1.56.1-src tar.gz
+sudo mkdir /opt/rustc-1.56.1             &&
+sudo ln -svfin rustc-1.56.1 /opt/rustc
 
 cat << EOF > config.toml
 # see config.toml.example for more possible options
@@ -898,8 +898,8 @@ docs = false
 extended = true
 
 [install]
-prefix = "/opt/rustc-1.56.0"
-docdir = "share/doc/rustc-1.56.0"
+prefix = "/opt/rustc-1.56.1"
+docdir = "share/doc/rustc-1.56.1"
 
 [rust]
 channel = "stable"
@@ -921,7 +921,9 @@ llvm-config = "/usr/bin/llvm-config"
 
 
 EOF
-
+sed -i -e '/^curl /s/0.4.38/0.4.40/' \
+       -e '/^curl-sys /s/0.4.48/0.4.50/' \
+       src/tools/cargo/Cargo.toml &&
 export RUSTFLAGS="$RUSTFLAGS -C link-args=-lffi" &&
 python3 ./x.py build --exclude src/tools/miri
 
@@ -956,8 +958,8 @@ EOF
 sudo mv /tmp/rustc.sh /etc/profile.d/rustc.sh
 sudo chown root:root /etc/profile.d/rustc.sh
 #finish 
-sudo rm -rf /sources/rustc-1.56.0-src
-
+sudo rm -rf /sources/rustc-1.56.1-src
+source /etc/profile.d/rustc.sh
 
 # need js78
 # https://archive.mozilla.org/pub/firefox/releases/78.15.0esr/source/firefox-78.15.0esr.source.tar.xz
