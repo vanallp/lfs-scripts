@@ -51,8 +51,10 @@ popd
 ```
 
 Check and confirm everything downloaded and passed OK
+```
 . $LFS/sources/lfs-scripts/step1.sh
-
+```
+will run:
 ```
 #The tcl & procps-ng package must be renamed
 mv $LFS/sources/tcl8.6.11-src.tar.gz $LFS/sources/tcl8.6.11.tar.gz
@@ -98,7 +100,9 @@ su - lfs
 ```
 
 :point_right: Run commands below as lfs.
+```
 . /mnt/lfs/sources/lfs-scripts/step2.sh
+```
 
 ```
 cat > ~/.bash_profile << "EOF"
@@ -135,7 +139,9 @@ exit
 ```
 
 :point_right: Run commands below as root. Make root own the entire filesystem again:
+```
 . $LFS/sources/lfs-scripts/step3.sh
+```
 
 ```
 chown -R root:root $LFS/{usr,lib,var,etc,bin,sbin,tools}
@@ -167,7 +173,9 @@ chroot "$LFS" /usr/bin/env -i   \
 ```
 
 Create essential directories, files and symlinks:
+```
 . $LFS/sources/lfs-scripts/step4.sh
+```
 
 ```
 mkdir -pv /{boot,home,mnt,opt,srv}

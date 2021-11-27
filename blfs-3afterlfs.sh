@@ -429,9 +429,9 @@ cat > /etc/issue << "EOF"
 EOF
 
 cd /sources
-#wget https://www.linuxfromscratch.org/blfs/downloads/systemd/blfs-systemd-units-20210819.tar.xz
-tar xf blfs-systemd-units-20210819.tar.xz
-mv blfs-systemd-units-20210819 blfs-systemd-units
+#wget https://www.linuxfromscratch.org/blfs/downloads/systemd/blfs-systemd-units-20211123.tar.xz
+tar xf blfs-systemd-units-20211123.tar.xz
+mv blfs-systemd-units-20211123 blfs-systemd-units
 
 
 

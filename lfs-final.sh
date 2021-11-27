@@ -177,7 +177,7 @@ begin linux-"$kernel" tar.xz
 make mrproper
 #make defconfig
 #make menuconfig
-cp /sources/lfs-scripts/saved5-14-1-config .config
+cp /sources/lfs-scripts/config-5.15.4 .config
 make 
 make modules_install
 cp -iv arch/x86/boot/bzImage /boot/vmlinuz-"$kernel"-lfs-10.1

@@ -105,9 +105,9 @@ finish
 
 
 
-# https://cmake.org/files/v3.21/cmake-3.21.4.tar.gz
-wget --no-check-certificate https://cmake.org/files/v3.21/cmake-3.21.4.tar.gz
-begin cmake-3.21.4 tar.gz
+# https://cmake.org/files/v3.22/cmake-3.22.0.tar.gz
+wget --no-check-certificate https://cmake.org/files/v3.22/cmake-3.22.0.tar.gz
+begin cmake-3.22.0 tar.gz
 sed -i '/"lib64"/s/64//' Modules/GNUInstallDirs.cmake &&
 
 ./bootstrap --prefix=/usr        \
@@ -115,7 +115,7 @@ sed -i '/"lib64"/s/64//' Modules/GNUInstallDirs.cmake &&
             --mandir=/share/man  \
             --no-system-jsoncpp  \
             --no-system-librhash \
-            --docdir=/share/doc/cmake-3.21.4 &&
+            --docdir=/share/doc/cmake-3.22.0 &&
 make
 sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
@@ -130,16 +130,16 @@ sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
-# https://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-2.1.1.tar.gz
-wget --no-check-certificate https://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-2.1.1.tar.gz
-begin libjpeg-turbo-2.1.1 tar.gz
+# https://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-2.1.2.tar.gz
+wget --no-check-certificate https://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-2.1.2.tar.gz
+begin libjpeg-turbo-2.1.2 tar.gz
 mkdir build &&
 cd    build &&
 
 cmake -DCMAKE_INSTALL_PREFIX=/usr \
       -DCMAKE_BUILD_TYPE=RELEASE  \
       -DENABLE_STATIC=FALSE       \
-      -DCMAKE_INSTALL_DOCDIR=/usr/share/doc/libjpeg-turbo-2.1.1 \
+      -DCMAKE_INSTALL_DOCDIR=/usr/share/doc/libjpeg-turbo-2.1.2 \
       -DCMAKE_INSTALL_DEFAULT_LIBDIR=lib  \
       .. &&
 make
@@ -1026,8 +1026,8 @@ sudo ln -svr /usr/share/graphviz/doc /usr/share/doc/graphviz-2.49.3
 finish
 
 # https://download.gnome.org/sources/vala/0.54/vala-0.54.1.tar.xz
-wget https://download.gnome.org/sources/vala/0.54/vala-0.54.1.tar.xz
-begin vala-0.54.1 tar.xz
+wget https://download.gnome.org/sources/vala/0.54/vala-0.54.3.tar.xz
+begin vala-0.54.3 tar.xz
 ./configure --prefix=/usr &&
 make
 sudo make install

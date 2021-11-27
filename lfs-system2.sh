@@ -458,6 +458,7 @@ patch -Np1 -i ../systemd-249-upstream_fixes-1.patch
 sed -i -e 's/GROUP="render"/GROUP="video"/' \
         -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
 sed -i 's/+ want_libfuzzer.*$/and want_libfuzzer/' meson.build
+sed -i '/ARPHRD_CAN/a#define ARPHRD_MCTP        290' src/basic/linux/if_arp.h
 mkdir -p build
 cd       build
 

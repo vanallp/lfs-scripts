@@ -63,14 +63,14 @@ ninja install;rc=$?;echo $package_name $rc >> /sources/5rc.log
 finish
 
 Requires inih-53
-#     https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-5.13.0.tar.xz
-#wget https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-5.13.0.tar.xz
-begin xfsprogs-5.13.0 tar.xz
+#     https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-5.14.0.tar.xz
+#wget https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-5.14.0.tar.xz
+begin xfsprogs-5.14.0 tar.xz
 make DEBUG=-DNDEBUG     \
      INSTALL_USER=root  \
      INSTALL_GROUP=root;rc=$?;echo $package_name $rc >> /sources/5rc.log
-make PKG_DOC_DIR=/usr/share/doc/xfsprogs-5.13.0 install     &&
-make PKG_DOC_DIR=/usr/share/doc/xfsprogs-5.13.0 install-dev &&
+make PKG_DOC_DIR=/usr/share/doc/xfsprogs-5.14.0 install     &&
+make PKG_DOC_DIR=/usr/share/doc/xfsprogs-5.14.0 install-dev &&
 rm -rfv /usr/lib/libhandle.{a,la}
 finish
 

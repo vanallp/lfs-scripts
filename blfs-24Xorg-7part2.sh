@@ -70,9 +70,9 @@ ninja
 sudo ninja install
 finish
 
-# https://wayland.freedesktop.org/releases/wayland-protocols-1.23.tar.xz
-wget https://wayland.freedesktop.org/releases/wayland-protocols-1.23.tar.xz
-begin wayland-protocols-1.23 tar.xz
+# https://wayland.freedesktop.org/releases/wayland-protocols-1.24.tar.xz
+wget https://wayland.freedesktop.org/releases/wayland-protocols-1.24.tar.xz
+begin wayland-protocols-1.24 tar.xz
 mkdir build &&
 cd    build &&
 
@@ -242,9 +242,9 @@ sudo ln -svfn $XORG_PREFIX/share/fonts/X11/OTF /usr/share/fonts/X11-OTF &&
 sudo ln -svfn $XORG_PREFIX/share/fonts/X11/TTF /usr/share/fonts/X11-TTF
 cd /sources
 
-# https://www.x.org/pub/individual/data/xkeyboard-config/xkeyboard-config-2.33.tar.bz2
-wget https://www.x.org/pub/individual/data/xkeyboard-config/xkeyboard-config-2.33.tar.bz2
-begin xkeyboard-config-2.33 tar.bz2
+# https://www.x.org/pub/individual/data/xkeyboard-config/xkeyboard-config-2.34.tar.bz2
+wget https://www.x.org/pub/individual/data/xkeyboard-config/xkeyboard-config-2.34.tar.bz2
+begin xkeyboard-config-2.34 tar.bz2
 ./configure $XORG_CONFIG --with-xkb-rules-symlink=xorg &&
 make
 sudo make install
@@ -262,15 +262,24 @@ sudo ninja install
 finish
 
 # https://www.x.org/pub/individual/xserver/xorg-server-1.20.13.tar.xz
-wget https://www.x.org/pub/individual/xserver/xorg-server-1.20.13.tar.xz
-begin xorg-server-1.20.13 tar.xz
-./configure $XORG_CONFIG            \
-            --enable-glamor         \
-            --enable-suid-wrapper   \
-            --with-xkb-output=/var/lib/xkb &&
-make
-sudo make install &&
+wget https://www.x.org/pub/individual/xserver/xorg-server-21.1.1.tar.xz
+begin xorg-server-21.1.1 tar.xz
+mkdir build &&
+	cd build    &&
+
+meson --prefix=$XORG_PREFIX \
+      -Dsuid_wrapper=true   \
+      -Dxkb_output_dir=/var/lib/xkb &&
+ninja
+sudo ninja install &&
 sudo mkdir -pv /etc/X11/xorg.conf.d
+#./configure $XORG_CONFIG            \
+#            --enable-glamor         \
+#            --enable-suid-wrapper   \
+#            --with-xkb-output=/var/lib/xkb &&
+#make
+#sudo make install &&
+#sudo mkdir -pv /etc/X11/xorg.conf.d
 finish
 
 # https://www.freedesktop.org/software/libevdev/libevdev-1.12.0.tar.xz
@@ -336,9 +345,9 @@ make
 sudo make install
 finish
 
-# https://github.com/intel/libva/releases/download/2.12.0/libva-2.12.0.tar.bz2
-wget https://github.com/intel/libva/releases/download/2.12.0/libva-2.12.0.tar.bz2
-begin libva-2.12.0 tar.bz2
+# https://github.com/intel/libva/releases/download/2.13.0/libva-2.13.0.tar.bz2
+wget https://github.com/intel/libva/releases/download/2.13.0/libva-2.13.0.tar.bz2
+begin libva-2.13.0 tar.bz2
 ./configure $XORG_CONFIG  &&
 make
 sudo make install
