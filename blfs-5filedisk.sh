@@ -62,7 +62,7 @@ ninja
 ninja install;rc=$?;echo $package_name $rc >> /sources/5rc.log
 finish
 
-Requires inih-53
+# Requires inih-53
 #     https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-5.14.0.tar.xz
 #wget https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-5.14.0.tar.xz
 begin xfsprogs-5.14.0 tar.xz
