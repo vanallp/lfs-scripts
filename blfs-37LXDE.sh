@@ -523,9 +523,9 @@ finish
 # There is a circular dependency between cairo and harfbuzz. If cairo is built before harfbuzz, it is necessary to rebuild cairo after harfbuzz in order to build pango.
 
 
-# https://github.com/harfbuzz/harfbuzz/releases/download/3.1.1/harfbuzz-3.1.1.tar.xz
-wget --no-check-certificate https://github.com/harfbuzz/harfbuzz/releases/download/3.1.1/harfbuzz-3.1.1.tar.xz
-begin harfbuzz-3.1.1 tar.xz
+# https://github.com/harfbuzz/harfbuzz/releases/download/3.1.2/harfbuzz-3.1.2.tar.xz
+wget --no-check-certificate https://github.com/harfbuzz/harfbuzz/releases/download/3.1.2/harfbuzz-3.1.2.tar.xz
+begin harfbuzz-3.1.2 tar.xz
 mkdir build &&
 cd    build &&
 meson --prefix=/usr        \
@@ -1025,9 +1025,9 @@ sudo make install
 sudo ln -svr /usr/share/graphviz/doc /usr/share/doc/graphviz-2.49.3
 finish
 
-# https://download.gnome.org/sources/vala/0.54/vala-0.54.1.tar.xz
-wget https://download.gnome.org/sources/vala/0.54/vala-0.54.3.tar.xz
-begin vala-0.54.3 tar.xz
+# https://download.gnome.org/sources/vala/0.54/vala-0.54.4.tar.xz
+wget https://download.gnome.org/sources/vala/0.54/vala-0.54.4.tar.xz
+begin vala-0.54.4 tar.xz
 ./configure --prefix=/usr &&
 make
 sudo make install

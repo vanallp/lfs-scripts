@@ -45,9 +45,9 @@ mkdir -v /usr/share/doc/libpng-1.6.37 &&
 cp -v README libpng-manual.txt /usr/share/doc/libpng-1.6.37
 finish
 
-# https://sqlite.org/2021/sqlite-autoconf-3360000.tar.gz
-#wget https://sqlite.org/2021/sqlite-autoconf-3360000.tar.gz
-begin sqlite-autoconf-3360000 tar.gz
+# https://sqlite.org/2021/sqlite-autoconf-3370000.tar.gz
+#wget https://sqlite.org/2021/sqlite-autoconf-3370000.tar.gz
+begin sqlite-autoconf-3370000 tar.gz
 ./configure --prefix=/usr     \
             --disable-static  \
             --enable-fts5     \
@@ -122,11 +122,11 @@ install -v -m644 nettle.html /usr/share/doc/nettle-3.7.3
 finish
 
 
-# https://archive.mozilla.org/pub/security/nss/releases/NSS_3_72_RTM/src/nss-3.72.tar.gz
-#wget https://archive.mozilla.org/pub/security/nss/releases/NSS_3_72_RTM/src/nss-3.72.tar.gz
-#wget https://www.linuxfromscratch.org/patches/blfs/svn/nss-3.72-standalone-1.patch
-begin nss-3.72 tar.gz
-patch -Np1 -i ../nss-3.72-standalone-1.patch &&
+# https://archive.mozilla.org/pub/security/nss/releases/NSS_3_73_RTM/src/nss-3.73.tar.gz
+#wget https://archive.mozilla.org/pub/security/nss/releases/NSS_3_73_RTM/src/nss-3.73.tar.gz
+#wget https://www.linuxfromscratch.org/patches/blfs/svn/nss-3.73-standalone-1.patch
+begin nss-3.73 tar.gz
+patch -Np1 -i ../nss-3.73-standalone-1.patch &&
 cd nss &&
 make BUILD_OPT=1                  \
   NSPR_INCLUDE_DIR=/usr/include/nspr  \

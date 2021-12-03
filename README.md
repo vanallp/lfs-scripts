@@ -15,9 +15,7 @@ sda2 /          26GiB ext4
 sda3 /mnt/lfs  [everything else] ext4
 ```
 
-
-Pick a kernel. [here](https://www.kernel.org/) I have been successful with the stable: 5.15.5 branch with LFSv10.1. Attempting to build anythig in the 5.13.x fail with "cyclades.h is removed from linux kernel header files" [bug](https://www.mail-archive.com/gcc-bugs@gcc.gnu.org/msg688380.html)
-
+Pick a kernel. [here](https://www.kernel.org/) 
 
 
 # Build instructions

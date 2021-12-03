@@ -45,9 +45,9 @@ mkdir -v /usr/share/doc/libpng-1.6.37 &&
 cp -v README libpng-manual.txt /usr/share/doc/libpng-1.6.37
 finish
 
-# https://sqlite.org/2021/sqlite-autoconf-3360000.tar.gz
-#wget https://sqlite.org/2021/sqlite-autoconf-3360000.tar.gz
-begin sqlite-autoconf-3360000 tar.gz
+# https://sqlite.org/2021/sqlite-autoconf-3370000.tar.gz
+#wget https://sqlite.org/2021/sqlite-autoconf-3370000.tar.gz
+begin sqlite-autoconf-3370000 tar.gz
 ./configure --prefix=/usr     \
             --disable-static  \
             --enable-fts5     \
@@ -505,6 +505,8 @@ begin systemd-249 tar.gz
 patch -Np1 -i ../systemd-249-upstream_fixes-1.patch
 sed -i -e 's/GROUP="render"/GROUP="video"/' \
        -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
+sed -i 's/+ want_libfuzzer.*$/and want_libfuzzer/' meson.build
+sed -i '/ARPHRD_CAN/a#define ARPHRD_MCTP        290' src/basic/linux/if_arp.h
 mkdir build &&
 cd    build &&
 meson --prefix=/usr                 \

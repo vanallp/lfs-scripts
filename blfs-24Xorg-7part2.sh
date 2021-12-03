@@ -36,9 +36,9 @@ make
 sudo make install
 finish
 
-# https://dri.freedesktop.org/libdrm/libdrm-2.4.108.tar.xz
-wget https://dri.freedesktop.org/libdrm/libdrm-2.4.108.tar.xz
-begin libdrm-2.4.108 tar.xz
+# https://dri.freedesktop.org/libdrm/libdrm-2.4.109.tar.xz
+wget https://dri.freedesktop.org/libdrm/libdrm-2.4.109.tar.xz
+begin libdrm-2.4.109 tar.xz
 mkdir build &&
 cd    build &&
 
@@ -131,7 +131,7 @@ c4a3664e08e5a47c120ff9263ee2f20c  luit-1.1.1.tar.bz2
 93e736c98fb75856ee8227a0c49a128d  setxkbmap-1.3.2.tar.bz2
 3a93d9f0859de5d8b65a68a125d48f6a  smproxy-1.0.6.tar.bz2
 e96b56756990c56c24d2d02c2964456b  x11perf-1.6.1.tar.bz2
-e50587c1bb832aafd1a19d91a0890a0b  xauth-1.1.tar.bz2
+325c2321d159d5b93490700960005037  xauth-1.1.1.tar.bz2
 5b6405973db69c0443be2fba8e1a8ab7  xbacklight-1.2.3.tar.bz2
 9956d751ea3ae4538c3ebd07f70736a0  xcmsdb-1.0.5.tar.bz2
 25cc7ca1ce5dcbb61c2b471c55e686b5  xcursorgen-1.0.7.tar.bz2

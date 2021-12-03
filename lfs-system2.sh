@@ -217,8 +217,8 @@ install -vDm644 misc/bash-completion /usr/share/bash-completion/completions/ninj
 install -vDm644 misc/zsh-completion  /usr/share/zsh/site-functions/_ninja
 finish
 
-# 8.52. Meson-0.60.1
-begin meson-0.60.1 tar.gz
+# 8.52. Meson-0.60.2
+begin meson-0.60.2 tar.gz
 python3 setup.py build
 python3 setup.py install --root=dest;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 cp -rv dest/* /
@@ -299,8 +299,9 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 #efibootmgr-17.tar.gz
-#wget https://github.com/rhboot/efibootmgr/archive/17/efibootmgr-17.tar.gz
-begin efibootmgr-17 tar.gz
+# https://github.com/rhboot/efibootmgr/archive/17/efibootmgr-17.tar.gz
+#wget https://github.com/rhboot/efibootmgr/releases/download/17/efibootmgr-17.tar.bz2
+begin efibootmgr-17 tar.bz2
 sed -e '/extern int efi_set_verbose/d' -i src/efibootmgr.c
 make EFIDIR=LFS EFI_LOADER=grubx64.efi
 make install EFIDIR=LFS ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
@@ -411,8 +412,8 @@ pushd /usr/share/info
 popd
 finish
 
-# 8.68. Vim-8.2.3508
-begin vim-8.2.3508 tar.gz
+# 8.68. Vim-8.2.3704
+begin vim-8.2.3704 tar.gz
 echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 ./configure --prefix=/usr
 make
@@ -421,7 +422,7 @@ ln -sv vim /usr/bin/vi
 for L in  /usr/share/man/{,*/}man1/vim.1; do
     ln -sv vim.1 $(dirname $L)/vi.1
 done
-ln -sv ../vim/vim82/doc /usr/share/doc/vim-8.2.3508
+ln -sv ../vim/vim82/doc /usr/share/doc/vim-8.2.3704
 cat > /etc/vimrc << "EOF"
 " Begin /etc/vimrc
 
