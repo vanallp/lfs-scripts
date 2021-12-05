@@ -307,9 +307,9 @@ make EFIDIR=LFS EFI_LOADER=grubx64.efi
 make install EFIDIR=LFS ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-#freetype-2.11.0.tar.xz
-#wget https://downloads.sourceforge.net/freetype/freetype-2.11.0.tar.xz
-begin freetype-2.11.0 tar.xz
+#freetype-2.11.1.tar.xz
+#wget https://downloads.sourceforge.net/freetype/freetype-2.11.1.tar.xz
+begin freetype-2.11.1 tar.xz
 sed -ri "s:.*(AUX_MODULES.*valid):\1:" modules.cfg &&
 
 sed -r "s:.*(#.*SUBPIXEL_RENDERING) .*:\1:" \

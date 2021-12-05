@@ -85,11 +85,11 @@ finish
 
 
 
-# https://mesa.freedesktop.org/archive/mesa-21.2.5.tar.xz
-wget https://mesa.freedesktop.org/archive/mesa-21.2.5.tar.xz
-wget https://www.linuxfromscratch.org/patches/blfs/svn/mesa-21.2.5-add_xdemos-1.patch
-begin mesa-21.2.5 tar.xz
-patch -Np1 -i ../mesa-21.2.5-add_xdemos-1.patch
+# https://mesa.freedesktop.org/archive/mesa-21.3.1.tar.xz
+wget https://mesa.freedesktop.org/archive/mesa-21.3.1.tar.xz
+wget https://www.linuxfromscratch.org/patches/blfs/svn/mesa-21.3.1-add_xdemos-1.patch
+begin mesa-21.3.1 tar.xz
+patch -Np1 -i ../mesa-21.3.1-add_xdemos-1.patch
 sed '1s/python/&3/' -i bin/symbols-check.py
 GALLIUM_DRV="crocus,i915,iris,nouveau,r600,radeonsi,svga,swrast,virgl"
 DRI_DRIVERS="i965,nouveau"
@@ -110,8 +110,8 @@ unset GALLIUM_DRV DRI_DRIVERS &&
 
 ninja
 sudo ninja install
-sudo install -v -dm755 /usr/share/doc/mesa-21.2.5 &&
-sudo cp -rfv ../docs/* /usr/share/doc/mesa-21.2.5
+sudo install -v -dm755 /usr/share/doc/mesa-21.3.1 &&
+sudo cp -rfv ../docs/* /usr/share/doc/mesa-21.3.1
 finish
 
 # https://www.x.org/pub/individual/data/xbitmaps-1.1.2.tar.bz2

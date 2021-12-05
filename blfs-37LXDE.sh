@@ -537,9 +537,9 @@ sudo ninja install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
-# https://downloads.sourceforge.net/freetype/freetype-2.11.0.tar.xz
-##wget --no-check-certificate https://downloads.sourceforge.net/freetype/freetype-2.11.0.tar.xz
-begin freetype-2.11.0 tar.xz
+# https://downloads.sourceforge.net/freetype/freetype-2.11.1.tar.xz
+##wget --no-check-certificate https://downloads.sourceforge.net/freetype/freetype-2.11.1.tar.xz
+begin freetype-2.11.1 tar.xz
 sed -ri "s:.*(AUX_MODULES.*valid):\1:" modules.cfg &&
 sed -r "s:.*(#.*SUBPIXEL_RENDERING) .*:\1:" \
     -i include/freetype/config/ftoption.h  &&

@@ -1025,9 +1025,9 @@ sudo make install
 sudo ln -svr /usr/share/graphviz/doc /usr/share/doc/graphviz-2.49.3
 finish
 
-# https://download.gnome.org/sources/vala/0.54/vala-0.54.1.tar.xz
-wget https://download.gnome.org/sources/vala/0.54/vala-0.54.3.tar.xz
-begin vala-0.54.3 tar.xz
+# https://download.gnome.org/sources/vala/0.54/vala-0.54.4.tar.xz
+wget https://download.gnome.org/sources/vala/0.54/vala-0.54.4.tar.xz
+begin vala-0.54.4 tar.xz
 ./configure --prefix=/usr &&
 make
 sudo make install
