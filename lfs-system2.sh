@@ -299,9 +299,8 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 #efibootmgr-17.tar.gz
-# https://github.com/rhboot/efibootmgr/archive/17/efibootmgr-17.tar.gz
-#wget https://github.com/rhboot/efibootmgr/releases/download/17/efibootmgr-17.tar.bz2
-begin efibootmgr-17 tar.bz2
+#wget https://github.com/rhboot/efibootmgr/archive/17/efibootmgr-17.tar.gz
+begin efibootmgr-17 tar.gz
 sed -e '/extern int efi_set_verbose/d' -i src/efibootmgr.c
 make EFIDIR=LFS EFI_LOADER=grubx64.efi
 make install EFIDIR=LFS ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
@@ -336,8 +335,8 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 mv -v /etc/bash_completion.d/grub /usr/share/bash-completion/completions
 finish
 
-# 8.60. Gzip-1.10
-begin gzip-1.10 tar.xz
+# 8.60. Gzip-1.11
+begin gzip-1.11 tar.xz
 ./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log

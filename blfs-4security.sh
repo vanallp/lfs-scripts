@@ -24,7 +24,7 @@ finish() {
 cd /sources
 
 # https://ftp.gnu.org/gnu/which/which-2.21.tar.gz
-#wget --no-check-certificate https://ftp.gnu.org/gnu/which/which-2.21.tar.gz
+#wget https://ftp.gnu.org/gnu/which/which-2.21.tar.gz
 begin which-2.21 tar.gz
 ./configure --prefix=/usr &&
 make
