@@ -60,20 +60,20 @@ mv $LFS/sources/procps-ng-3.3.17.tar.xz $LFS/sources/procps-3.3.17.tar.xz
 
 # https://www.kernel.org
 cd $LFS/sources
-wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-"$kernel".tar.xz
+wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-"$kernel".tar.xz;rc=$?;echo kernel-"$kernel" $rc > wget.log
 
 ## blfs 
-echo "lfs-system2.sh " > wget.log
+echo "lfs-system2.sh " >> wget.log
 for getfile in $(grep "#wget" lfs-scripts/lfs-system2.sh    | cut -c 7- ); do wget $getfile;rc=$?;echo $getfile $rc >> wget.log;done
-echo "blfs-3afterlfs.sh " > wget.log
+echo "blfs-3afterlfs.sh " >> wget.log
 for getfile in $(grep "#wget" lfs-scripts/blfs-3afterlfs.sh | cut -c 7- ); do wget $getfile;rc=$?;echo $getfile $rc >> wget.log; done
-echo "blfs-4security.sh " > wget.log
+echo "blfs-4security.sh " >> wget.log
 for getfile in $(grep "#wget" lfs-scripts/blfs-4security.sh | cut -c 7- ); do wget $getfile;rc=$?;echo $getfile $rc >> wget.log; done
-echo "blfs-5filedisk.sh " > wget.log
+echo "blfs-5filedisk.sh " >> wget.log
 for getfile in $(grep "#wget" lfs-scripts/blfs-5filedisk.sh | cut -c 7- ); do wget $getfile;rc=$?;echo $getfile $rc >> wget.log; done
-echo "blfs-11generalutil.sh " > wget.log
+echo "blfs-11generalutil.sh " >> wget.log
 for getfile in $(grep "#wget" lfs-scripts/blfs-11generalutil.sh  | cut -c 7- ); do wget $getfile;rc=$?;echo $getfile $rc >> wget.log; done
-echo "blfs-15networking.sh " > wget.log
+echo "blfs-15networking.sh " >> wget.log
 for getfile in $(grep "#wget" lfs-scripts/blfs-15networking.sh   | cut -c 7- ); do wget $getfile;rc=$?;echo $getfile $rc >> wget.log; done
 cat wget.log
 

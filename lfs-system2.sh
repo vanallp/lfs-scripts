@@ -171,8 +171,8 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.49. OpenSSL-1.1.1l
-begin openssl-1.1.1l tar.gz
+# 8.49. OpenSSL-1.1.1m
+begin openssl-1.1.1m tar.gz
 ./config --prefix=/usr         \
          --openssldir=/etc/ssl \
          --libdir=lib          \
@@ -181,12 +181,12 @@ begin openssl-1.1.1l tar.gz
 make
 sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
 make MANSUFFIX=ssl install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/share/doc/openssl /usr/share/doc/openssl-1.1.1l
-cp -vfr doc/* /usr/share/doc/openssl-1.1.1l
+mv -v /usr/share/doc/openssl /usr/share/doc/openssl-1.1.1m
+cp -vfr doc/* /usr/share/doc/openssl-1.1.1m
 finish
 
-# 8.50. Python-3.10.0
-begin Python-3.10.0 tar.xz
+# 8.50. Python-3.10.1
+begin Python-3.10.1 tar.xz
 ./configure --prefix=/usr       \
             --enable-shared     \
             --with-system-expat \
@@ -195,12 +195,12 @@ begin Python-3.10.0 tar.xz
 	    --enable-optimizations
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-install -v -dm755 /usr/share/doc/python-3.10.0/html 
+install -v -dm755 /usr/share/doc/python-3.10.1/html 
 tar --strip-components=1  \
     --no-same-owner       \
     --no-same-permissions \
-    -C /usr/share/doc/python-3.10.0/html \
-    -xvf ../python-3.10.0-docs-html.tar.bz2
+    -C /usr/share/doc/python-3.10.1/html \
+    -xvf ../python-3.10.1-docs-html.tar.bz2
 finish
 
 # 8.51. Ninja-1.10.2

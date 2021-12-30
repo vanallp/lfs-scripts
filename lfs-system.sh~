@@ -348,12 +348,12 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.24. Libcap-2.60
-begin libcap-2.60 tar.xz
+# 8.24. Libcap-2.61
+begin libcap-2.61 tar.xz
 sed -i '/install -m.*STA/d' libcap/Makefile
 make prefix=/usr lib=lib
 make prefix=/usr lib=lib install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-chmod -v 755 /usr/lib/lib{cap,psx}.so.2.60
+chmod -v 755 /usr/lib/lib{cap,psx}.so.2.61
 finish
 
 # 8.25. Shadow-4.9

@@ -62,6 +62,16 @@ ninja
 ninja install;rc=$?;echo $package_name $rc >> /sources/5rc.log
 finish
 
+# liburcu-0.13.0
+#wget https://lttng.org/files/urcu/userspace-rcu-0.13.0.tar.bz2
+begin userspace-rcu-0.13.0 tar.bz2
+./configure --prefix=/usr    \
+            --disable-static \
+            --docdir=/usr/share/doc/liburcu-0.13.0 &&
+make
+make install
+finish
+
 # Requires inih-53
 #     https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-5.14.1.tar.xz
 #wget https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-5.14.1.tar.xz
