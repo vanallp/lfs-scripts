@@ -80,6 +80,8 @@ finish
 # https://github.com/libarchive/libarchive/releases/download/v3.5.2/libarchive-3.5.2.tar.xz
 wget --no-check-certificate  https://github.com/libarchive/libarchive/releases/download/v3.5.2/libarchive-3.5.2.tar.xz
 begin libarchive-3.5.2 tar.xz
+sed -i '436a if ((OSSL_PROVIDER_load(NULL, "legacy")) == NULL) \
+      return (ARCHIVE_FAILED);' libarchive/archive_digest.c
 ./configure --prefix=/usr --disable-static &&
 make
 sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
@@ -105,9 +107,9 @@ finish
 
 
 
-# https://cmake.org/files/v3.22/cmake-3.22.0.tar.gz
-wget --no-check-certificate https://cmake.org/files/v3.22/cmake-3.22.0.tar.gz
-begin cmake-3.22.0 tar.gz
+# https://cmake.org/files/v3.22/cmake-3.22.1.tar.gz
+wget --no-check-certificate https://cmake.org/files/v3.22/cmake-3.22.1.tar.gz
+begin cmake-3.22.1 tar.gz
 sed -i '/"lib64"/s/64//' Modules/GNUInstallDirs.cmake &&
 
 ./bootstrap --prefix=/usr        \
@@ -115,7 +117,7 @@ sed -i '/"lib64"/s/64//' Modules/GNUInstallDirs.cmake &&
             --mandir=/share/man  \
             --no-system-jsoncpp  \
             --no-system-librhash \
-            --docdir=/share/doc/cmake-3.22.0 &&
+            --docdir=/share/doc/cmake-3.22.1 &&
 make
 sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
@@ -523,9 +525,9 @@ finish
 # There is a circular dependency between cairo and harfbuzz. If cairo is built before harfbuzz, it is necessary to rebuild cairo after harfbuzz in order to build pango.
 
 
-# https://github.com/harfbuzz/harfbuzz/releases/download/3.1.2/harfbuzz-3.1.2.tar.xz
-wget --no-check-certificate https://github.com/harfbuzz/harfbuzz/releases/download/3.1.2/harfbuzz-3.1.2.tar.xz
-begin harfbuzz-3.1.2 tar.xz
+# https://github.com/harfbuzz/harfbuzz/releases/download/3.2.0/harfbuzz-3.2.0.tar.xz
+wget --no-check-certificate https://github.com/harfbuzz/harfbuzz/releases/download/3.2.0/harfbuzz-3.2.0.tar.xz
+begin harfbuzz-3.2.0 tar.xz
 mkdir build &&
 cd    build &&
 meson --prefix=/usr        \
@@ -587,9 +589,9 @@ finish
 # https://github.com/lopesivan/libXft-2.3.3.git
 
 
-# https://download.gnome.org/sources/pango/1.48/pango-1.48.10.tar.xz
-wget --no-check-certificate https://download.gnome.org/sources/pango/1.48/pango-1.48.10.tar.xz
-begin pango-1.48.10 tar.xz
+# https://download.gnome.org/sources/pango/1.50/pango-1.50.3.tar.xz
+wget --no-check-certificate https://download.gnome.org/sources/pango/1.50/pango-1.50.3.tar.xz
+begin pango-1.50.3 tar.xz
 mkdir build &&
 cd    build &&
 meson --prefix=/usr --buildtype=release --wrap-mode=nofallback .. &&
@@ -1025,9 +1027,9 @@ sudo make install
 sudo ln -svr /usr/share/graphviz/doc /usr/share/doc/graphviz-2.49.3
 finish
 
-# https://download.gnome.org/sources/vala/0.54/vala-0.54.4.tar.xz
-wget https://download.gnome.org/sources/vala/0.54/vala-0.54.4.tar.xz
-begin vala-0.54.4 tar.xz
+# https://download.gnome.org/sources/vala/0.54/vala-0.54.5.tar.xz
+wget https://download.gnome.org/sources/vala/0.54/vala-0.54.5.tar.xz
+begin vala-0.54.5 tar.xz
 ./configure --prefix=/usr &&
 make
 sudo make install
@@ -1174,9 +1176,9 @@ finish
 
 
 
-# https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.30.tar.xz
-wget https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.30.tar.xz
-begin gtk+-3.24.30 tar.xz
+# https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.31.tar.xz
+wget https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.31.tar.xz
+begin gtk+-3.24.31 tar.xz
 ./configure --prefix=/usr              \
             --sysconfdir=/etc          \
             --enable-broadway-backend  \
@@ -1421,9 +1423,9 @@ sudo ./mach install
 unset CC CXX MOZBUILD_STATE_PATH
 
 
-# https://archive.mozilla.org/pub/seamonkey/releases/2.53.9.1/source/seamonkey-2.53.9.1.source.tar.xz
-wget https://archive.mozilla.org/pub/seamonkey/releases/2.53.9.1/source/seamonkey-2.53.9.1.source.tar.xz
-begin seamonkey-2.53.9.1.source tar.xz
+# https://archive.mozilla.org/pub/seamonkey/releases/2.53.10.1/source/seamonkey-2.53.10.1.source.tar.xz
+wget https://archive.mozilla.org/pub/seamonkey/releases/2.53.10.1/source/seamonkey-2.53.10.1.source.tar.xz
+begin seamonkey-2.53.10.1.source tar.xz
 
 cat > mozconfig << EOF
 # If you have a multicore machine, all cores will be used
