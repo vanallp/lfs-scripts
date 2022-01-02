@@ -27,12 +27,13 @@ finish() {
 cd /sources
 
 # 9.2. 
+# Name=enp0s25  # dell
 cat > /etc/systemd/network/10-eth-static.network << "EOF"
 [Match]
-Name=enp0s25
+Name=eno1
 
 [Network]
-Address=192.168.1.140/24
+Address=192.168.1.48/24
 Gateway=192.168.1.1
 EOF
 

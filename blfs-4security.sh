@@ -338,8 +338,8 @@ session     required        pam_deny.so
 # End /etc/pam.d/other
 EOF
 
-# 8.25.reinstall Shadow-4.9
-begin shadow-4.9 tar.xz
+# 8.25.reinstall Shadow-4.10
+begin shadow-4.10 tar.xz
 sed -i.orig '/$(LIBTCB)/i $(LIBPAM) \\' libsubid/Makefile.am &&
 sed -i "224s/rounds/min_rounds/"        libmisc/salt.c       &&
 autoreconf -fiv &&
@@ -499,10 +499,10 @@ EOF
 chmod 644 /etc/profile.d/xorg.sh
 
 
-# https://github.com/systemd/systemd/archive/v249/systemd-249.tar.gz
+# https://github.com/systemd/systemd/archive/v249/systemd-250.tar.gz
 cd /sources
-begin systemd-249 tar.gz
-patch -Np1 -i ../systemd-249-upstream_fixes-1.patch
+begin systemd-250 tar.gz
+patch -Np1 -i ../systemd-250-upstream_fixes-1.patch
 sed -i -e 's/GROUP="render"/GROUP="video"/' \
        -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
 sed -i 's/+ want_libfuzzer.*$/and want_libfuzzer/' meson.build
@@ -524,7 +524,7 @@ meson --prefix=/usr                 \
       -Duserdb=false                \
       -Dmode=release                \
       -Dpamconfdir=/etc/pam.d       \
-      -Ddocdir=/usr/share/doc/systemd-249 \
+      -Ddocdir=/usr/share/doc/systemd-250 \
       ..                            &&
 ninja
 ninja install

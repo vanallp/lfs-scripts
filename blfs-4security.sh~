@@ -24,7 +24,7 @@ finish() {
 cd /sources
 
 # https://ftp.gnu.org/gnu/which/which-2.21.tar.gz
-#wget --no-check-certificate https://ftp.gnu.org/gnu/which/which-2.21.tar.gz
+#wget https://ftp.gnu.org/gnu/which/which-2.21.tar.gz
 begin which-2.21 tar.gz
 ./configure --prefix=/usr &&
 make
@@ -499,10 +499,10 @@ EOF
 chmod 644 /etc/profile.d/xorg.sh
 
 
-# https://github.com/systemd/systemd/archive/v249/systemd-249.tar.gz
+# https://github.com/systemd/systemd/archive/v249/systemd-250.tar.gz
 cd /sources
-begin systemd-249 tar.gz
-patch -Np1 -i ../systemd-249-upstream_fixes-1.patch
+begin systemd-250 tar.gz
+patch -Np1 -i ../systemd-250-upstream_fixes-1.patch
 sed -i -e 's/GROUP="render"/GROUP="video"/' \
        -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
 sed -i 's/+ want_libfuzzer.*$/and want_libfuzzer/' meson.build
@@ -524,7 +524,7 @@ meson --prefix=/usr                 \
       -Duserdb=false                \
       -Dmode=release                \
       -Dpamconfdir=/etc/pam.d       \
-      -Ddocdir=/usr/share/doc/systemd-249 \
+      -Ddocdir=/usr/share/doc/systemd-250 \
       ..                            &&
 ninja
 ninja install

@@ -51,14 +51,14 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.38. Expat-2.4.1
-begin expat-2.4.1 tar.xz
+# 8.38. Expat-2.4.2
+begin expat-2.4.2 tar.xz
 ./configure --prefix=/usr    \
             --disable-static \
-            --docdir=/usr/share/doc/expat-2.4.1
+            --docdir=/usr/share/doc/expat-2.4.2
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-install -v -m644 doc/*.{html,png,css} /usr/share/doc/expat-2.4.1
+install -v -m644 doc/*.{html,png,css} /usr/share/doc/expat-2.4.2
 finish
 
 # 8.39. Inetutils-2.2
@@ -171,8 +171,8 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.49. OpenSSL-1.1.1m
-begin openssl-1.1.1m tar.gz
+# 8.49. openssl-3.0.1
+begin openssl-3.0.1 tar.gz
 ./config --prefix=/usr         \
          --openssldir=/etc/ssl \
          --libdir=lib          \
@@ -181,8 +181,8 @@ begin openssl-1.1.1m tar.gz
 make
 sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
 make MANSUFFIX=ssl install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/share/doc/openssl /usr/share/doc/openssl-1.1.1m
-cp -vfr doc/* /usr/share/doc/openssl-1.1.1m
+mv -v /usr/share/doc/openssl /usr/share/doc/openssl-3.0.1
+cp -vfr doc/* /usr/share/doc/openssl-3.0.1
 finish
 
 # 8.50. Python-3.10.1
@@ -217,8 +217,8 @@ install -vDm644 misc/bash-completion /usr/share/bash-completion/completions/ninj
 install -vDm644 misc/zsh-completion  /usr/share/zsh/site-functions/_ninja
 finish
 
-# 8.52. Meson-0.60.2
-begin meson-0.60.2 tar.gz
+# 8.52. Meson-0.60.3
+begin meson-0.60.3 tar.gz
 python3 setup.py build
 python3 setup.py install --root=dest;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 cp -rv dest/* /
@@ -452,9 +452,9 @@ begin Jinja2-3.0.3 tar.gz
 python3 setup.py install --optimize=1;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.71. Systemd-249
-begin systemd-249 tar.gz
-patch -Np1 -i ../systemd-249-upstream_fixes-1.patch
+# 8.71. Systemd-250
+begin systemd-250 tar.gz
+patch -Np1 -i ../systemd-250-upstream_fixes-1.patch
 sed -i -e 's/GROUP="render"/GROUP="video"/' \
         -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
 sed -i 's/+ want_libfuzzer.*$/and want_libfuzzer/' meson.build
@@ -479,11 +479,11 @@ meson --prefix=/usr                 \
       -Duserdb=false                \
       -Dman=false                   \
       -Dmode=release                \
-      -Ddocdir=/usr/share/doc/systemd-249 \
+      -Ddocdir=/usr/share/doc/systemd-250 \
       ..
 LANG=en_US.UTF-8 ninja
 LANG=en_US.UTF-8 ninja install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-tar -xf ../../systemd-man-pages-249.tar.xz --strip-components=1 -C /usr/share/man
+tar -xf ../../systemd-man-pages-250.tar.xz --strip-components=1 -C /usr/share/man
 rm -rf /usr/lib/pam.d
 systemd-machine-id-setup
 systemctl preset-all
@@ -556,8 +556,8 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.76. E2fsprogs-1.46.4
-begin e2fsprogs-1.46.4 tar.gz
+# 8.76. E2fsprogs-1.46.5
+begin e2fsprogs-1.46.5 tar.gz
 mkdir -v build
 cd       build
 ../configure --prefix=/usr           \

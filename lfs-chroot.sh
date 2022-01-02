@@ -69,8 +69,8 @@ make
 make install ;rc=$?;echo $package_name $rc >> /sources/rc.log
 finish
 
-# 7.11. Python-3.10.0 (upper case P)
-begin Python-3.10.0 tar.xz
+# 7.11. Python-3.10.1 (upper case P)
+begin Python-3.10.1 tar.xz
 ./configure --prefix=/usr   \
             --enable-shared \
             --without-ensurepip

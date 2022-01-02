@@ -31,8 +31,8 @@ begin man-pages-5.13 tar.xz
 make prefix=/usr install ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.4. Iana-Etc-20211124
-begin iana-etc-20211124 tar.gz
+# 8.4. Iana-Etc-20211224
+begin iana-etc-20211224 tar.gz
 cp services protocols /etc ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
@@ -167,8 +167,8 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.9. Zstd-1.5.0
-begin zstd-1.5.0 tar.gz
+# 8.9. Zstd-1.5.1
+begin zstd-1.5.1 tar.gz
 make
 make prefix=/usr install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 rm -v /usr/lib/libzstd.a
@@ -356,8 +356,8 @@ make prefix=/usr lib=lib install;rc=$?;echo $package_name $rc >> /sources/system
 chmod -v 755 /usr/lib/lib{cap,psx}.so.2.62
 finish
 
-# 8.25. Shadow-4.9
-begin shadow-4.9 tar.xz
+# 8.25. Shadow-4.10
+begin shadow-4.10 tar.xz
 sed -i 's/groups$(EXEEXT) //' src/Makefile.in
 find man -name Makefile.in -exec sed -i 's/groups\.1 / /'   {} \;
 find man -name Makefile.in -exec sed -i 's/getspnam\.3 / /' {} \;
