@@ -24,7 +24,7 @@ Pick a kernel. [here](https://www.kernel.org/)
 
 ```
 # several times below I have to set the kernel version with:
-kernel="5.15.6"
+kernel="5.15.12"
 
 dnf install -y vim-default-editor --allowerasing
 dnf -y group install "C Development Tools and Libraries"
@@ -136,7 +136,7 @@ Run the lfs-cross.sh script, which will build the cross-toolchain and cross comp
 
 ```
 source ~/.bash_profile
-kernel="5.15.6"
+kernel="5.15.12"
 .  $LFS/sources/lfs-scripts/lfs-cross.sh
 ```
 # Chapter 7
@@ -274,7 +274,7 @@ exec /bin/bash --login +h
 Run the lfs-chroot.sh script, which will build additional temporary tools:
 
 ``` 
-kernel="5.15.6"
+kernel="5.15.12"
 . sources/lfs-scripts/lfs-chroot.sh 
 ```
 If you wish to make a backup at this step you can.
@@ -313,12 +313,12 @@ chroot "$LFS" /usr/bin/env -i   \
 
 # chap 8
 
-kernel="5.15.6"
+kernel="5.15.12"
 . sources/lfs-scripts/lfs-system.sh
 
 exec /bin/bash --login +h
 passwd root
-kernel="5.15.6"
+kernel="5.15.12"
 . sources/lfs-scripts/lfs-system2.sh 
 ```
 
@@ -343,7 +343,7 @@ userdel -r tester
 Run the final script to configure the rest of the system:
 
 ```
-kernel="5.15.6"
+kernel="5.15.12"
 . sources/lfs-scripts/lfs-final.sh 
 ```
 

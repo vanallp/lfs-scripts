@@ -77,9 +77,6 @@ echo "blfs-15networking.sh " >> wget.log
 for getfile in $(grep "#wget" lfs-scripts/blfs-15networking.sh   | cut -c 7- ); do wget $getfile;rc=$?;echo $getfile $rc >> wget.log; done
 cat wget.log
 
-
-
-
 mkdir -pv $LFS/{etc,var} $LFS/usr/{bin,lib,sbin}
 for i in bin lib sbin; do
   ln -sv usr/$i $LFS/$i
@@ -97,15 +94,9 @@ case $(uname -m) in
   x86_64) chown -v lfs $LFS/lib64 ;;
 esac
 chown -v lfs $LFS/sources
-```
-
-
-Login as the lfs user:
-
-
-```
 su - lfs
 ```
+
 
 :point_right: Run commands below as lfs.
 ```
@@ -136,6 +127,7 @@ Run the lfs-cross.sh script, which will build the cross-toolchain and cross comp
 
 ```
 source ~/.bash_profile
+
 kernel="5.15.12"
 .  $LFS/sources/lfs-scripts/lfs-cross.sh
 ```
