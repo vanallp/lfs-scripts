@@ -261,9 +261,9 @@ ninja
 sudo ninja install
 finish
 
-# https://www.x.org/pub/individual/xserver/xorg-server-21.1.2.tar.xz
-wget https://www.x.org/pub/individual/xserver/xorg-server-21.1.2.tar.xz
-begin xorg-server-21.1.2 tar.xz
+# https://www.x.org/pub/individual/xserver/xorg-server-21.1.3.tar.xz
+wget https://www.x.org/pub/individual/xserver/xorg-server-21.1.3.tar.xz
+begin xorg-server-21.1.3 tar.xz
 mkdir build &&
 	cd build    &&
 

@@ -54,9 +54,9 @@ sudo make install ;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
-# https://dist.libuv.org/dist/v1.42.0/libuv-v1.42.0.tar.gz
-wget --no-check-certificate https://dist.libuv.org/dist/v1.42.0/libuv-v1.42.0.tar.gz
-begin libuv-v1.42.0 tar.gz
+# https://dist.libuv.org/dist/v1.43.0/libuv-v1.43.0.tar.gz
+wget --no-check-certificate https://dist.libuv.org/dist/v1.43.0/libuv-v1.43.0.tar.gz
+begin libuv-v1.43.0 tar.gz
 sh autogen.sh                              &&
 ./configure --prefix=/usr --disable-static &&
 make 
@@ -88,9 +88,9 @@ sudo make install;rc=$?;echo $package_name $rc >> /sources/37rc.log
 finish
 
 
-# https://curl.se/download/curl-7.80.0.tar.xz
-wget --no-check-certificate  https://curl.se/download/curl-7.80.0.tar.xz
-begin curl-7.80.0 tar.xz
+# https://curl.se/download/curl-7.81.0.tar.xz
+wget --no-check-certificate  https://curl.se/download/curl-7.81.0.tar.xz
+begin curl-7.81.0 tar.xz
 grep -rl '#!.*python$' | xargs sed -i '1s/python/&3/'
 ./configure --prefix=/usr                           \
             --disable-static                        \
@@ -101,8 +101,8 @@ make
 sudo make install && rc=$?;echo $package_name $rc >> /sources/37rc.log
 sudo rm -rf docs/examples/.deps &&
 sudo find docs \( -name Makefile\* -o -name \*.1 -o -name \*.3 \) -exec rm {} \; &&
-sudo install -v -d -m755 /usr/share/doc/curl-7.80.0 &&
-sudo cp -v -R docs/*     /usr/share/doc/curl-7.80.0
+sudo install -v -d -m755 /usr/share/doc/curl-7.81.0 &&
+sudo cp -v -R docs/*     /usr/share/doc/curl-7.81.0
 finish
 
 
@@ -1423,9 +1423,9 @@ sudo ./mach install
 unset CC CXX MOZBUILD_STATE_PATH
 
 
-# https://archive.mozilla.org/pub/seamonkey/releases/2.53.10.1/source/seamonkey-2.53.10.1.source.tar.xz
-wget https://archive.mozilla.org/pub/seamonkey/releases/2.53.10.1/source/seamonkey-2.53.10.1.source.tar.xz
-begin seamonkey-2.53.10.1.source tar.xz
+# https://archive.mozilla.org/pub/seamonkey/releases/2.53.10.2/source/seamonkey-2.53.10.2.source.tar.xz
+wget https://archive.mozilla.org/pub/seamonkey/releases/2.53.10.2/source/seamonkey-2.53.10.2.source.tar.xz
+begin seamonkey-2.53.10.2.source tar.xz
 
 cat > mozconfig << EOF
 # If you have a multicore machine, all cores will be used

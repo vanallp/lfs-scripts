@@ -45,9 +45,11 @@ mkdir -v /usr/share/doc/libpng-1.6.37 &&
 cp -v README libpng-manual.txt /usr/share/doc/libpng-1.6.37
 finish
 
-# https://sqlite.org/2021/sqlite-autoconf-3370100.tar.gz
-#wget https://sqlite.org/2021/sqlite-autoconf-3370100.tar.gz
-begin sqlite-autoconf-3370100 tar.gz
+# https://sqlite.org/2022/sqlite-autoconf-3370200.tar.gz
+#wget https://sqlite.org/2022/sqlite-autoconf-3370200.tar.gz
+#wget https://sqlite.org/2022/sqlite-doc-3370200.zip
+begin sqlite-autoconf-3370200 tar.gz
+unzip -q ../sqlite-doc-3370200.zip
 ./configure --prefix=/usr     \
             --disable-static  \
             --enable-fts5     \
@@ -60,6 +62,8 @@ begin sqlite-autoconf-3370100 tar.gz
                       -DSQLITE_ENABLE_FTS3_TOKENIZER=1" &&
 make
 make install
+install -v -m755 -d /usr/share/doc/sqlite-3.37.2 &&
+cp -v -R sqlite-doc-3370200/* /usr/share/doc/sqlite-3.37.2
 finish
 
 
@@ -122,11 +126,11 @@ install -v -m644 nettle.html /usr/share/doc/nettle-3.7.3
 finish
 
 
-# https://archive.mozilla.org/pub/security/nss/releases/NSS_3_73_RTM/src/nss-3.73.1.tar.gz
-#wget https://archive.mozilla.org/pub/security/nss/releases/NSS_3_73_RTM/src/nss-3.73.1.tar.gz
-#wget https://www.linuxfromscratch.org/patches/blfs/svn/nss-3.73.1-standalone-1.patch
-begin nss-3.73.1 tar.gz
-patch -Np1 -i ../nss-3.73.1-standalone-1.patch &&
+# https://archive.mozilla.org/pub/security/nss/releases/NSS_3_73_RTM/src/nss-3.74.tar.gz
+#wget https://archive.mozilla.org/pub/security/nss/releases/NSS_3_73_RTM/src/nss-3.74.tar.gz
+#wget https://www.linuxfromscratch.org/patches/blfs/svn/nss-3.74-standalone-1.patch
+begin nss-3.74 tar.gz
+patch -Np1 -i ../nss-3.74-standalone-1.patch &&
 cd nss &&
 make BUILD_OPT=1                  \
   NSPR_INCLUDE_DIR=/usr/include/nspr  \
@@ -178,12 +182,12 @@ ln -sfv ./pkcs11/p11-kit-trust.so /usr/lib/libnssckbi.so
 finish
 
 
-# https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz
-#wget https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz
-begin libunistring-0.9.10 tar.xz
+# https://ftp.gnu.org/gnu/libunistring/libunistring-1.0.tar.xz
+#wget https://ftp.gnu.org/gnu/libunistring/libunistring-1.0.tar.xz
+begin libunistring-1.0 tar.xz
 ./configure --prefix=/usr    \
             --disable-static \
-            --docdir=/usr/share/doc/libunistring-0.9.10 &&
+            --docdir=/usr/share/doc/libunistring-1.0 &&
 make
 make install
 finish
