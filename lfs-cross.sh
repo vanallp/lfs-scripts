@@ -23,8 +23,8 @@ finish() {
 
 cd $LFS/sources
 
-# 5.2. Binutils-2.37 - Pass 1
-begin binutils-2.37 tar.xz
+# 5.2. Binutils-2.38 - Pass 1
+begin binutils-2.38 tar.xz
 mkdir -v build
 cd build
 ../configure --prefix=$LFS/tools        \
@@ -55,7 +55,7 @@ cd       build
 ../configure                                       \
     --target=$LFS_TGT                              \
     --prefix=$LFS/tools                            \
-    --with-glibc-version=2.11                      \
+    --with-glibc-version=2.35                      \
     --with-sysroot=$LFS                            \
     --with-newlib                                  \
     --without-headers                              \
@@ -90,8 +90,8 @@ rm usr/include/Makefile
 cp -rv usr/include $LFS/usr
 finish
 
-# 5.5. Glibc-2.34
-begin glibc-2.34 tar.xz
+# 5.5. Glibc-2.35
+begin glibc-2.35 tar.xz
 case $(uname -m) in
     i?86)   ln -sfv ld-linux.so.2 $LFS/lib/ld-lsb.so.3
     ;;
@@ -99,7 +99,7 @@ case $(uname -m) in
             ln -sfv ../lib/ld-linux-x86-64.so.2 $LFS/lib64/ld-lsb-x86-64.so.3
     ;;
 esac
-patch -Np1 -i ../glibc-2.34-fhs-1.patch
+patch -Np1 -i ../glibc-2.35-fhs-1.patch
 mkdir -v build
 cd       build
 echo "rootsbindir=/usr/sbin" > configparms
@@ -175,8 +175,8 @@ echo "INPUT(-lncursesw)" > $LFS/usr/lib/libncurses.so
 #ln -sfv ../../lib/$(readlink $LFS/usr/lib/libncursesw.so) $LFS/usr/lib/libncursesw.so
 finish
 
-# 6.4. Bash-5.1.8
-begin bash-5.1.8 tar.gz
+# 6.4. Bash-5.1.16
+begin bash-5.1.16 tar.gz
 ./configure --prefix=/usr                   \
             --build=$(support/config.guess) \
             --host=$LFS_TGT                 \
@@ -224,8 +224,8 @@ make FILE_COMPILE=$(pwd)/build/src/file
 make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 finish
 
-# 6.8. Findutils-4.8.0
-begin findutils-4.8.0 tar.xz
+# 6.8. Findutils-4.9.0
+begin findutils-4.9.0 tar.xz
 ./configure --prefix=/usr   \
             --host=$LFS_TGT \
             --build=$(build-aux/config.guess)
@@ -314,8 +314,9 @@ make DESTDIR=$LFS install ;rc=$?;echo $package_name $rc >> $LFS/sources/rc.log
 #ln -svf ../../lib/$(readlink $LFS/usr/lib/liblzma.so) $LFS/usr/lib/liblzma.so
 finish
 
-# 6.17. Binutils-2.37 - Pass 2
-begin binutils-2.37 tar.xz
+# 6.17. Binutils-2.38 - Pass 2
+begin binutils-2.38 tar.xz
+sed '6009s/$add_dir//' -i ltmain.sh
 mkdir -v build
 cd       build
 ../configure                   \

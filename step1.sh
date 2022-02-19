@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #The tcl & procps-ng package must be renamed
-mv $LFS/sources/tcl8.6.11-src.tar.gz $LFS/sources/tcl8.6.11.tar.gz
+mv $LFS/sources/tcl8.6.12-src.tar.gz $LFS/sources/tcl8.6.12.tar.gz
 mv $LFS/sources/procps-ng-3.3.17.tar.xz $LFS/sources/procps-3.3.17.tar.xz
 
 # vim https://github.com/vim/vim/releases

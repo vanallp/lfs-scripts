@@ -35,8 +35,8 @@ make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 rm -fv /usr/lib/libltdl.a
 finish
 
-# 8.36. GDBM-1.22
-begin gdbm-1.22 tar.gz
+# 8.36. GDBM-1.23
+begin gdbm-1.23 tar.gz
 ./configure --prefix=/usr    \
             --disable-static \
             --enable-libgdbm-compat
@@ -51,14 +51,14 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.38. Expat-2.4.2
-begin expat-2.4.2 tar.xz
+# 8.38. Expat-2.4.4
+begin expat-2.4.4 tar.xz
 ./configure --prefix=/usr    \
             --disable-static \
-            --docdir=/usr/share/doc/expat-2.4.2
+            --docdir=/usr/share/doc/expat-2.4.4
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-install -v -m644 doc/*.{html,png,css} /usr/share/doc/expat-2.4.2
+install -v -m644 doc/*.{html,png,css} /usr/share/doc/expat-2.4.4
 finish
 
 # 8.39. Inetutils-2.2
@@ -138,10 +138,25 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
+# 8.49. openssl-3.0.1
+begin openssl-3.0.1 tar.gz
+./config --prefix=/usr         \
+         --openssldir=/etc/ssl \
+         --libdir=lib          \
+         shared                \
+         zlib-dynamic
+make
+sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
+make MANSUFFIX=ssl install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
+mv -v /usr/share/doc/openssl /usr/share/doc/openssl-3.0.1
+cp -vfr doc/* /usr/share/doc/openssl-3.0.1
+finish
+
 # 8.46. Kmod-29
 begin kmod-29 tar.xz
 ./configure --prefix=/usr          \
             --sysconfdir=/etc      \
+	    --with-openssl         \
             --with-xz              \
 	    --with-zstd            \
             --with-zlib
@@ -171,22 +186,8 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.49. openssl-3.0.1
-begin openssl-3.0.1 tar.gz
-./config --prefix=/usr         \
-         --openssldir=/etc/ssl \
-         --libdir=lib          \
-         shared                \
-         zlib-dynamic
-make
-sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
-make MANSUFFIX=ssl install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mv -v /usr/share/doc/openssl /usr/share/doc/openssl-3.0.1
-cp -vfr doc/* /usr/share/doc/openssl-3.0.1
-finish
-
-# 8.50. Python-3.10.1
-begin Python-3.10.1 tar.xz
+# 8.50. Python-3.10.2
+begin Python-3.10.2 tar.xz
 ./configure --prefix=/usr       \
             --enable-shared     \
             --with-system-expat \
@@ -195,12 +196,12 @@ begin Python-3.10.1 tar.xz
 	    --enable-optimizations
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-install -v -dm755 /usr/share/doc/python-3.10.1/html 
+install -v -dm755 /usr/share/doc/python-3.10.2/html 
 tar --strip-components=1  \
     --no-same-owner       \
     --no-same-permissions \
-    -C /usr/share/doc/python-3.10.1/html \
-    -xvf ../python-3.10.1-docs-html.tar.bz2
+    -C /usr/share/doc/python-3.10.2/html \
+    -xvf ../python-3.10.2-docs-html.tar.bz2
 finish
 
 # 8.51. Ninja-1.10.2
@@ -217,8 +218,8 @@ install -vDm644 misc/bash-completion /usr/share/bash-completion/completions/ninj
 install -vDm644 misc/zsh-completion  /usr/share/zsh/site-functions/_ninja
 finish
 
-# 8.52. Meson-0.60.3
-begin meson-0.60.3 tar.gz
+# 8.52. Meson-0.61.1
+begin meson-0.61.1 tar.gz
 python3 setup.py build
 python3 setup.py install --root=dest;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 cp -rv dest/* /
@@ -265,8 +266,8 @@ mkdir -v /usr/share/doc/gawk-5.1.1
 cp    -v doc/{awkforai.txt,*.{eps,pdf,jpg}} /usr/share/doc/gawk-5.1.1
 finish
 
-# 8.57. Findutils-4.8.0
-begin findutils-4.8.0 tar.xz
+# 8.57. Findutils-4.9.0
+begin findutils-4.9.0 tar.xz
 ./configure --prefix=/usr --localstatedir=/var/lib/locate
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
@@ -342,15 +343,15 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.61. IPRoute2-5.15.0
-begin iproute2-5.15.0 tar.xz
+# 8.61. IPRoute2-5.16.0
+begin iproute2-5.16.0 tar.xz
 sed -i /ARPD/d Makefile
 rm -fv man/man8/arpd.8
 sed -i 's/.m_ipt.o//' tc/Makefile
 make
 make SBINDIR=/usr/sbin install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-mkdir -v              /usr/share/doc/iproute2-5.15.0
-cp -v COPYING README* /usr/share/doc/iproute2-5.15.0
+mkdir -v              /usr/share/doc/iproute2-5.16.0
+cp -v COPYING README* /usr/share/doc/iproute2-5.16.0
 finish
 
 # 8.62. Kbd-2.4.0
@@ -365,8 +366,8 @@ mkdir -v            /usr/share/doc/kbd-2.4.0
 cp -R -v docs/doc/* /usr/share/doc/kbd-2.4.0
 finish
 
-# 8.63. Libpipeline-1.5.4
-begin libpipeline-1.5.4 tar.gz
+# 8.63. Libpipeline-1.5.5
+begin libpipeline-1.5.5 tar.gz
 ./configure --prefix=/usr
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
@@ -411,8 +412,8 @@ pushd /usr/share/info
 popd
 finish
 
-# 8.68. Vim-8.2.3704
-begin vim-8.2.3704 tar.gz
+# 8.68. Vim-8.2.4383
+begin vim-8.2.4383 tar.gz
 echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 ./configure --prefix=/usr
 make
@@ -421,7 +422,7 @@ ln -sv vim /usr/bin/vi
 for L in  /usr/share/man/{,*/}man1/vim.1; do
     ln -sv vim.1 $(dirname $L)/vi.1
 done
-ln -sv ../vim/vim82/doc /usr/share/doc/vim-8.2.3704
+ln -sv ../vim/vim82/doc /usr/share/doc/vim-8.2.4383
 cat > /etc/vimrc << "EOF"
 " Begin /etc/vimrc
 
@@ -507,10 +508,10 @@ make install ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 ln -sfv /etc/machine-id /var/lib/dbus
 finish
 
-# 8.73. Man-DB-2.9.4          
-begin man-db-2.9.4 tar.xz
+# 8.73. Man-DB-2.10.1         
+begin man-db-2.10.1 tar.xz
 ./configure --prefix=/usr                        \
-            --docdir=/usr/share/doc/man-db-2.9.4 \
+            --docdir=/usr/share/doc/man-db-2.10.1 \
             --sysconfdir=/etc                    \
             --disable-setuid                     \
             --enable-cache-owner=bin             \
@@ -537,11 +538,11 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.75. Util-linux-2.37.2
-begin util-linux-2.37.2 tar.xz
+# 8.75. Util-linux-2.37.4
+begin util-linux-2.37.4 tar.xz
 ./configure ADJTIME_PATH=/var/lib/hwclock/adjtime   \
 	    --libdir=/usr/lib    \
-            --docdir=/usr/share/doc/util-linux-2.37.2 \
+            --docdir=/usr/share/doc/util-linux-2.37.4 \
             --disable-chfn-chsh  \
             --disable-login      \
             --disable-nologin    \

@@ -31,16 +31,16 @@ begin man-pages-5.13 tar.xz
 make prefix=/usr install ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.4. Iana-Etc-20211224
-begin iana-etc-20211224 tar.gz
+# 8.4. Iana-Etc-20220207
+begin iana-etc-20220207 tar.gz
 cp services protocols /etc ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.5. Glibc-2.34
-begin glibc-2.34 tar.xz
-sed -e '/NOTIFY_REMOVED)/s/)/ \&\& data.attr != NULL)/' \
-    -i sysdeps/unix/sysv/linux/mq_notify.c
-patch -Np1 -i ../glibc-2.34-fhs-1.patch
+# 8.5. Glibc-2.35
+begin glibc-2.35 tar.xz
+#sed -e '/NOTIFY_REMOVED)/s/)/ \&\& data.attr != NULL)/' \
+#    -i sysdeps/unix/sysv/linux/mq_notify.c
+patch -Np1 -i ../glibc-2.35-fhs-1.patch
 mkdir -v build
 cd       build
 echo "rootsbindir=/usr/sbin" > configparms
@@ -167,8 +167,8 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.9. Zstd-1.5.1
-begin zstd-1.5.1 tar.gz
+# 8.9. Zstd-1.5.2
+begin zstd-1.5.2 tar.gz
 make
 make prefix=/usr install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 rm -v /usr/lib/libzstd.a
@@ -182,17 +182,17 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.11. Readline-8.1
-begin readline-8.1 tar.gz
+# 8.11. Readline-8.1.2
+begin readline-8.1.2 tar.gz
 sed -i '/MV.*old/d' Makefile.in
 sed -i '/{OLDSUFF}/c:' support/shlib-install
 ./configure --prefix=/usr    \
             --disable-static \
             --with-curses    \
-            --docdir=/usr/share/doc/readline-8.1
+            --docdir=/usr/share/doc/readline-8.1.2
 make SHLIB_LIBS="-lncursesw"
 make SHLIB_LIBS="-lncursesw" install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-install -v -m644 doc/*.{ps,pdf,html,dvi} /usr/share/doc/readline-8.1
+install -v -m644 doc/*.{ps,pdf,html,dvi} /usr/share/doc/readline-8.1.2
 finish
 
 # 8.12. M4-1.4.19
@@ -202,8 +202,8 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.13. Bc-5.2.1
-begin bc-5.2.1 tar.xz
+# 8.13. Bc-5.2.2
+begin bc-5.2.2 tar.xz
 CC=gcc ./configure --prefix=/usr -G -O3
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
@@ -220,9 +220,9 @@ ln -sv flex /usr/bin/lex
 finish
 
 
-# 8.15. Tcl-8.6.11
-begin tcl8.6.11 tar.gz
-tar -xf ../tcl8.6.11-html.tar.gz --strip-components=1
+# 8.15. Tcl-8.6.12
+begin tcl8.6.12 tar.gz
+tar -xf ../tcl8.6.12-html.tar.gz --strip-components=1
 SRCDIR=$(pwd)
 cd unix
 ./configure --prefix=/usr           \
@@ -273,11 +273,11 @@ install -v -dm755  /usr/share/doc/dejagnu-1.6.3
 install -v -m644   doc/dejagnu.{html,txt} /usr/share/doc/dejagnu-1.6.3
 finish
 
-# 8.18. Binutils-2.37
-begin binutils-2.37 tar.xz
-patch -Np1 -i ../binutils-2.37-upstream_fix-1.patch
-sed -i '63d' etc/texi2pod.pl
-find -name \*.1 -delete
+# 8.18. Binutils-2.38
+begin binutils-2.38 tar.xz
+patch -Np1 -i ../binutils-2.38-lto_fix-1.patch
+sed -e '/R_386_TLS_LE /i \   || (TYPE) == R_386_TLS_IE \\' \
+    -i ./bfd/elfxx-x86.h
 mkdir -v build
 cd       build
 ../configure --prefix=/usr       \
@@ -348,16 +348,16 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.24. Libcap-2.62
-begin libcap-2.62 tar.xz
+# 8.24. Libcap-2.63
+begin libcap-2.63 tar.xz
 sed -i '/install -m.*STA/d' libcap/Makefile
 make prefix=/usr lib=lib
 make prefix=/usr lib=lib install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-chmod -v 755 /usr/lib/lib{cap,psx}.so.2.62
+chmod -v 755 /usr/lib/lib{cap,psx}.so.2.63
 finish
 
-# 8.25. Shadow-4.10
-begin shadow-4.10 tar.xz
+# 8.25. Shadow-4.11.1
+begin shadow-4.11.1 tar.xz
 sed -i 's/groups$(EXEEXT) //' src/Makefile.in
 find man -name Makefile.in -exec sed -i 's/groups\.1 / /'   {} \;
 find man -name Makefile.in -exec sed -i 's/getspnam\.3 / /' {} \;
@@ -497,10 +497,10 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.34. Bash-5.1.8
-begin bash-5.1.8 tar.gz
+# 8.34. Bash-5.1.16
+begin bash-5.1.16 tar.gz
 ./configure --prefix=/usr                    \
-            --docdir=/usr/share/doc/bash-5.1.8 \
+            --docdir=/usr/share/doc/bash-5.1.16 \
             --without-bash-malloc            \
             --with-installed-readline
 make

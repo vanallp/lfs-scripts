@@ -77,9 +77,6 @@ echo "blfs-15networking.sh " >> wget.log
 for getfile in $(grep "#wget" lfs-scripts/blfs-15networking.sh   | cut -c 7- ); do wget $getfile;rc=$?;echo $getfile $rc >> wget.log; done
 cat wget.log
 
-
-
-
 mkdir -pv $LFS/{etc,var} $LFS/usr/{bin,lib,sbin}
 for i in bin lib sbin; do
   ln -sv usr/$i $LFS/$i
@@ -97,15 +94,9 @@ case $(uname -m) in
   x86_64) chown -v lfs $LFS/lib64 ;;
 esac
 chown -v lfs $LFS/sources
-```
-
-
-Login as the lfs user:
-
-
-```
 su - lfs
 ```
+
 
 :point_right: Run commands below as lfs.
 ```
@@ -136,6 +127,7 @@ Run the lfs-cross.sh script, which will build the cross-toolchain and cross comp
 
 ```
 source ~/.bash_profile
+
 kernel="5.15.12"
 .  $LFS/sources/lfs-scripts/lfs-cross.sh
 ```
@@ -177,7 +169,7 @@ chroot "$LFS" /usr/bin/env -i   \
     TERM="$TERM"                \
     PS1='(lfs chroot) \u:\w\$ ' \
     PATH=/bin:/usr/bin:/sbin:/usr/sbin \
-    /bin/bash --login +h
+    /bin/bash --login 
 ```
 
 Create essential directories, files and symlinks:
@@ -267,7 +259,7 @@ touch /var/log/{btmp,lastlog,faillog,wtmp}
 chgrp -v utmp /var/log/lastlog
 chmod -v 664  /var/log/lastlog
 chmod -v 600  /var/log/btmp
-exec /bin/bash --login +h
+exec /bin/bash --login 
 ```
 
 # Chapter 7. Entering Chroot and Building Additional Temporary Tools
@@ -309,14 +301,14 @@ chroot "$LFS" /usr/bin/env -i   \
     TERM="$TERM"                \
     PS1='(lfs chroot) \u:\w\$ ' \
     PATH=/bin:/usr/bin:/sbin:/usr/sbin \
-    /bin/bash --login +h
+    /bin/bash --login 
 
 # chap 8
 
 kernel="5.15.12"
 . sources/lfs-scripts/lfs-system.sh
 
-exec /bin/bash --login +h
+exec /bin/bash --login 
 passwd root
 kernel="5.15.12"
 . sources/lfs-scripts/lfs-system2.sh 

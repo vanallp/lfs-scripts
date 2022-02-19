@@ -342,8 +342,8 @@ session     required        pam_deny.so
 # End /etc/pam.d/other
 EOF
 
-# 8.25.reinstall Shadow-4.10
-begin shadow-4.10 tar.xz
+# 8.25.reinstall Shadow-4.11.1
+begin shadow-4.11.1 tar.xz
 sed -i.orig '/$(LIBTCB)/i $(LIBPAM) \\' libsubid/Makefile.am &&
 sed -i "224s/rounds/min_rounds/"        libmisc/salt.c       &&
 autoreconf -fiv &&

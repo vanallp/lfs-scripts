@@ -55,7 +55,7 @@ Check and confirm everything downloaded and passed OK
 will run:
 ```
 #The tcl & procps-ng package must be renamed
-mv $LFS/sources/tcl8.6.11-src.tar.gz $LFS/sources/tcl8.6.11.tar.gz
+mv $LFS/sources/tcl8.6.12-src.tar.gz $LFS/sources/tcl8.6.12.tar.gz
 mv $LFS/sources/procps-ng-3.3.17.tar.xz $LFS/sources/procps-3.3.17.tar.xz
 
 # https://www.kernel.org
@@ -169,7 +169,7 @@ chroot "$LFS" /usr/bin/env -i   \
     TERM="$TERM"                \
     PS1='(lfs chroot) \u:\w\$ ' \
     PATH=/bin:/usr/bin:/sbin:/usr/sbin \
-    /bin/bash --login +h
+    /bin/bash --login 
 ```
 
 Create essential directories, files and symlinks:
@@ -259,7 +259,7 @@ touch /var/log/{btmp,lastlog,faillog,wtmp}
 chgrp -v utmp /var/log/lastlog
 chmod -v 664  /var/log/lastlog
 chmod -v 600  /var/log/btmp
-exec /bin/bash --login +h
+exec /bin/bash --login 
 ```
 
 # Chapter 7. Entering Chroot and Building Additional Temporary Tools
@@ -301,14 +301,14 @@ chroot "$LFS" /usr/bin/env -i   \
     TERM="$TERM"                \
     PS1='(lfs chroot) \u:\w\$ ' \
     PATH=/bin:/usr/bin:/sbin:/usr/sbin \
-    /bin/bash --login +h
+    /bin/bash --login 
 
 # chap 8
 
 kernel="5.15.12"
 . sources/lfs-scripts/lfs-system.sh
 
-exec /bin/bash --login +h
+exec /bin/bash --login 
 passwd root
 kernel="5.15.12"
 . sources/lfs-scripts/lfs-system2.sh 

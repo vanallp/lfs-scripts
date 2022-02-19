@@ -69,8 +69,8 @@ make
 make install ;rc=$?;echo $package_name $rc >> /sources/rc.log
 finish
 
-# 7.11. Python-3.10.1 (upper case P)
-begin Python-3.10.1 tar.xz
+# 7.11. Python-3.10.2 (upper case P)
+begin Python-3.10.2 tar.xz
 ./configure --prefix=/usr   \
             --enable-shared \
             --without-ensurepip
@@ -87,12 +87,12 @@ make
 make install ;rc=$?;echo $package_name $rc >> /sources/rc.log
 finish
 
-# 7.13. Util-linux-2.37.2
-begin util-linux-2.37.2 tar.xz
+# 7.13. Util-linux-2.37.4
+begin util-linux-2.37.4 tar.xz
 mkdir -pv /var/lib/hwclock
 ./configure ADJTIME_PATH=/var/lib/hwclock/adjtime    \
 	    --libdir=/usr/lib    \
-            --docdir=/usr/share/doc/util-linux-2.37.2 \
+            --docdir=/usr/share/doc/util-linux-2.37.4 \
             --disable-chfn-chsh  \
             --disable-login      \
             --disable-nologin    \
