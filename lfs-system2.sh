@@ -51,14 +51,14 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-# 8.38. Expat-2.4.4
-begin expat-2.4.4 tar.xz
+# 8.38. Expat-2.4.5
+begin expat-2.4.5 tar.xz
 ./configure --prefix=/usr    \
             --disable-static \
-            --docdir=/usr/share/doc/expat-2.4.4
+            --docdir=/usr/share/doc/expat-2.4.5
 make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
-install -v -m644 doc/*.{html,png,css} /usr/share/doc/expat-2.4.4
+install -v -m644 doc/*.{html,png,css} /usr/share/doc/expat-2.4.5
 finish
 
 # 8.39. Inetutils-2.2
