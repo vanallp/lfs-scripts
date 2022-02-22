@@ -280,14 +280,24 @@ make -j1
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
+#mandoc
+# wget https://mandoc.bsd.lv/snapshots/mandoc-1.14.6.tar.gz
+begin mandoc-1.14.6 tar.gz
+./configure &&
+make mandoc
+install -vm755 mandoc   /usr/bin &&
+install -vm644 mandoc.1 /usr/share/man/man1
+finish
+
+
 # 8.59 grub   after...
 
-#efivar efivar-37.tar.bz2
-#wget https://github.com/rhboot/efivar/releases/download/37/efivar-37.tar.bz2
-#wget https://www.linuxfromscratch.org/patches/blfs/svn/efivar-37-gcc_9-1.patch
-begin efivar-37 tar.bz2
-patch -Np1 -i ../efivar-37-gcc_9-1.patch
-make CFLAGS="-O2 -Wno-stringop-truncation"
+#efivar efivar-38.tar.bz2
+#wget https://github.com/rhboot/efivar/releases/download/38/efivar-38.tar.bz2
+##wget https://www.linuxfromscratch.org/patches/blfs/svn/efivar-37-gcc_9-1.patch
+begin efivar-38 tar.bz2
+sed '/prep :/a\\ttouch prep' -i src/Makefile
+make 
 make install LIBDIR=/usr/lib ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
@@ -299,10 +309,11 @@ make
 make install;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
-#efibootmgr-17.tar.gz
-#wget https://github.com/rhboot/efibootmgr/archive/17/efibootmgr-17.tar.gz
-begin efibootmgr-17 tar.gz
+#efibootmgr-18.tar.gz
+#wget https://github.com/rhboot/efibootmgr/archive/18/efibootmgr-18.tar.gz
+begin efibootmgr-18 tar.gz
 sed -e '/extern int efi_set_verbose/d' -i src/efibootmgr.c
+sed 's/-Werror//' -i Make.defaults
 make EFIDIR=LFS EFI_LOADER=grubx64.efi
 make install EFIDIR=LFS ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
@@ -321,10 +332,10 @@ make install ;rc=$?;echo $package_name $rc >> /sources/systemrc.log
 finish
 
 # 8.59. GRUB-2.06
-#wget https://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
+#wget https://unifoundry.com/pub/unifont/unifont-14.0.01/font-builds/unifont-14.0.01.pcf.gz
 begin grub-2.06 tar.xz
 mkdir -pv /usr/share/fonts/unifont &&
-gunzip -c ../unifont-13.0.06.pcf.gz > /usr/share/fonts/unifont/unifont.pcf
+gunzip -c ../unifont-14.0.01.pcf.gz > /usr/share/fonts/unifont/unifont.pcf
 ./configure --prefix=/usr          \
             --sysconfdir=/etc      \
             --disable-efiemu       \
